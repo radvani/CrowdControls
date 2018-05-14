@@ -24,35 +24,77 @@
 //  SOFTWARE.
 
 #import "CCRenderDelegate.h"
+#import <Syphon/Syphon.h>
 
 @interface CCRenderDelegate ()
+
+@property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
 @property (readwrite, nonatomic) std::shared_ptr<VRORendererTestHarness> harness;
+@property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
+@property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
+@property (readwrite, nonatomic) SyphonServer *syphon;
+
 @end
 
 @implementation CCRenderDelegate
 
 - (void)userDidRequestExitVR {}
 
-- (void)nextSceneAfterDelay {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self nextScene:nullptr];
-        [self nextSceneAfterDelay];
-    });
-}
-
-- (IBAction)nextScene:(id)sender {
- 
-}
-
 - (void)setupRendererWithDriver:(std::shared_ptr<VRODriver>)driver {
-    _harness = std::make_shared<VRORendererTestHarness>(self.view.renderer, self.view.frameSynchronizer, driver);
+    self.driver = driver;
+    self.harness = std::make_shared<VRORendererTestHarness>(self.view.renderer, self.view.frameSynchronizer, driver);
     std::shared_ptr<VRORendererTest> test = _harness->loadTest(self.test);
     
     self.view.sceneController = test->getSceneController();
     if (test->getPointOfView()) {
         [self.view setPointOfView:test->getPointOfView()];
     }
+    
+    NSOpenGLContext *oglContext = (__bridge NSOpenGLContext *)driver->getGraphicsContext();
+    CGLContextObj context = [oglContext CGLContextObj];
+    self.syphon = [[SyphonServer alloc] initWithName:nil context:context options:nil];
+    
+    self.renderToTextureDelegate = std::make_shared<CCRenderToTextureDelegate>(self);
+    self.view.choreographer->setRenderToTextureDelegate(self.renderToTextureDelegate);
+    
+    std::vector<std::string> blitSamplers = { "source_texture" };
+    std::vector<std::string> blitCode = {
+        "uniform sampler2D source_texture;",
+        "const highp float gamma = 2.2;",
+        "highp vec3 source_color = texture(source_texture, v_texcoord).rgb;",
+        "highp vec3 gamma_corrected = pow(source_color, vec3(1.0 / gamma));",
+        "frag_color = vec4(gamma_corrected, 1.0);",
+    };
+    std::shared_ptr<VROShaderProgram> blitShader = VROImageShaderProgram::create(blitSamplers, blitCode, driver);
+    _blitPostProcess = driver->newImagePostProcess(blitShader);
+}
+
+- (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target {
+    VROViewScene *view = (VROViewScene *) self.view;
+    std::shared_ptr<VRODriver> driver = self.driver;
+
+    [self.syphon bindToDrawFrameOfSize:view.bounds.size];
+    self.blitPostProcess->blit({ target->getTexture(0) }, driver);
+    [self.syphon unbindAndPublish];
 }
 
 @end
+
+CCRenderToTextureDelegate::CCRenderToTextureDelegate(CCRenderDelegate *renderer) :
+    _renderer(renderer) {
+    
+}
+
+CCRenderToTextureDelegate::~CCRenderToTextureDelegate() {
+    
+}
+
+void CCRenderToTextureDelegate::didRenderFrame(std::shared_ptr<VRORenderTarget> renderedTarget,
+                                               std::shared_ptr<VRODriver> driver) {
+    CCRenderDelegate *renderer = _renderer;
+    if (!renderer) {
+        return;
+    }
+    [renderer publishSyphonFrame:renderedTarget];
+}
 

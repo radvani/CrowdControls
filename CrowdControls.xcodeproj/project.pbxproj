@@ -25,6 +25,10 @@
 		8F292C1A20A9276200635C0D /* cylinder_pbr.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8F292C1420A9276200635C0D /* cylinder_pbr.vrx */; };
 		8F292C1B20A9276200635C0D /* blinn2_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F292C1520A9276200635C0D /* blinn2_Base_Color.png */; };
 		8F292C1C20A9276200635C0D /* blinn2_Mixed_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F292C1620A9276200635C0D /* blinn2_Mixed_AO.png */; };
+		8F292C1E20A9DF3A00635C0D /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C1D20A9DF3A00635C0D /* Syphon.framework */; };
+		8F292C1F20A9DF3A00635C0D /* Syphon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C1D20A9DF3A00635C0D /* Syphon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8F292C2220AA370300635C0D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C2120AA370300635C0D /* Cocoa.framework */; };
+		8F292C2420AA370F00635C0D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C2320AA370F00635C0D /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +39,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				8F292C0720A9268400635C0D /* harfbuzz.framework in Embed Frameworks */,
+				8F292C1F20A9DF3A00635C0D /* Syphon.framework in Embed Frameworks */,
 				8F292C0B20A9269100635C0D /* ViroKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -66,6 +71,9 @@
 		8F292C1420A9276200635C0D /* cylinder_pbr.vrx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cylinder_pbr.vrx; sourceTree = "<group>"; };
 		8F292C1520A9276200635C0D /* blinn2_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blinn2_Base_Color.png; sourceTree = "<group>"; };
 		8F292C1620A9276200635C0D /* blinn2_Mixed_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blinn2_Mixed_AO.png; sourceTree = "<group>"; };
+		8F292C1D20A9DF3A00635C0D /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = Libraries/Syphon/Syphon.framework; sourceTree = "<group>"; };
+		8F292C2120AA370300635C0D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		8F292C2320AA370F00635C0D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +81,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F292C2420AA370F00635C0D /* OpenGL.framework in Frameworks */,
+				8F292C2220AA370300635C0D /* Cocoa.framework in Frameworks */,
 				8F292C0620A9268400635C0D /* harfbuzz.framework in Frameworks */,
+				8F292C1E20A9DF3A00635C0D /* Syphon.framework in Frameworks */,
 				8F292C0A20A9269100635C0D /* ViroKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,6 +134,9 @@
 		8F292BF620A91F7D00635C0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8F292C2320AA370F00635C0D /* OpenGL.framework */,
+				8F292C2120AA370300635C0D /* Cocoa.framework */,
+				8F292C1D20A9DF3A00635C0D /* Syphon.framework */,
 				8F292C0920A9269000635C0D /* ViroKit.framework */,
 				8F292C0520A9268400635C0D /* harfbuzz.framework */,
 			);
@@ -182,6 +196,11 @@
 				TargetAttributes = {
 					8F292BDE20A91F5C00635C0D = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -362,15 +381,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = CrowdControls/CrowdControls.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = FX7DLGYQ33;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/Libraries/Viro",
-					"$(SRCROOT)/Libraries/Harfbuzz/x86_64",
 					"$(PROJECT_DIR)/Libraries/Harfbuzz/x86_64",
 					"$(PROJECT_DIR)/Libraries/Viro",
+					"$(PROJECT_DIR)/Libraries/Syphon",
 				);
 				INFOPLIST_FILE = CrowdControls/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -386,15 +403,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = CrowdControls/CrowdControls.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = FX7DLGYQ33;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/Libraries/Viro",
-					"$(SRCROOT)/Libraries/Harfbuzz/x86_64",
 					"$(PROJECT_DIR)/Libraries/Harfbuzz/x86_64",
 					"$(PROJECT_DIR)/Libraries/Viro",
+					"$(PROJECT_DIR)/Libraries/Syphon",
 				);
 				INFOPLIST_FILE = CrowdControls/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

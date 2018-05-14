@@ -25,12 +25,25 @@
 
 #import <ViroKit/ViroKit.h>
 
+@class CCRenderDelegate;
+
+class CCRenderToTextureDelegate : public VRORenderToTextureDelegate {
+public:
+    CCRenderToTextureDelegate(CCRenderDelegate *renderer);
+    virtual ~CCRenderToTextureDelegate();
+    
+    void didRenderFrame(std::shared_ptr<VRORenderTarget> renderedTarget,
+                        std::shared_ptr<VRODriver> driver);
+private:
+    __weak CCRenderDelegate *_renderer;
+};
+
 @interface CCRenderDelegate : NSObject <VRORenderDelegate>
 
 @property (readwrite, nonatomic) IBOutlet id <VROView> view;
 @property (readwrite, nonatomic) VRORendererTestType test;
 
-- (IBAction)nextScene:(id)sender;
+- (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
 
 @end
 
