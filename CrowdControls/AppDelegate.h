@@ -23,9 +23,12 @@
 //  SOFTWARE.
 
 #import <Cocoa/Cocoa.h>
+#import "CCViewController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
+@property (readwrite, nonatomic) IBOutlet CCViewController *LED;
+@property (readwrite, nonatomic) IBOutlet CCViewController *projection1;
 
 @end
 

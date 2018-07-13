@@ -23,14 +23,15 @@
 //  SOFTWARE.
 
 #import "CCRenderDelegate.h"
+#import "CCFBXTest.h"
 #import <Syphon/Syphon.h>
 
 @interface CCRenderDelegate ()
 
 @property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
-@property (readwrite, nonatomic) std::shared_ptr<VRORendererTestHarness> harness;
 @property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
 @property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
+@property (readwrite, nonatomic) std::shared_ptr<CCFBXTest> fbxTest;
 @property (readwrite, nonatomic) SyphonServer *syphon;
 
 @end
@@ -41,12 +42,12 @@
 
 - (void)setupRendererWithDriver:(std::shared_ptr<VRODriver>)driver {
     self.driver = driver;
-    self.harness = std::make_shared<VRORendererTestHarness>(self.view.renderer, self.view.frameSynchronizer, driver);
-    std::shared_ptr<VRORendererTest> test = _harness->loadTest(self.test);
+    self.fbxTest = std::make_shared<CCFBXTest>();
+    self.fbxTest->build(self.view.renderer, self.view.frameSynchronizer, driver);
     
-    self.view.sceneController = test->getSceneController();
-    if (test->getPointOfView()) {
-        [self.view setPointOfView:test->getPointOfView()];
+    self.view.sceneController = self.fbxTest->getSceneController();
+    if (self.fbxTest->getPointOfView()) {
+        [self.view setPointOfView:self.fbxTest->getPointOfView()];
     }
     
     NSOpenGLContext *oglContext = (__bridge NSOpenGLContext *)driver->getGraphicsContext();
