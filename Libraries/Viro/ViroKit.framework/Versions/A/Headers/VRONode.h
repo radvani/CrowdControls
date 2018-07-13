@@ -118,19 +118,20 @@ public:
     /*
      Recursive function that recomputes the transforms of this node. This includes:
      
-     _computedTransform,
-     _computedRotation,
-     _computedPosition,
-     _computedBoundingBox
+     _worldTransform,
+     _worldRotation,
+     _worldPosition,
+     _worldBoundingBox
      */
     void computeTransforms(VROMatrix4f parentTransform, VROMatrix4f parentRotation);
 
     /*
      Sets both the local position and rotation of this node in terms of world coordinates.
      A computeTransform pass is then performed to update the node's bounding boxes
-     and as well as its child's node transforms recursively.
+     and as well as its child's node transforms recursively. The animated flag should be
+     false in most cases because of the recursive computeTransform pass.
      */
-    void setWorldTransform(VROVector3f finalPosition, VROQuaternion finalRotation);
+    void setWorldTransform(VROVector3f finalPosition, VROQuaternion finalRotation, bool animated = false);
 
     /*
      Update the visibility status of this node, using the camera in the current render
@@ -149,12 +150,6 @@ public:
      */
     void applyConstraints(const VRORenderContext &context, VROMatrix4f parentTransform,
                           bool parentUpdated);
-
-    /*
-     Recursively sets the atomic properties computed during a render pass. Should be
-     called after the computation occurs.
-     */
-    void setAtomicRenderProperties();
     
     /*
      Update the position of each light in this node, and add to the outLights vector.
@@ -242,9 +237,9 @@ public:
     
 #pragma mark - Transforms
     
-    VROVector3f getComputedPosition() const;
-    VROMatrix4f getComputedRotation() const;
-    VROMatrix4f getComputedTransform() const;
+    VROVector3f getWorldPosition() const;
+    VROMatrix4f getWorldRotation() const;
+    VROMatrix4f getWorldTransform() const;
 
     VROVector3f getPosition() const {
         return _position;
@@ -258,16 +253,19 @@ public:
     VROVector3f getRotationEuler() const {
         return _euler;
     }
-    
+
     /*
      The following are atomic, updated once per frame on the rendering thread. They can
      be accessed safely from any thread to get an up-to-date state of the transform.
      */
     VROMatrix4f    getLastWorldTransform() const;
     VROVector3f    getLastWorldPosition() const;
+    VROMatrix4f    getLastWorldRotation() const;
     VROVector3f    getLastLocalPosition() const;
     VROVector3f    getLastLocalScale() const;
     VROQuaternion  getLastLocalRotation() const;
+    VROMatrix4f    getLastScalePivot() const;
+    VROMatrix4f    getLastRotationPivot() const;
     VROBoundingBox getLastUmbrellaBoundingBox() const;
     
     /*
@@ -277,11 +275,6 @@ public:
     void setPosition(VROVector3f position);
     void setScale(VROVector3f scale);
     void setTransformDelegate(std::shared_ptr<VROTransformDelegate> delegate);
-
-    /*
-     Notifies attached transform delegate, if any, that a position change had occurred.
-     */
-    void notifyTransformUpdate(bool forced);
     
     /*
      Set the rotation as a vector of Euler angles. Using this method
@@ -316,6 +309,65 @@ public:
     void setRotationPivot(VROMatrix4f pivot);
     void setScalePivot(VROMatrix4f pivot);
     
+    /*
+     Get the bounding box and the umbrella bounding box. The former is the bounding box
+     of just this node and its geometry; the latter is the union of this node's bounding
+     box and that of all of its child nodes, descending recurisvely down the scene graph.
+     */
+    VROBoundingBox getBoundingBox() const;
+    VROBoundingBox getUmbrellaBoundingBox() const;
+    
+#pragma mark - Application Thread Properties
+
+    // Viro platforms in general properties on the main thread and dispatch those setters
+    // to the rendering thread. This maintains thread-safety (and speed) because we don't
+    // interfere with the ongoing render cycle when setting variables. However, it's common that
+    // the user wants to set something on the application thread and then immediately invoke some
+    // computation utilizing said variable, before it's been synchronized with the rendering
+    // thread. For this reason we copy all relevant fields from VRONode into std::atomic variables.
+    // These variables can be accessed from any thread. This way, we:
+    //
+    // 1. Maintain speed on the rendering thread (e.g. we don't have to lock or deal with atomics)
+    // 2. Maintain access of this data across threads
+    //
+    // In other words, these atomic fields are *duplicates* of rendering thread fields, but are
+    // accessible from the application thread. They are set in two ways:
+    //
+    // 1. By the application, via any atomic setter, from the application thread.
+    // 2. By the renderer, via automatic sync with the rendering thread counterparts,
+    //    once per frame. This mode of update is required because the renderer itself
+    //    changes these variables through internal processes like physics and animation.
+
+    // The atomic setters below will immediately update all of a node's related application
+    // thread properties. For example, node->setPositionAtomic() will immediately update the
+    // application thread's world transform, so that it can be used for other calculations on
+    // the application thread. These setters will *dispatch* to the rendering thread to set the
+    // corresponding rendering thread properties.
+    void setPositionAtomic(VROVector3f position);
+    void setRotationAtomic(VROQuaternion rotation);
+    void setScaleAtomic(VROVector3f scale);
+    void setScalePivotAtomic(VROMatrix4f scalePivot);
+    void setRotationPivotAtomic(VROMatrix4f rotationPivot);
+    
+    /*
+     Must be invoked for this node and its children (all the way down the scene graph) whenever
+     atomic position, scale, scale pivot, rotation, or rotation pivot are set. Computes _lastWorldTransform,
+     _lastWorldPosition, _lastWorldRotation, _lastWorldBoundingBox, and _lastUmbrellaBoundingBox,
+     on this node only. Requires the latest data from this node's parent to make the computations.
+
+     This does not recurse down the scene graph on its own because we do not have access to an
+     application thread copy of the scene graph. ViroCore does have such a copy in Java-land, so it
+     handles the recursive invocation of this method.
+     */
+    void computeTransformsAtomic(VROMatrix4f parentTransform, VROMatrix4f parentRotation);
+    
+    /*
+     Recursively sync the application thread properties with the latest values from the rendering
+     thread. Called on the rendering thread after the transform computation occurs in the render
+     cycle. Dispatches to the application thread.
+     */
+    void syncAppThreadProperties();
+    
 #pragma mark - Render Settings
     
     std::string getName() const {
@@ -347,6 +399,14 @@ public:
     }
     void setHierarchicalRendering(bool hierarchicalRendering) {
         _hierarchicalRendering = hierarchicalRendering;
+    }
+    
+    /*
+     True to stop rendering of this node and all of its children until the
+     model load callbacks are finished. Used internally.
+     */
+    void setHoldRendering(bool hold) {
+        _holdRendering = hold;
     }
     
     /*
@@ -550,8 +610,6 @@ public:
     
 #pragma mark - Events
     
-    VROBoundingBox getBoundingBox() const;
-    VROBoundingBox getUmbrellaBoundingBox() const;
     std::vector<VROHitTestResult> hitTest(const VROCamera &camera, VROVector3f origin, VROVector3f ray,
                                           bool boundsOnly = false);
     
@@ -590,13 +648,11 @@ public:
     void setTag(std::string tag) {
         _tag = tag;
     }
-
     std::string getTag() const {
         return _tag;
     }
     
     void setHighAccuracyGaze(bool enabled);
-    
     bool getHighAccuracyGaze() const {
         return _highAccuracyGaze;
     }
@@ -611,7 +667,6 @@ public:
     void setDragType(VRODragType dragType) {
         _dragType = dragType;
     }
-
     VRODragType getDragType() {
         return _dragType;
     }
@@ -619,7 +674,6 @@ public:
     void setDragPlanePoint(VROVector3f point) {
         _dragPlanePoint = point;
     }
-
     VROVector3f getDragPlanePoint() {
         return _dragPlanePoint;
     }
@@ -627,7 +681,6 @@ public:
     void setDragPlaneNormal(VROVector3f normal) {
         _dragPlaneNormal = normal;
     }
-
     VROVector3f getDragPlaneNormal() {
         return _dragPlaneNormal;
     }
@@ -635,7 +688,6 @@ public:
     void setDragMaxDistance(float maxDistance) {
         _dragMaxDistance = maxDistance;
     }
-
     float getDragMaxDistance() {
         return _dragMaxDistance;
     }
@@ -643,7 +695,6 @@ public:
     bool isAnimatingDrag() {
         return _isAnimatingDrag;
     }
-
     void setIsAnimatingDrag(bool isAnimatingDrag) {
         _isAnimatingDrag = isAnimatingDrag;
     }
@@ -651,7 +702,6 @@ public:
     std::shared_ptr<VROTransaction> getDragAnimation() {
         return _dragAnimation;
     }
-    
     void setDragAnimation(std::shared_ptr<VROTransaction> dragAnimation) {
         _dragAnimation = dragAnimation;
     }
@@ -753,41 +803,51 @@ private:
      Parameters computed by descending down the tree. These are updated whenever
      any parent or this node itself is updated. For example, computedOpacity is
      the opacity of this node multiplied by the opacities of all this node's
-     ancestors. Similarly, computedTransform is the full cascaded transformation 
+     ancestors. Similarly, worldTransform is the full cascaded transformation
      matrix for the node. 
      
-     computedRotation only takes into account rotations (not scale or translation).
+     worldRotation only takes into account rotations (not scale or translation).
      computedLights are the lights that influence this node, based on distance from
      the light and light attenuation, unrelated to the scene graph (e.g. the lights
      in _computedLights may belong to any node in the scene).
      */
-    VROMatrix4f _computedTransform;
-    VROMatrix4f _computedInverseTransposeTransform;
-    VROMatrix4f _computedRotation;
+    VROMatrix4f _worldTransform;
+    VROMatrix4f _worldInverseTransposeTransform;
+    VROMatrix4f _worldRotation;
+    VROVector3f _worldPosition;
     float _computedOpacity;
     std::vector<std::shared_ptr<VROLight>> _computedLights;
     uint32_t _computedLightsHash;
-    VROVector3f _computedPosition;
     std::weak_ptr<VROTransformDelegate> _transformDelegate;
 
     /*
-     Because _computedTransform is computed multiple times during a single render, storing
-     the last fully computed transform is necessary to retrieve a "valid" computedTransform.
-     We also store the last *local* position, scale, and rotation atomically.
+     Application-thread copies of the node's transform data. See the 'Application Thread
+     Properties' pragma above for a more extensive description of why we need these fields.
+     The following are computed fields (not directly set by users).
      */
-    std::atomic<VROMatrix4f> _lastComputedTransform;
-    std::atomic<VROVector3f> _lastComputedPosition;
+    std::atomic<VROMatrix4f> _lastWorldTransform;
+    std::atomic<VROVector3f> _lastWorldPosition;
+    std::atomic<VROMatrix4f> _lastWorldRotation;
+    std::atomic<VROBoundingBox> _lastWorldBoundingBox;
+    std::atomic<VROBoundingBox> _lastUmbrellaBoundingBox;
+    
+    /*
+     Directly-set application thread properties.
+     */
     std::atomic<VROVector3f> _lastPosition;
     std::atomic<VROVector3f> _lastScale;
     std::atomic<VROQuaternion> _lastRotation;
-    std::atomic<VROBoundingBox> _lastUmbrellaBoundingBox;
+    std::atomic<VROMatrix4f> _lastScalePivot, _lastScalePivotInverse;
+    std::atomic<VROMatrix4f> _lastRotationPivot, _lastRotationPivotInverse;
+    std::atomic<bool> _lastHasScalePivot;
+    std::atomic<bool> _lastHasRotationPivot;
 
     /*
      The transformed bounding box containing this node's geometry. The 
      _umbrellaBoundingBox encompasses not only this geometry, but the geometries
      of all this node's children.
      */
-    VROBoundingBox _computedBoundingBox;
+    VROBoundingBox _worldBoundingBox;
     VROBoundingBox _umbrellaBoundingBox;
     VROFrustumBoxIntersectionMetadata _umbrellaBoxMetadata;
     
@@ -886,6 +946,11 @@ private:
     std::shared_ptr<VROTransaction> _dragAnimation;
     
 #pragma mark - Private
+
+    /*
+     Notifies attached transform delegate, if any, that a position change had occurred.
+     */
+    void notifyTransformUpdate(bool forced);
     
     /*
      Recursively set the visibility of this node and all of its children to the 
@@ -894,7 +959,7 @@ private:
     void setVisibilityRecursive(bool visible);
     
     /*
-     Recursively expand the given bounding box by this node's _computedBoundingBox.
+     Recursively expand the given bounding box by this node's _worldBoundingBox.
      */
     void computeUmbrellaBounds(VROBoundingBox *bounds) const;
     
@@ -902,9 +967,9 @@ private:
      Compute the transform for this node, taking into the account the parent's transform.
      Updates all related variables:
      
-     _computedTransform
-     _computedPosition
-     _computedBoundingBox
+     _worldTransform
+     _worldPosition
+     _worldBoundingBox
      */
     void doComputeTransform(VROMatrix4f parentTransform);
     
@@ -959,6 +1024,12 @@ private:
      Non-unique tag identifier representing this node. Defaults to kDefaultNodeTag.
      */
     std::string _tag = kDefaultNodeTag;
+    
+    /*
+     Used internally to hold the rendering of a node and all of its children until a model
+     load callback has been invoked.
+     */
+    bool _holdRendering;
 };
 
 #endif /* VRONode_h */

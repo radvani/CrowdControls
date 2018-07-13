@@ -30,7 +30,7 @@ public:
      Returns whether or not the given VROARAnchor fulfills this plane's requirements.
      */
     bool hasRequirementsFulfilled(std::shared_ptr<VROARAnchor> candidate) {
-        std::shared_ptr<VROARPlaneAnchor> planeAnchor = std::dynamic_pointer_cast<VROARPlaneAnchor>(candidate);
+        std::shared_ptr<VROARPlaneAnchor> planeAnchor = std::dynamic_pointer_cast<VROARPlaneAnchor>(candidate->getAnchorForTrackable());
         if (!planeAnchor) {
             return false;
         }
@@ -46,7 +46,7 @@ public:
          Horizontal       | n/a                   | Horizontal, Up, Down
          Up               | Up, Horizontal        | n/a
          Down             | Down, Horizontal      | n/a
-         Vertical         | n/a                   | Vertical
+         Vertical         | Vertical              | Vertical
 
          */
 #if VRO_PLATFORM_IOS
@@ -67,8 +67,8 @@ public:
                 break;
         }
 #elif VRO_PLATFORM_ANDROID
-        // Android really only has 2 types of plane alignments, up and down.
         switch (planeAnchor->getAlignment()) {
+            case VROARPlaneAlignment::Horizontal:
             case VROARPlaneAlignment::HorizontalUpward:
                 if (_alignment != VROARPlaneAlignment::Horizontal
                     && _alignment != VROARPlaneAlignment::HorizontalUpward) {
@@ -80,11 +80,14 @@ public:
                     && _alignment != VROARPlaneAlignment::HorizontalDownward) {
                     return false;
                 }
+            case VROARPlaneAlignment::Vertical:
+                if (_alignment != VROARPlaneAlignment::Vertical) {
+                    return false;
+                }
             default:
                 break;
         }
 #endif
-        
         return true;
     }
     

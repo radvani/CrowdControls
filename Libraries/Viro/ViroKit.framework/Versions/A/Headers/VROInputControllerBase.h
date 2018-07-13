@@ -38,7 +38,7 @@ static float kSceneBackgroundDistance = 8;
  */
 class VROInputControllerBase {
 public:
-    VROInputControllerBase();
+    VROInputControllerBase(std::shared_ptr<VRODriver> driver);
     virtual ~VROInputControllerBase(){}
     
     /*
@@ -86,8 +86,9 @@ public:
      rendering thread.
      */
     std::shared_ptr<VROInputPresenter> getPresenter() {
-        if (!_controllerPresenter) {
-            _controllerPresenter = createPresenter();
+        std::shared_ptr<VRODriver> driver = _driver.lock();
+        if (!_controllerPresenter && driver) {
+            _controllerPresenter = createPresenter(driver);
             registerEventDelegate(_controllerPresenter);
         }
         return _controllerPresenter;
@@ -133,9 +134,14 @@ public:
     
     void onRotate(int source, float rotationRadians, VROEventDelegate::RotateState rotateState);
 
+    /*
+     Function that attempts to notify a delegate on the Scene of the current camera transform.
+     */
+    void notifyCameraTransform(const VROCamera &camera);
+
 protected:
     
-    virtual std::shared_ptr<VROInputPresenter> createPresenter(){
+    virtual std::shared_ptr<VROInputPresenter> createPresenter(std::shared_ptr<VRODriver> driver) {
         perror("Error: Derived class should create a presenter for BaseInputController to consume!");
         return nullptr;
     }
@@ -164,6 +170,7 @@ protected:
         std::shared_ptr<VRONode> _draggedNode;
         VROVector3f _originalHitLocation;
         VROVector3f _originalDraggedNodePosition;
+        VROQuaternion _originalDraggedNodeRotation;
         VROVector3f _forwardOffset;
         float _draggedDistanceFromController;
     };
@@ -299,6 +306,12 @@ private:
      True if we have already notified delegates about the onFuse event.
      */
     bool _haveNotifiedOnFuseTriggered;
+
+    /*
+     Weak pointer to the driver.
+     */
+    std::weak_ptr<VRODriver> _driver;
+
     void processOnFuseEvent(int source, std::shared_ptr<VRONode> node);
     void notifyOnFuseEvent(int source, float timeToFuseRatio);
 };

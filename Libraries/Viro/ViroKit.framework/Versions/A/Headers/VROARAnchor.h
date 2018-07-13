@@ -33,7 +33,7 @@
  VROARAnchor is subclassed by specific anchor types; planes, image targets, 
  etc.
  */
-class VROARAnchor {
+class VROARAnchor : public std::enable_shared_from_this<VROARAnchor> {
 public:
     
     /*
@@ -73,6 +73,14 @@ public:
         _node = node;
         updateNodeTransform();
     }
+
+    /*
+     Get the anchor that's associated with the real-world object. On ARKit this is simply this
+     anchor itself; while on ARCore the anchors have attached 'trackable' anchors.
+     */
+    virtual std::shared_ptr<VROARAnchor> getAnchorForTrackable() {
+        return shared_from_this();
+    }
     
     /*
      Update the anchor's node's transforms given the data in the anchor.
@@ -96,6 +104,15 @@ private:
 
     /*
      The node associated with this anchor.
+
+     There is an *intentional* strong reference cycle between VROARNode and VROARAnchor. Anchors and
+     ARNodes are managed in one of two ways:
+
+     1. By the AR subsystem (ARCore). When anchors are bound to trackables, and the bound trackable
+        disappears, VROARSessionARCore will remove the corresponding VROARAnchor and its VROARNode.
+
+     2. Manually, by attaching anchors to hit results. In this case, anchors and nodes are removed
+        together when the ARNode is detached from the system (see ARNode.detach() in Java).
      */
     std::shared_ptr<VROARNode> _node;
     

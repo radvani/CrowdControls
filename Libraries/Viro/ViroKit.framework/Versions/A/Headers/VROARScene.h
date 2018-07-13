@@ -22,7 +22,7 @@ class VROFixedParticleEmitter;
 class VROARSceneDelegate {
 public:
     virtual void onTrackingUpdated(VROARTrackingState state, VROARTrackingStateReason reason) = 0;
-    virtual void onAmbientLightUpdate(float ambientLightIntensity, float colorTemperature) = 0;
+    virtual void onAmbientLightUpdate(float ambientLightIntensity, VROVector3f ambientLightColor) = 0;
 };
 
 class VROARScene : public VROScene {
@@ -33,6 +33,8 @@ public:
         _displayPointCloud(false),
         _pointCloudSurfaceScale(VROVector3f(.01, .01, 1)),
         _pointCloudMaxPoints(500) {
+            _ambientLightIntensity.store(1000),
+            _ambientLightColor.store({ 1.0, 1.0, 1.0 }),
             _pointCloudNode = std::make_shared<VRONode>();
             _pointCloudEmitter = nullptr;
             _detectionTypes = { VROAnchorDetection::PlanesHorizontal }; //default is horizontal
@@ -89,11 +91,25 @@ public:
     
     void setDelegate(std::shared_ptr<VROARSceneDelegate> delegate);
     void setTrackingState(VROARTrackingState state, VROARTrackingStateReason reason, bool force);
-    void updateAmbientLight(float intensity, float colorTemperature);
+
+    /*
+     Get the ambient light estimate of the scene.
+     */
+    float getAmbientLightIntensity() const { return _ambientLightIntensity.load(); }
+    VROVector3f getAmbientLightColor() const { return _ambientLightColor.load(); }
+    
+    /*
+     Update the ambient light estimate of the scene. Intensity is reported in
+     lumens and color is reported in linear space.
+     */
+    void updateAmbientLight(float intensity, VROVector3f color);
     
     void willAppear();
     void willDisappear();
-    
+
+    std::shared_ptr<VROARSession> getARSession() {
+        return _arSession.lock();
+    }
     std::shared_ptr<VROARDeclarativeSession> getDeclarativeSession() {
         return _declarativeSession;
     }
@@ -104,6 +120,7 @@ public:
     void updateParticles(const VRORenderContext &context);
     
 private:
+    
     /*
      The anchors that we should detect in this scene. This is the *ground truth* setting for
      this variable. It is stored here so that it can be pushed into the VROARSession when that
@@ -119,6 +136,12 @@ private:
     std::shared_ptr<VRONode> _pointCloudNode;
     std::shared_ptr<VROFixedParticleEmitter> _pointCloudEmitter;
     std::weak_ptr<VROARSceneDelegate> _delegate;
+    
+    /*
+     Ambient light estimation. The intensity is in lumens and the color is in linear space.
+     */
+    std::atomic<float> _ambientLightIntensity;
+    std::atomic<VROVector3f> _ambientLightColor;
 
     /*
      Tracking states that have been read from AR cameras. Usually, this flips between Unavailable

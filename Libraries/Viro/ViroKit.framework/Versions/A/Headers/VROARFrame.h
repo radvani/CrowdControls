@@ -14,6 +14,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include "VROVector3f.h"
 
 class VROARCamera;
 class VROARAnchor;
@@ -48,7 +49,7 @@ public:
      system is viewport pixels (e.g. the coordinate system in which
      VROViewport is defined).
      */
-    virtual std::vector<VROARHitTestResult> hitTest(int x, int y, std::set<VROARHitTestResultType> types) = 0;
+    virtual std::vector<std::shared_ptr<VROARHitTestResult>> hitTest(int x, int y, std::set<VROARHitTestResultType> types) = 0;
 
     /*
      Returns the affine transform to move from viewport space to camera
@@ -71,9 +72,9 @@ public:
     virtual float getAmbientLightIntensity() const = 0;
 
     /*
-     Return the estimate color temperature of ambient light in the physical scene.
+     Return the estimated color of ambient light in the physical scene, in linear RGB space.
      */
-    virtual float getAmbientLightColorTemperature() const = 0;
+    virtual VROVector3f getAmbientLightColor() const = 0;
 
     /*
      Get all the anchors representing tracked positions and objects in the

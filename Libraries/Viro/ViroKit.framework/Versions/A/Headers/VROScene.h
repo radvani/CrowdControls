@@ -46,7 +46,7 @@ public:
     /*
      Compute the transforms, recursively, for all nodes in this scene.
      */
-    void computeTransforms(const VRORenderContext &context);
+    void computeTransforms();
 
     /*
      Update the visibility status of all nodes in the scene graph.
@@ -65,10 +65,10 @@ public:
     void applyConstraints(const VRORenderContext &context);
     
     /*
-     Notifies the root node that it the render properties have settled and
-     that it should set them now.
+     Notifies the root node that the render properties have settled and
+     that it should sync them now with their corresponding atomics.
      */
-    void setAtomicRenderProperties();
+    void syncAtomicRenderProperties();
     
     /*
      Update the sort keys for all nodes in this scene.
