@@ -69,6 +69,10 @@
     _blitPostProcess = driver->newImagePostProcess(blitShader);
 }
 
+- (void)rotateColor {
+    self.fbxTest->rotateColor();
+}
+
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target {
     VROViewScene *view = (VROViewScene *) self.view;
     std::shared_ptr<VRODriver> driver = self.driver;

@@ -1,8 +1,9 @@
 //
-//  CCRenderDelegate.h
+//  CCSignalReader.h
 //  CrowdControls
 //
-//  Created by Raj Advani on 5/13/18.
+//  Copyright © 2018 Raj Advani. All rights reserved.
+//  Created by Raj Advani on 7/14/18.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +23,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <ViroKit/ViroKit.h>
+#ifndef CCSignalReader_h
+#define CCSignalReader_h
 
-@class CCRenderDelegate;
+#include <Foundation/Foundation.h>
+#include <string>
 
-class CCRenderToTextureDelegate : public VRORenderToTextureDelegate {
-public:
-    CCRenderToTextureDelegate(CCRenderDelegate *renderer);
-    virtual ~CCRenderToTextureDelegate();
-    
-    void didRenderFrame(std::shared_ptr<VRORenderTarget> renderedTarget,
-                        std::shared_ptr<VRODriver> driver);
-private:
-    __weak CCRenderDelegate *_renderer;
-};
+@protocol CCSignalDelegate
+@required
 
-@interface CCRenderDelegate : NSObject <VRORenderDelegate>
-
-@property (readwrite, nonatomic) IBOutlet id <VROView> view;
-@property (readwrite, nonatomic) VRORendererTestType test;
-
-- (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
-- (void)rotateColor;
+- (void)pin:(int)pin didChangeSignal:(int)signal;
 
 @end
 
+@interface CCSignalReader : NSObject
 
+@property (readwrite, nonatomic) id<CCSignalDelegate> delegate;
+
+- (id)init;
+- (void)listPorts;
+- (void)connect:(std::string)port;
+    
+@end
+
+#endif /* CCSignalReader_h */

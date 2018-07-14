@@ -46,6 +46,9 @@
 @property (nonatomic, strong) CCViewController *p3ViewController;
 @property (nonatomic, strong) CCRenderDelegate *p3RenderDelegate;
 
+@property (nonatomic, strong) CCColorChangeSignalDelegate *signalDelegate;
+
+
 @end
 
 @implementation AppDelegate
@@ -55,7 +58,6 @@
                        NSWindowStyleMaskUnifiedTitleAndToolbar | NSWindowStyleMaskTexturedBackground;
     
     NSRect windowSize = NSMakeRect(20, 20, 600, 600);
-    
     
     /*
      LED Screen.
@@ -112,6 +114,14 @@
     [self.p3Window orderFront:self];
     self.p3Window.title = @"Projector 3";
     self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
+    
+    CCSignalReader *reader = [[CCSignalReader alloc] init];
+    [reader listPorts];
+    [reader connect:"/dev/cu.usbmodem14411"];
+    
+    self.signalDelegate = [[CCColorChangeSignalDelegate alloc] init];
+    [self.signalDelegate setLedRenderDelegate:self.ledRenderDelegate];
+    reader.delegate = self.signalDelegate;
 }
 
 
@@ -119,5 +129,13 @@
     // Insert code here to tear down your application
 }
 
+@end
+
+@implementation CCColorChangeSignalDelegate
+
+- (void)pin:(int)pin didChangeSignal:(int)signal {
+    NSLog(@"Pin %d did change signal to %d", pin, signal);
+    [self.ledRenderDelegate rotateColor];
+}
 
 @end

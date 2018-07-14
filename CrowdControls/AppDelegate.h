@@ -24,11 +24,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CCViewController.h"
+#import "CCSignalReader.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
-@property (readwrite, nonatomic) IBOutlet CCViewController *LED;
-@property (readwrite, nonatomic) IBOutlet CCViewController *projection1;
+@end
 
+@interface CCColorChangeSignalDelegate : NSObject <CCSignalDelegate>
+@property (readwrite, nonatomic) CCRenderDelegate *ledRenderDelegate;
+- (void)pin:(int)pin didChangeSignal:(int)signal;
 @end
 

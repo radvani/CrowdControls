@@ -211,6 +211,18 @@ void CCFBXTest::setColor(std::shared_ptr<VRONode> node, VROVector4f color) {
     }
 }
 
+void CCFBXTest::rotateColor() {
+    if (!_fbxContainerNode) {
+        return;
+    }
+    
+    float red = arc4random() % 255 / 255.0;
+    float green = arc4random() % 255 / 255.0;
+    float blue = arc4random() % 255 / 255.0;
+    VROVector4f color = { red, green, blue, 1.0 };
+    setColor(_fbxContainerNode, color);
+}
+
 std::shared_ptr<VROTexture> CCFBXTest::loadRadianceHDRTexture(std::string texture) {
     std::string path;
     NSString *fbxPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:texture.c_str()]

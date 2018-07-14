@@ -1,6 +1,6 @@
 //
 //  CCFBXTest.h
-//  ViroKit
+//  CrowdControls
 //
 //  Created by Raj Advani on 6/30/18.
 //
@@ -69,6 +69,7 @@ public:
         return _sceneController;
     }
     
+    void rotateColor();
     void rotateFBX();
     
 private:
