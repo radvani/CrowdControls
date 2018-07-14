@@ -101,6 +101,7 @@ void CCFBXTest::build(std::shared_ptr<VRORenderer> renderer,
     
     std::shared_ptr<VRONode> cameraNode = std::make_shared<VRONode>();
     cameraNode->setCamera(camera);
+    cameraNode->setPosition({ 0, 0.5, 1 });
     rootNode->addChildNode(cameraNode);
     
     _pointOfView = cameraNode;

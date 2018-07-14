@@ -56,61 +56,67 @@
     NSUInteger masks = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable |
                        NSWindowStyleMaskUnifiedTitleAndToolbar | NSWindowStyleMaskTexturedBackground;
     
-    NSRect windowSize = NSMakeRect(20, 20, 600, 600);
+    int windowLength = 800;
+    int windowHeight = 500;
+    int padding = 15;
     
     /*
      LED Screen.
      */
-    self.ledWindow = [[NSWindow alloc] initWithContentRect:windowSize styleMask:masks backing:NSBackingStoreBuffered
+    self.ledWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, padding, windowLength, windowHeight)
+                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                      defer:NO];
     self.ledRenderDelegate = [[CCAnimationScreen alloc] init];
     self.ledViewController = [[CCViewController alloc] init];
     self.ledViewController.renderDelegate = self.ledRenderDelegate;
     
     self.ledWindow.contentView = self.ledViewController.view;
-    [self.ledWindow orderFront:self];
+    [self.ledWindow orderBack:self];
     self.ledWindow.title = @"LED Screen";
     self.ledWindowController = [[NSWindowController alloc] initWithWindow:self.ledWindow];
     
     /*
      Projector 1.
      */
-    self.p1Window = [[NSWindow alloc] initWithContentRect:windowSize styleMask:masks backing:NSBackingStoreBuffered
+    self.p1Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, padding, windowLength, windowHeight)
+                                                styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
     self.p1RenderDelegate = [[CCAnimationScreen alloc] init];
     self.p1ViewController = [[CCViewController alloc] init];
     self.p1ViewController.renderDelegate = self.p1RenderDelegate;
     
     self.p1Window.contentView = self.p1ViewController.view;
-    [self.p1Window orderFront:self];
+    [self.p1Window orderBack:self];
     self.p1Window.title = @"Projector 1";
     self.p1WindowController = [[NSWindowController alloc] initWithWindow:self.p1Window];
     
     /*
      Projector 2.
      */
-    self.p2Window = [[NSWindow alloc] initWithContentRect:windowSize styleMask:masks backing:NSBackingStoreBuffered
+    self.p2Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, windowHeight + 2 * padding, windowLength, windowHeight)
+                                                styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
     self.p2RenderDelegate = [[CCAnimationScreen alloc] init];
     self.p2ViewController = [[CCViewController alloc] init];
     self.p2ViewController.renderDelegate = self.p2RenderDelegate;
     
     self.p2Window.contentView = self.p2ViewController.view;
-    [self.p2Window orderFront:self];
+    [self.p2Window orderBack:self];
     self.p2Window.title = @"Projector 2";
     self.p2WindowController = [[NSWindowController alloc] initWithWindow:self.p2Window];
     
     /*
      Projector 3.
      */
-    self.p3Window = [[NSWindow alloc] initWithContentRect:windowSize styleMask:masks backing:NSBackingStoreBuffered
+    self.p3Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, windowHeight + 2 * padding, windowLength, windowHeight)
+                                                styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
     self.p3RenderDelegate = [[CCAnimationScreen alloc] init];
     self.p3ViewController = [[CCViewController alloc] init];
     self.p3ViewController.renderDelegate = self.p3RenderDelegate;
     
     self.p3Window.contentView = self.p3ViewController.view;
-    [self.p3Window orderFront:self];
+    [self.p3Window orderBack:self];
     self.p3Window.title = @"Projector 3";
     self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
     
