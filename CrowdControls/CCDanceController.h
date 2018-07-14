@@ -1,8 +1,9 @@
 //
-//  CCRenderDelegate.h
+//  CCDanceController.h
 //  CrowdControls
 //
-//  Created by Raj Advani on 5/13/18.
+//  Created by Raj Advani on 7/14/18.
+//  Copyright © 2018 Raj Advani. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +23,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <ViroKit/ViroKit.h>
+#import <Foundation/Foundation.h>
+#import "CCSignalReader.h"
 
-@class CCRenderDelegate;
-
-class CCRenderToTextureDelegate : public VRORenderToTextureDelegate {
-public:
-    CCRenderToTextureDelegate(CCRenderDelegate *renderer);
-    virtual ~CCRenderToTextureDelegate();
-    
-    void didRenderFrame(std::shared_ptr<VRORenderTarget> renderedTarget,
-                        std::shared_ptr<VRODriver> driver);
-private:
-    __weak CCRenderDelegate *_renderer;
+typedef NS_ENUM(NSInteger, CCBodyPart) {
+    CCBodyPartHead,
+    CCBodyPartLeftArm,
+    CCBodyPartRightArm,
+    CCBodyPartLeftLeg,
+    CCBodyPartRightLeg
 };
 
-@interface CCRenderDelegate : NSObject <VRORenderDelegate>
+@interface CCDanceController : NSObject <CCSignalDelegate>
 
-@property (readwrite, nonatomic) IBOutlet id <VROView> view;
-@property (readwrite, nonatomic) VRORendererTestType test;
-
-- (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
-- (void)rotateColor;
+- (id)initWithAnimationScreens:(NSArray *)animationScreens;
+- (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal;
 
 @end
-
 

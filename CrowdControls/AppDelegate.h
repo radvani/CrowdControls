@@ -24,14 +24,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CCViewController.h"
-#import "CCSignalReader.h"
+
+@class CCDanceController;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
-@end
+@property (nonatomic, strong) CCDanceController *danceController;
 
-@interface CCColorChangeSignalDelegate : NSObject <CCSignalDelegate>
-@property (readwrite, nonatomic) CCRenderDelegate *ledRenderDelegate;
-- (void)pin:(int)pin didChangeSignal:(int)signal;
 @end
 

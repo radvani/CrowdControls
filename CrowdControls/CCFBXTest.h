@@ -69,7 +69,7 @@ public:
         return _sceneController;
     }
     
-    void rotateColor();
+    void setColor(VROVector4f color);
     void rotateFBX();
     
 private:
@@ -82,6 +82,14 @@ private:
     int _fbxIndex;
     float _angle;
     std::vector<std::vector<CCFBXModel>> _models;
+    
+    /*
+    White FFFFFF      r-255 g-255 b-255
+    Blue 1E91E1        r-30 g-145 b-225
+    Red DE1B37        r-222 g-27 b-55
+    Green 6AED6D    r-106 g-237, b-109
+    Yellow FFD956     r-255 g-217 b-86
+     */
     
     static std::shared_ptr<VRONode> loadFBXModel(std::string model, VROVector3f position, VROVector3f scale,
                                                  std::string animation, std::shared_ptr<VRODriver> driver);

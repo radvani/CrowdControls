@@ -1,5 +1,5 @@
 //
-//  CCViewController.h
+//  CCAnimationScreen.h
 //  CrowdControls
 //
 //  Created by Raj Advani on 5/13/18.
@@ -22,12 +22,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <Cocoa/Cocoa.h>
 #import <ViroKit/ViroKit.h>
-#import "CCAnimationScreen.h"
+#import "CCDanceController.h"
 
-@interface CCViewController : NSViewController
+@class CCAnimationScreen;
 
-@property (readwrite, nonatomic) IBOutlet CCAnimationScreen *renderDelegate;
+class CCRenderToTextureDelegate : public VRORenderToTextureDelegate {
+public:
+    CCRenderToTextureDelegate(CCAnimationScreen *renderer);
+    virtual ~CCRenderToTextureDelegate();
+    
+    void didRenderFrame(std::shared_ptr<VRORenderTarget> renderedTarget,
+                        std::shared_ptr<VRODriver> driver);
+private:
+    __weak CCAnimationScreen *_renderer;
+};
+
+@interface CCAnimationScreen : NSObject <VRORenderDelegate>
+
+@property (readwrite, nonatomic) IBOutlet id <VROView> view;
+@property (readwrite, nonatomic) VRORendererTestType test;
+
+- (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
+- (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color;
 
 @end
+
+

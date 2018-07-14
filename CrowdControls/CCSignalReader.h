@@ -29,10 +29,41 @@
 #include <Foundation/Foundation.h>
 #include <string>
 
+static const int kSignalOff = 0;
+static const int kSignalOn = 1;
+
+typedef NS_ENUM(NSInteger, CCSignalPin) {
+    CCSignalPinHeadWhite,
+    CCSignalPinLeftArmWhite,
+    CCSignalPinRightArmWhite,
+    CCSignalPinLeftLegWhite,
+    CCSignalPinRightLegWhite,
+    CCSignalPinHeadBlue,
+    CCSignalPinLeftArmBlue,
+    CCSignalPinRightArmBlue,
+    CCSignalPinLeftLegBlue,
+    CCSignalPinRightLegBlue,
+    CCSignalPinHeadRed,
+    CCSignalPinLeftArmRed,
+    CCSignalPinRightArmRed,
+    CCSignalPinLeftLegRed,
+    CCSignalPinRightLegRed,
+    CCSignalPinHeadGreen,
+    CCSignalPinLeftArmGreen,
+    CCSignalPinRightArmGreen,
+    CCSignalPinLeftLegGreen,
+    CCSignalPinRightLegGreen,
+    CCSignalPinHeadYellow,
+    CCSignalPinLeftArmYellow,
+    CCSignalPinRightArmYellow,
+    CCSignalPinLeftLegYellow,
+    CCSignalPinRightLegYellow
+};
+
 @protocol CCSignalDelegate
 @required
 
-- (void)pin:(int)pin didChangeSignal:(int)signal;
+- (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal;
 
 @end
 

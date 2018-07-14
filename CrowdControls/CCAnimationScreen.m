@@ -1,5 +1,5 @@
 //
-//  CCRenderDelegate.m
+//  CCAnimationScreen.m
 //  CrowdControls
 //
 //  Created by Raj Advani on 5/13/18.
@@ -22,11 +22,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import "CCRenderDelegate.h"
+#import "CCAnimationScreen.h"
 #import "CCFBXTest.h"
 #import <Syphon/Syphon.h>
 
-@interface CCRenderDelegate ()
+@interface CCAnimationScreen ()
 
 @property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
 @property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
@@ -36,7 +36,7 @@
 
 @end
 
-@implementation CCRenderDelegate
+@implementation CCAnimationScreen
 
 - (void)userDidRequestExitVR {}
 
@@ -69,8 +69,9 @@
     _blitPostProcess = driver->newImagePostProcess(blitShader);
 }
 
-- (void)rotateColor {
-    self.fbxTest->rotateColor();
+- (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color {
+    // TODO Find the nodes corresponding to the body part
+    self.fbxTest->setColor(color);
 }
 
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target {
@@ -84,7 +85,7 @@
 
 @end
 
-CCRenderToTextureDelegate::CCRenderToTextureDelegate(CCRenderDelegate *renderer) :
+CCRenderToTextureDelegate::CCRenderToTextureDelegate(CCAnimationScreen *renderer) :
     _renderer(renderer) {
     
 }
@@ -95,7 +96,7 @@ CCRenderToTextureDelegate::~CCRenderToTextureDelegate() {
 
 void CCRenderToTextureDelegate::didRenderFrame(std::shared_ptr<VRORenderTarget> renderedTarget,
                                                std::shared_ptr<VRODriver> driver) {
-    CCRenderDelegate *renderer = _renderer;
+    CCAnimationScreen *renderer = _renderer;
     if (!renderer) {
         return;
     }

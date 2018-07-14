@@ -117,7 +117,7 @@ static const int kPinCapacity = 50;
                 if (pins[pin] != signal) {
                     pins[pin] = signal;
                     if (self.delegate) {
-                        [self.delegate pin:pin didChangeSignal:signal];
+                        [self.delegate pin:(CCSignalPin)pin didChangeSignal:signal];
                     }
                 }
             }

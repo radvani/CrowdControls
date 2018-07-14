@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		8F201C2720FA6EEF00637A75 /* CCSignalReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */; };
 		8F201C2920FA70CF00637A75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F201C2820FA70CF00637A75 /* IOKit.framework */; };
+		8F201C2C20FA9B4E00637A75 /* CCColumnSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */; };
+		8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2E20FAB08100637A75 /* CCDanceController.m */; };
+		8F201C3120FAB14100637A75 /* CCAnimationScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C3020FAB14000637A75 /* CCAnimationScreen.m */; };
 		8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE320A91F5C00635C0D /* AppDelegate.m */; };
 		8F292BE720A91F5C00635C0D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE620A91F5C00635C0D /* ViewController.m */; };
 		8F292BE920A91F5E00635C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F292BE820A91F5E00635C0D /* Assets.xcassets */; };
 		8F292BEC20A91F5E00635C0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F292BEA20A91F5E00635C0D /* Main.storyboard */; };
 		8F292BEF20A91F5E00635C0D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BEE20A91F5E00635C0D /* main.m */; };
-		8F292BFD20A91FF000635C0D /* CCRenderDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BFA20A91FF000635C0D /* CCRenderDelegate.m */; };
 		8F292BFE20A91FF000635C0D /* CCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BFB20A91FF000635C0D /* CCViewController.m */; };
 		8F292C0620A9268400635C0D /* harfbuzz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C0520A9268400635C0D /* harfbuzz.framework */; };
 		8F292C0720A9268400635C0D /* harfbuzz.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C0520A9268400635C0D /* harfbuzz.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -69,6 +71,11 @@
 		8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCSignalReader.mm; sourceTree = "<group>"; };
 		8F201C2620FA6EEF00637A75 /* CCSignalReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCSignalReader.h; sourceTree = "<group>"; };
 		8F201C2820FA70CF00637A75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		8F201C2A20FA9B4E00637A75 /* CCColumnSimulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCColumnSimulator.h; sourceTree = "<group>"; };
+		8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCColumnSimulator.m; sourceTree = "<group>"; };
+		8F201C2D20FAB08100637A75 /* CCDanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCDanceController.h; sourceTree = "<group>"; };
+		8F201C2E20FAB08100637A75 /* CCDanceController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCDanceController.m; sourceTree = "<group>"; };
+		8F201C3020FAB14000637A75 /* CCAnimationScreen.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCAnimationScreen.m; sourceTree = "<group>"; };
 		8F292BDF20A91F5C00635C0D /* CrowdControls.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrowdControls.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F292BE220A91F5C00635C0D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8F292BE320A91F5C00635C0D /* AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -79,8 +86,7 @@
 		8F292BED20A91F5E00635C0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F292BEE20A91F5E00635C0D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8F292BF020A91F5E00635C0D /* CrowdControls.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CrowdControls.entitlements; sourceTree = "<group>"; };
-		8F292BF920A91FF000635C0D /* CCRenderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCRenderDelegate.h; sourceTree = "<group>"; };
-		8F292BFA20A91FF000635C0D /* CCRenderDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCRenderDelegate.m; sourceTree = "<group>"; };
+		8F292BF920A91FF000635C0D /* CCAnimationScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAnimationScreen.h; sourceTree = "<group>"; };
 		8F292BFB20A91FF000635C0D /* CCViewController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCViewController.m; sourceTree = "<group>"; };
 		8F292BFC20A91FF000635C0D /* CCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCViewController.h; sourceTree = "<group>"; };
 		8F292C0520A9268400635C0D /* harfbuzz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = harfbuzz.framework; path = Libraries/Harfbuzz/x86_64/harfbuzz.framework; sourceTree = "<group>"; };
@@ -153,8 +159,8 @@
 			children = (
 				8F292C0E20A926D600635C0D /* Models */,
 				8F292C0D20A926B600635C0D /* Images */,
-				8F292BF920A91FF000635C0D /* CCRenderDelegate.h */,
-				8F292BFA20A91FF000635C0D /* CCRenderDelegate.m */,
+				8F292BF920A91FF000635C0D /* CCAnimationScreen.h */,
+				8F201C3020FAB14000637A75 /* CCAnimationScreen.m */,
 				8F292BFC20A91FF000635C0D /* CCViewController.h */,
 				8F292BFB20A91FF000635C0D /* CCViewController.m */,
 				8F2F341F20E7D96D001962D0 /* CCFBXTest.h */,
@@ -165,6 +171,10 @@
 				8F292BE320A91F5C00635C0D /* AppDelegate.m */,
 				8F292BE520A91F5C00635C0D /* ViewController.h */,
 				8F292BE620A91F5C00635C0D /* ViewController.m */,
+				8F201C2A20FA9B4E00637A75 /* CCColumnSimulator.h */,
+				8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */,
+				8F201C2D20FAB08100637A75 /* CCDanceController.h */,
+				8F201C2E20FAB08100637A75 /* CCDanceController.m */,
 				8F292BE820A91F5E00635C0D /* Assets.xcassets */,
 				8F292BEA20A91F5E00635C0D /* Main.storyboard */,
 				8F292BED20A91F5E00635C0D /* Info.plist */,
@@ -320,9 +330,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F292BFD20A91FF000635C0D /* CCRenderDelegate.m in Sources */,
+				8F201C3120FAB14100637A75 /* CCAnimationScreen.m in Sources */,
 				8F201C2720FA6EEF00637A75 /* CCSignalReader.mm in Sources */,
+				8F201C2C20FA9B4E00637A75 /* CCColumnSimulator.m in Sources */,
 				8F292BE720A91F5C00635C0D /* ViewController.m in Sources */,
+				8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */,
 				8F292BFE20A91FF000635C0D /* CCViewController.m in Sources */,
 				8F292BEF20A91F5E00635C0D /* main.m in Sources */,
 				8F2F342020E7D96D001962D0 /* CCFBXTest.cpp in Sources */,

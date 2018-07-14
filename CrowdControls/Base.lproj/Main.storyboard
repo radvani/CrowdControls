@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="KMz-Zh-rlV">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -678,6 +679,392 @@
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
+        </scene>
+        <!--Column Simulator-->
+        <scene sceneID="KFe-6Y-5Ql">
+            <objects>
+                <viewController title="Column Simulator" id="KMz-Zh-rlV" userLabel="Column Simulator" customClass="CCColumnSimulator" sceneMemberID="viewController">
+                    <view key="view" id="Mns-Z4-K9h">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ajs-n2-e3o">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="1" green="0.85098039215686272" blue="0.33725490196078434" alpha="1" colorSpace="calibratedRGB"/>
+                            </colorWell>
+                            <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="COs-w0-PS4">
+                                <rect key="frame" x="0.0" y="150" width="450" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.11764705882352941" green="0.56862745098039214" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
+                            </colorWell>
+                            <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1XM-lW-6vC">
+                                <rect key="frame" x="0.0" y="100" width="450" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.87058823529411766" green="0.10588235294117647" blue="0.21568627450980393" alpha="1" colorSpace="calibratedRGB"/>
+                            </colorWell>
+                            <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rNc-zP-RAy">
+                                <rect key="frame" x="0.0" y="200" width="450" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </colorWell>
+                            <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ALW-xW-E8F">
+                                <rect key="frame" x="0.0" y="50" width="450" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.41568627450980389" green="0.92941176470588238" blue="0.42745098039215684" alpha="1" colorSpace="calibratedRGB"/>
+                            </colorWell>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uvd-tG-14o">
+                                <rect key="frame" x="105" y="259" width="61" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="L Arm" id="iwr-tj-4dG">
+                                    <font key="font" size="18" name=".SFNSDisplay-Bold"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ewu-z4-N5x">
+                                <rect key="frame" x="195" y="259" width="61" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="R Arm" id="9jc-W7-6UB">
+                                    <font key="font" size="18" name=".SFNSDisplay-Bold"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hge-b1-CkZ">
+                                <rect key="frame" x="285" y="259" width="61" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="L Leg" id="frS-VB-NBS">
+                                    <font key="font" size="18" name=".SFNSDisplay-Bold"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7zH-hn-1oZ">
+                                <rect key="frame" x="375" y="259" width="61" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="R Leg" id="pry-J2-4ZY">
+                                    <font key="font" size="18" name=".SFNSDisplay-Bold"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p1q-lc-SyI">
+                                <rect key="frame" x="15" y="259" width="61" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Head" id="nlA-4H-Jb0">
+                                    <font key="font" size="18" name=".SFNSDisplay-Bold"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UHp-3H-AaR" userLabel="Head_White">
+                                <rect key="frame" x="35" y="216" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Cfp-Ga-ltH">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onHeadChange:" target="KMz-Zh-rlV" id="8iF-Ja-vae"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NMc-rl-NBR" userLabel="LArm_White">
+                                <rect key="frame" x="125" y="216" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="srs-7Q-E0N">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftArmChange:" target="KMz-Zh-rlV" id="vOZ-yD-pvU"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ld8-rL-fBy" userLabel="RArm_White">
+                                <rect key="frame" x="215" y="216" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="zSb-FR-2DX">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightArmChange:" target="KMz-Zh-rlV" id="k3W-kT-TkT"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TDU-A9-OGV" userLabel="LLeg_White">
+                                <rect key="frame" x="305" y="216" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="WJE-nh-S7Y">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftLegChange:" target="KMz-Zh-rlV" id="8bT-4R-hvE"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e5J-O4-Ara" userLabel="RLeg_White">
+                                <rect key="frame" x="395" y="216" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="aT6-Wy-oNt">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightLegChange:" target="KMz-Zh-rlV" id="K2S-jW-cu0"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w2c-69-jyi" userLabel="Head_Blue">
+                                <rect key="frame" x="35" y="166" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dt4-Ca-7iQ">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onHeadChange:" target="KMz-Zh-rlV" id="sIQ-QI-PnQ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UhI-1u-Gyd" userLabel="LArm_Blue">
+                                <rect key="frame" x="125" y="166" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="m95-0C-ww6">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftArmChange:" target="KMz-Zh-rlV" id="ay2-Uj-7vx"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="thd-8P-MQD" userLabel="RArm_Blue">
+                                <rect key="frame" x="215" y="166" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="viq-QJ-Kug">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightArmChange:" target="KMz-Zh-rlV" id="fMp-uZ-uzc"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bEO-gs-XFt" userLabel="LLeg_Blue">
+                                <rect key="frame" x="305" y="166" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="OQb-I3-seS">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftLegChange:" target="KMz-Zh-rlV" id="Q44-Id-rFu"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cFP-DX-pWc" userLabel="RLeg_Blue">
+                                <rect key="frame" x="395" y="166" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="gCM-Zh-y8D">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightLegChange:" target="KMz-Zh-rlV" id="avQ-u7-hbz"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mW5-fb-YJU" userLabel="Head_Red">
+                                <rect key="frame" x="35" y="116" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="gEF-sK-AeO">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onHeadChange:" target="KMz-Zh-rlV" id="m8z-KA-a0v"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fdu-Vf-MaY" userLabel="LArm_Red">
+                                <rect key="frame" x="125" y="116" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="o7v-rP-dll">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftArmChange:" target="KMz-Zh-rlV" id="Ecu-OT-reE"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VdW-g8-TRK" userLabel="RArm_Red">
+                                <rect key="frame" x="215" y="116" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="T4J-5v-2Kd">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightArmChange:" target="KMz-Zh-rlV" id="OOC-lC-yGB"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="68E-Gk-8rl" userLabel="LLeg_Red">
+                                <rect key="frame" x="305" y="116" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="fLt-lq-zmV">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftLegChange:" target="KMz-Zh-rlV" id="nfD-6m-VNp"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wBy-AV-uUy" userLabel="RLeg_Red">
+                                <rect key="frame" x="395" y="116" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="S2z-II-WBw">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightLegChange:" target="KMz-Zh-rlV" id="Jld-h4-rFJ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wjx-5T-crZ" userLabel="Head_Green">
+                                <rect key="frame" x="35" y="66" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="BSH-kV-aMK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onHeadChange:" target="KMz-Zh-rlV" id="BmB-Km-7Gn"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cfj-Qc-8Bu" userLabel="LArm_Green">
+                                <rect key="frame" x="125" y="66" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="4AP-np-iZf">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftArmChange:" target="KMz-Zh-rlV" id="K9u-dE-bl6"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mof-6Z-rBp" userLabel="RArm_Green">
+                                <rect key="frame" x="215" y="66" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="LQA-fV-YTv">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightArmChange:" target="KMz-Zh-rlV" id="p3e-jF-mWI"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Noo-ch-9If" userLabel="LLeg_Green">
+                                <rect key="frame" x="305" y="66" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="wsw-56-yiU">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftLegChange:" target="KMz-Zh-rlV" id="gLq-L3-vgQ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VEU-pC-ZMs" userLabel="RLeg_Green">
+                                <rect key="frame" x="395" y="66" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5RN-RH-mt5">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightLegChange:" target="KMz-Zh-rlV" id="cgh-fc-0XL"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dfs-Ub-jR5" userLabel="Head_Yellow">
+                                <rect key="frame" x="35" y="16" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Xiu-uf-ppu">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onHeadChange:" target="KMz-Zh-rlV" id="LCx-ip-Owz"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UhD-jh-Trc" userLabel="LArm_Yellow">
+                                <rect key="frame" x="125" y="16" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="vT7-ei-BXf">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftArmChange:" target="KMz-Zh-rlV" id="9ok-DS-4QG"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdG-0k-W3c" userLabel="RArm_Yellow">
+                                <rect key="frame" x="215" y="16" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Mff-EM-TeG">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightArmChange:" target="KMz-Zh-rlV" id="nsP-dQ-Zon"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="86O-3s-aal" userLabel="LLeg_Yellow">
+                                <rect key="frame" x="305" y="16" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="J3T-37-e3z">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeftLegChange:" target="KMz-Zh-rlV" id="bUZ-k5-CHV"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DWj-dL-3qs" userLabel="RLeg_Yellow">
+                                <rect key="frame" x="395" y="16" width="22" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dCs-On-f8r">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRightLegChange:" target="KMz-Zh-rlV" id="X8o-d7-tn1"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="headBlue" destination="w2c-69-jyi" id="4eu-1K-95e"/>
+                        <outlet property="headGreen" destination="Wjx-5T-crZ" id="Ojg-4D-GoB"/>
+                        <outlet property="headRed" destination="mW5-fb-YJU" id="TWG-Oh-Cki"/>
+                        <outlet property="headWhite" destination="UHp-3H-AaR" id="D8n-ED-W1j"/>
+                        <outlet property="headYellow" destination="dfs-Ub-jR5" id="aoZ-lc-e3M"/>
+                        <outlet property="leftArmBlue" destination="UhI-1u-Gyd" id="bp7-md-KnF"/>
+                        <outlet property="leftArmGreen" destination="cfj-Qc-8Bu" id="9oW-w4-JcU"/>
+                        <outlet property="leftArmRed" destination="Fdu-Vf-MaY" id="g5h-fY-e1K"/>
+                        <outlet property="leftArmWhite" destination="NMc-rl-NBR" id="s1Y-fq-xp1"/>
+                        <outlet property="leftArmYellow" destination="UhD-jh-Trc" id="ECh-Go-Hxa"/>
+                        <outlet property="leftLegBlue" destination="bEO-gs-XFt" id="bDx-pd-UZj"/>
+                        <outlet property="leftLegGreen" destination="Noo-ch-9If" id="SpT-Rf-qSk"/>
+                        <outlet property="leftLegRed" destination="68E-Gk-8rl" id="XNU-ce-Zgd"/>
+                        <outlet property="leftLegWhite" destination="TDU-A9-OGV" id="004-VQ-qEQ"/>
+                        <outlet property="leftLegYellow" destination="86O-3s-aal" id="tWQ-cS-1UJ"/>
+                        <outlet property="rightArmBlue" destination="thd-8P-MQD" id="oW7-df-7HP"/>
+                        <outlet property="rightArmGreen" destination="mof-6Z-rBp" id="iCP-cH-JeX"/>
+                        <outlet property="rightArmRed" destination="VdW-g8-TRK" id="xLF-5R-giL"/>
+                        <outlet property="rightArmWhite" destination="Ld8-rL-fBy" id="DCT-iz-GmA"/>
+                        <outlet property="rightArmYellow" destination="hdG-0k-W3c" id="pnv-bh-Rcn"/>
+                        <outlet property="rightLegBlue" destination="cFP-DX-pWc" id="eCT-ex-CH8"/>
+                        <outlet property="rightLegGreen" destination="VEU-pC-ZMs" id="zMW-UP-1ez"/>
+                        <outlet property="rightLegRed" destination="wBy-AV-uUy" id="SBD-3i-3by"/>
+                        <outlet property="rightLegWhite" destination="e5J-O4-Ara" id="ZHl-qU-ywT"/>
+                        <outlet property="rightLegYellow" destination="DWj-dL-3qs" id="RRk-Wj-AHs"/>
+                    </connections>
+                </viewController>
+                <customObject id="z4Q-mV-E0Z" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
 </document>
