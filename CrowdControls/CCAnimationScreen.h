@@ -43,6 +43,7 @@ private:
 @property (readwrite, nonatomic) IBOutlet id <VROView> view;
 @property (readwrite, nonatomic) VRORendererTestType test;
 
+- (id)initWithName:(NSString *)name;
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
 - (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color;
 

@@ -31,22 +31,22 @@
 @property (nonatomic, strong) NSWindowController *ledWindowController;
 @property (nonatomic, strong) NSWindow *ledWindow;
 @property (nonatomic, strong) CCViewController *ledViewController;
-@property (nonatomic, strong) CCAnimationScreen *ledRenderDelegate;
+@property (nonatomic, strong) CCAnimationScreen *ledScreen;
 
 @property (nonatomic, strong) NSWindowController *p1WindowController;
 @property (nonatomic, strong) NSWindow *p1Window;
 @property (nonatomic, strong) CCViewController *p1ViewController;
-@property (nonatomic, strong) CCAnimationScreen *p1RenderDelegate;
+@property (nonatomic, strong) CCAnimationScreen *p1Screen;
 
 @property (nonatomic, strong) NSWindowController *p2WindowController;
 @property (nonatomic, strong) NSWindow *p2Window;
 @property (nonatomic, strong) CCViewController *p2ViewController;
-@property (nonatomic, strong) CCAnimationScreen *p2RenderDelegate;
+@property (nonatomic, strong) CCAnimationScreen *p2Screen;
 
 @property (nonatomic, strong) NSWindowController *p3WindowController;
 @property (nonatomic, strong) NSWindow *p3Window;
 @property (nonatomic, strong) CCViewController *p3ViewController;
-@property (nonatomic, strong) CCAnimationScreen *p3RenderDelegate;
+@property (nonatomic, strong) CCAnimationScreen *p3Screen;
 
 @end
 
@@ -66,9 +66,9 @@
     self.ledWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, padding, windowLength, windowHeight)
                                                  styleMask:masks backing:NSBackingStoreBuffered
                                                      defer:NO];
-    self.ledRenderDelegate = [[CCAnimationScreen alloc] init];
+    self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen"];
     self.ledViewController = [[CCViewController alloc] init];
-    self.ledViewController.renderDelegate = self.ledRenderDelegate;
+    self.ledViewController.renderDelegate = self.ledScreen;
     
     self.ledWindow.contentView = self.ledViewController.view;
     [self.ledWindow orderBack:self];
@@ -81,9 +81,9 @@
     self.p1Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, padding, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.p1RenderDelegate = [[CCAnimationScreen alloc] init];
+    self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1"];
     self.p1ViewController = [[CCViewController alloc] init];
-    self.p1ViewController.renderDelegate = self.p1RenderDelegate;
+    self.p1ViewController.renderDelegate = self.p1Screen;
     
     self.p1Window.contentView = self.p1ViewController.view;
     [self.p1Window orderBack:self];
@@ -96,9 +96,9 @@
     self.p2Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, windowHeight + 2 * padding, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.p2RenderDelegate = [[CCAnimationScreen alloc] init];
+    self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2"];
     self.p2ViewController = [[CCViewController alloc] init];
-    self.p2ViewController.renderDelegate = self.p2RenderDelegate;
+    self.p2ViewController.renderDelegate = self.p2Screen;
     
     self.p2Window.contentView = self.p2ViewController.view;
     [self.p2Window orderBack:self];
@@ -111,9 +111,9 @@
     self.p3Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, windowHeight + 2 * padding, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.p3RenderDelegate = [[CCAnimationScreen alloc] init];
+    self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3"];
     self.p3ViewController = [[CCViewController alloc] init];
-    self.p3ViewController.renderDelegate = self.p3RenderDelegate;
+    self.p3ViewController.renderDelegate = self.p3Screen;
     
     self.p3Window.contentView = self.p3ViewController.view;
     [self.p3Window orderBack:self];
@@ -124,8 +124,8 @@
     [reader listPorts];
     [reader connect:"/dev/cu.usbmodem14411"];
     
-    NSArray *animationScreens = [NSArray arrayWithObjects:self.ledRenderDelegate, self.p1RenderDelegate,
-                                 self.p2RenderDelegate, self.p3RenderDelegate, nil];
+    NSArray *animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.p1Screen,
+                                 self.p2Screen, self.p3Screen, nil];
     
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;

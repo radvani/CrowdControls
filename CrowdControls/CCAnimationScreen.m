@@ -28,6 +28,7 @@
 
 @interface CCAnimationScreen ()
 
+@property (readwrite, nonatomic) NSString *name;
 @property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
 @property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
 @property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
@@ -37,6 +38,14 @@
 @end
 
 @implementation CCAnimationScreen
+
+- (id)initWithName:(NSString *)name {
+    self = [super init];
+    if (self) {
+        self.name = name;
+    }
+    return self;
+}
 
 - (void)userDidRequestExitVR {}
 
@@ -52,7 +61,7 @@
     
     NSOpenGLContext *oglContext = (__bridge NSOpenGLContext *)driver->getGraphicsContext();
     CGLContextObj context = [oglContext CGLContextObj];
-    self.syphon = [[SyphonServer alloc] initWithName:nil context:context options:nil];
+    self.syphon = [[SyphonServer alloc] initWithName:self.name context:context options:nil];
     
     self.renderToTextureDelegate = std::make_shared<CCRenderToTextureDelegate>(self);
     self.view.choreographer->setRenderToTextureDelegate(self.renderToTextureDelegate);
