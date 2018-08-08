@@ -41,9 +41,8 @@ private:
 @interface CCAnimationScreen : NSObject <VRORenderDelegate>
 
 @property (readwrite, nonatomic) IBOutlet id <VROView> view;
-@property (readwrite, nonatomic) VRORendererTestType test;
 
-- (id)initWithName:(NSString *)name;
+- (id)initWithName:(NSString *)name scene:(std::shared_ptr<VRORendererTest>)scene;
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
 - (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color;
 

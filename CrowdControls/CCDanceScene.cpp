@@ -1,5 +1,5 @@
 //
-//  CCFBXTest.cpp
+//  CCDanceScene.cpp
 //  ViroKit
 //
 //  Created by Raj Advani on 6/30/18.
@@ -22,32 +22,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "CCFBXTest.h"
+#include "CCDanceScene.h"
 
-CCFBXTest::CCFBXTest() :
+CCDanceScene::CCDanceScene() :
     VRORendererTest(VRORendererTestType::FBX) {
     _angle = 0;
 }
 
-CCFBXTest::~CCFBXTest() {
+CCDanceScene::~CCDanceScene() {
     
 }
 
-void CCFBXTest::build(std::shared_ptr<VRORenderer> renderer,
+void CCDanceScene::build(std::shared_ptr<VRORenderer> renderer,
                       std::shared_ptr<VROFrameSynchronizer> frameSynchronizer,
                       std::shared_ptr<VRODriver> driver) {
 
     _driver = driver;
     
     CCFBXModel danceAll("trap", { 0, -1, -3 }, { 0.2, 0.2, 0.2 }, "Trap" );
-    CCFBXModel panther("object_bpanther_anim", { 0, -1.5, -8 }, { 2, 2, 2 }, "01");
-    CCFBXModel cylinder("cylinder_pbr", { 0, -1.5, -3 }, { 0.4, 0.4, 0.4 }, "02_spin");
-    
     _models.push_back({ danceAll });
-    _models.push_back({ cylinder });
-    _models.push_back({ panther });
     
-    _sceneController = std::make_shared<VROARSceneController>();
+    _sceneController = std::make_shared<VROSceneController>();
     std::shared_ptr<VROScene> scene = _sceneController->getScene();
     
     std::shared_ptr<VROLight> light = std::make_shared<VROLight>(VROLightType::Spot);
@@ -105,13 +100,9 @@ void CCFBXTest::build(std::shared_ptr<VRORenderer> renderer,
     rootNode->addChildNode(cameraNode);
     
     _pointOfView = cameraNode;
-    
-    _eventDelegate = std::make_shared<CCFBXEventDelegate>(this);
-    _eventDelegate->setEnabledEvent(VROEventDelegate::EventAction::OnClick, true);
-    rootNode->setEventDelegate(_eventDelegate);
 }
 
-void CCFBXTest::rotateFBX() {
+void CCDanceScene::rotateFBX() {
     _fbxContainerNode->removeAllChildren();
 
     std::vector<CCFBXModel> models = _models[_fbxIndex];
@@ -123,14 +114,7 @@ void CCFBXTest::rotateFBX() {
     _fbxIndex = (_fbxIndex + 1) % _models.size();
 }
 
-void CCFBXEventDelegate::onClick(int source, std::shared_ptr<VRONode> node, ClickState clickState,
-                                 std::vector<float> position) {
-    if (clickState == ClickState::Clicked) {
-        _test->rotateFBX();
-    }
-}
-
-std::shared_ptr<VRONode> CCFBXTest::loadFBXModel(std::string model, VROVector3f position, VROVector3f scale,
+std::shared_ptr<VRONode> CCDanceScene::loadFBXModel(std::string model, VROVector3f position, VROVector3f scale,
                                                  std::string animation, std::shared_ptr<VRODriver> driver) {
     std::string url;
     std::string base;
@@ -189,18 +173,17 @@ std::shared_ptr<VRONode> CCFBXTest::loadFBXModel(std::string model, VROVector3f 
     return node;
 }
 
-void CCFBXTest::animateTake(std::weak_ptr<VRONode> node_w, std::string name) {
+void CCDanceScene::animateTake(std::weak_ptr<VRONode> node_w, std::string name) {
     std::shared_ptr<VRONode> node = node_w.lock();
     if (!node) {
         return;
     }
-    
     node->getAnimation(name.c_str(), true)->execute(node, [node_w, name] {
         animateTake(node_w, name);
     });
 }
 
-void CCFBXTest::setColor(std::shared_ptr<VRONode> node, VROVector4f color) {
+void CCDanceScene::setColor(std::shared_ptr<VRONode> node, VROVector4f color) {
     if (node->getGeometry()) {
         for (std::shared_ptr<VROMaterial> material : node->getGeometry()->getMaterials()) {
             material->getDiffuse().setColor(color);
@@ -212,14 +195,14 @@ void CCFBXTest::setColor(std::shared_ptr<VRONode> node, VROVector4f color) {
     }
 }
 
-void CCFBXTest::setColor(VROVector4f color) {
+void CCDanceScene::setColor(VROVector4f color) {
     if (!_fbxContainerNode) {
         return;
     }
     setColor(_fbxContainerNode, color);
 }
 
-std::shared_ptr<VROTexture> CCFBXTest::loadRadianceHDRTexture(std::string texture) {
+std::shared_ptr<VROTexture> CCDanceScene::loadRadianceHDRTexture(std::string texture) {
     std::string path;
     NSString *fbxPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:texture.c_str()]
                                                         ofType:@"hdr"];

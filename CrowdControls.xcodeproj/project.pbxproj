@@ -12,6 +12,7 @@
 		8F201C2C20FA9B4E00637A75 /* CCColumnSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */; };
 		8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2E20FAB08100637A75 /* CCDanceController.m */; };
 		8F201C3120FAB14100637A75 /* CCAnimationScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C3020FAB14000637A75 /* CCAnimationScreen.m */; };
+		8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C3320FACBA800637A75 /* CCCountdownScene.cpp */; };
 		8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE320A91F5C00635C0D /* AppDelegate.m */; };
 		8F292BE720A91F5C00635C0D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE620A91F5C00635C0D /* ViewController.m */; };
 		8F292BE920A91F5E00635C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F292BE820A91F5E00635C0D /* Assets.xcassets */; };
@@ -33,7 +34,7 @@
 		8F292C1F20A9DF3A00635C0D /* Syphon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C1D20A9DF3A00635C0D /* Syphon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8F292C2220AA370300635C0D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C2120AA370300635C0D /* Cocoa.framework */; };
 		8F292C2420AA370F00635C0D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F292C2320AA370F00635C0D /* OpenGL.framework */; };
-		8F2F342020E7D96D001962D0 /* CCFBXTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F2F341E20E7D96C001962D0 /* CCFBXTest.cpp */; };
+		8F2F342020E7D96D001962D0 /* CCDanceScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F2F341E20E7D96C001962D0 /* CCDanceScene.cpp */; };
 		8F2F342220E7DE4F001962D0 /* Dance_all.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F342120E7DE4F001962D0 /* Dance_all.vrx */; };
 		8F2F344620F7A59A001962D0 /* trap.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F343920F7A599001962D0 /* trap.vrx */; };
 		8F2F344720F7A59A001962D0 /* Jams_Lleg_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F343A20F7A599001962D0 /* Jams_Lleg_white.png */; };
@@ -76,6 +77,8 @@
 		8F201C2D20FAB08100637A75 /* CCDanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCDanceController.h; sourceTree = "<group>"; };
 		8F201C2E20FAB08100637A75 /* CCDanceController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCDanceController.m; sourceTree = "<group>"; };
 		8F201C3020FAB14000637A75 /* CCAnimationScreen.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCAnimationScreen.m; sourceTree = "<group>"; };
+		8F201C3220FACBA800637A75 /* CCCountdownScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCCountdownScene.h; sourceTree = "<group>"; };
+		8F201C3320FACBA800637A75 /* CCCountdownScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCCountdownScene.cpp; sourceTree = "<group>"; };
 		8F292BDF20A91F5C00635C0D /* CrowdControls.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrowdControls.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F292BE220A91F5C00635C0D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8F292BE320A91F5C00635C0D /* AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -101,8 +104,8 @@
 		8F292C1D20A9DF3A00635C0D /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = Libraries/Syphon/Syphon.framework; sourceTree = "<group>"; };
 		8F292C2120AA370300635C0D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		8F292C2320AA370F00635C0D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		8F2F341E20E7D96C001962D0 /* CCFBXTest.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCFBXTest.cpp; sourceTree = "<group>"; };
-		8F2F341F20E7D96D001962D0 /* CCFBXTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCFBXTest.h; sourceTree = "<group>"; };
+		8F2F341E20E7D96C001962D0 /* CCDanceScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCDanceScene.cpp; sourceTree = "<group>"; };
+		8F2F341F20E7D96D001962D0 /* CCDanceScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDanceScene.h; sourceTree = "<group>"; };
 		8F2F342120E7DE4F001962D0 /* Dance_all.vrx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Dance_all.vrx; sourceTree = "<group>"; };
 		8F2F343920F7A599001962D0 /* trap.vrx */ = {isa = PBXFileReference; lastKnownFileType = file; path = trap.vrx; sourceTree = "<group>"; };
 		8F2F343A20F7A599001962D0 /* Jams_Lleg_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jams_Lleg_white.png; sourceTree = "<group>"; };
@@ -137,6 +140,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F201C85211B83BA00637A75 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Sound;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		8F292BD620A91F5C00635C0D = {
 			isa = PBXGroup;
 			children = (
@@ -157,14 +168,17 @@
 		8F292BE120A91F5C00635C0D /* CrowdControls */ = {
 			isa = PBXGroup;
 			children = (
+				8F201C85211B83BA00637A75 /* Sound */,
 				8F292C0E20A926D600635C0D /* Models */,
 				8F292C0D20A926B600635C0D /* Images */,
 				8F292BF920A91FF000635C0D /* CCAnimationScreen.h */,
 				8F201C3020FAB14000637A75 /* CCAnimationScreen.m */,
 				8F292BFC20A91FF000635C0D /* CCViewController.h */,
 				8F292BFB20A91FF000635C0D /* CCViewController.m */,
-				8F2F341F20E7D96D001962D0 /* CCFBXTest.h */,
-				8F2F341E20E7D96C001962D0 /* CCFBXTest.cpp */,
+				8F2F341F20E7D96D001962D0 /* CCDanceScene.h */,
+				8F2F341E20E7D96C001962D0 /* CCDanceScene.cpp */,
+				8F201C3220FACBA800637A75 /* CCCountdownScene.h */,
+				8F201C3320FACBA800637A75 /* CCCountdownScene.cpp */,
 				8F201C2620FA6EEF00637A75 /* CCSignalReader.h */,
 				8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */,
 				8F292BE520A91F5C00635C0D /* ViewController.h */,
@@ -337,7 +351,8 @@
 				8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */,
 				8F292BFE20A91FF000635C0D /* CCViewController.m in Sources */,
 				8F292BEF20A91F5E00635C0D /* main.m in Sources */,
-				8F2F342020E7D96D001962D0 /* CCFBXTest.cpp in Sources */,
+				8F2F342020E7D96D001962D0 /* CCDanceScene.cpp in Sources */,
+				8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */,
 				8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

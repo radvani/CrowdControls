@@ -23,8 +23,8 @@
 //  SOFTWARE.
 
 #import "CCAnimationScreen.h"
-#import "CCFBXTest.h"
 #import <Syphon/Syphon.h>
+#import "CCDanceScene.h"
 
 @interface CCAnimationScreen ()
 
@@ -32,17 +32,18 @@
 @property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
 @property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
 @property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
-@property (readwrite, nonatomic) std::shared_ptr<CCFBXTest> fbxTest;
+@property (readwrite, nonatomic) std::shared_ptr<VRORendererTest> scene;
 @property (readwrite, nonatomic) SyphonServer *syphon;
 
 @end
 
 @implementation CCAnimationScreen
 
-- (id)initWithName:(NSString *)name {
+- (id)initWithName:(NSString *)name scene:(std::shared_ptr<VRORendererTest>)scene {
     self = [super init];
     if (self) {
         self.name = name;
+        self.scene = scene;
     }
     return self;
 }
@@ -51,12 +52,11 @@
 
 - (void)setupRendererWithDriver:(std::shared_ptr<VRODriver>)driver {
     self.driver = driver;
-    self.fbxTest = std::make_shared<CCFBXTest>();
-    self.fbxTest->build(self.view.renderer, self.view.frameSynchronizer, driver);
+    self.scene->build(self.view.renderer, self.view.frameSynchronizer, driver);
     
-    self.view.sceneController = self.fbxTest->getSceneController();
-    if (self.fbxTest->getPointOfView()) {
-        [self.view setPointOfView:self.fbxTest->getPointOfView()];
+    self.view.sceneController = self.scene->getSceneController();
+    if (self.scene->getPointOfView()) {
+        [self.view setPointOfView:self.scene->getPointOfView()];
     }
     
     NSOpenGLContext *oglContext = (__bridge NSOpenGLContext *)driver->getGraphicsContext();
@@ -79,8 +79,11 @@
 }
 
 - (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color {
-    // TODO Find the nodes corresponding to the body part
-    self.fbxTest->setColor(color);
+    std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
+    if (danceScene) {
+        // TODO Find the nodes corresponding to the body part
+        danceScene->setColor(color);
+    }
 }
 
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target {

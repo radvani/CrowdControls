@@ -25,6 +25,8 @@
 #import "AppDelegate.h"
 #import "CCSignalReader.h"
 #import "CCDanceController.h"
+#import "CCDanceScene.h"
+#import "CCCountdownScene.h"
 
 @interface AppDelegate ()
 
@@ -48,6 +50,11 @@
 @property (nonatomic, strong) CCViewController *p3ViewController;
 @property (nonatomic, strong) CCAnimationScreen *p3Screen;
 
+@property (nonatomic, strong) NSWindowController *countdownWindowController;
+@property (nonatomic, strong) NSWindow *countdownWindow;
+@property (nonatomic, strong) CCViewController *countdownViewController;
+@property (nonatomic, strong) CCAnimationScreen *countdownScreen;
+
 @end
 
 @implementation AppDelegate
@@ -63,10 +70,11 @@
     /*
      LED Screen.
      */
+    std::shared_ptr<CCDanceScene> ledScene = std::make_shared<CCDanceScene>();
     self.ledWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, padding, windowLength, windowHeight)
                                                  styleMask:masks backing:NSBackingStoreBuffered
                                                      defer:NO];
-    self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen"];
+    self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene];
     self.ledViewController = [[CCViewController alloc] init];
     self.ledViewController.renderDelegate = self.ledScreen;
     
@@ -78,10 +86,11 @@
     /*
      Projector 1.
      */
+    std::shared_ptr<CCDanceScene> proj1Scene = std::make_shared<CCDanceScene>();
     self.p1Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, padding, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1"];
+    self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1" scene:proj1Scene];
     self.p1ViewController = [[CCViewController alloc] init];
     self.p1ViewController.renderDelegate = self.p1Screen;
     
@@ -93,10 +102,11 @@
     /*
      Projector 2.
      */
+    std::shared_ptr<CCDanceScene> proj2Scene = std::make_shared<CCDanceScene>();
     self.p2Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, windowHeight + 2 * padding, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2"];
+    self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2" scene:proj2Scene];
     self.p2ViewController = [[CCViewController alloc] init];
     self.p2ViewController.renderDelegate = self.p2Screen;
     
@@ -108,10 +118,11 @@
     /*
      Projector 3.
      */
+    std::shared_ptr<CCDanceScene> proj3Scene = std::make_shared<CCDanceScene>();
     self.p3Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, windowHeight + 2 * padding, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3"];
+    self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3" scene:proj3Scene];
     self.p3ViewController = [[CCViewController alloc] init];
     self.p3ViewController.renderDelegate = self.p3Screen;
     
@@ -119,6 +130,22 @@
     [self.p3Window orderBack:self];
     self.p3Window.title = @"Projector 3";
     self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
+    
+    /*
+     Countdown.
+     */
+    std::shared_ptr<CCCountdownScene> countdownScene = std::make_shared<CCCountdownScene>();
+    self.countdownWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength / 2.0 + padding, 0, windowLength, windowHeight)
+                                                styleMask:masks backing:NSBackingStoreBuffered
+                                                    defer:NO];
+    self.countdownScreen = [[CCAnimationScreen alloc] initWithName:@"Countdown" scene:countdownScene];
+    self.countdownViewController = [[CCViewController alloc] init];
+    self.countdownViewController.renderDelegate = self.countdownScreen;
+    
+    self.countdownWindow.contentView = self.countdownViewController.view;
+    [self.countdownWindow orderBack:self];
+    self.countdownWindow.title = @"Countdown";
+    self.countdownWindowController = [[NSWindowController alloc] initWithWindow:self.countdownWindow];
     
     CCSignalReader *reader = [[CCSignalReader alloc] init];
     [reader listPorts];
@@ -130,7 +157,6 @@
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;
 }
-
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application

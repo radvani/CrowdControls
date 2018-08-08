@@ -1,8 +1,9 @@
 //
-//  CCViewController.m
+//  CCCountdownScene.h
 //  CrowdControls
 //
-//  Created by Raj Advani on 5/13/18.
+//  Created by Raj Advani on 7/14/18.
+//  Copyright © 2018 Raj Advani. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +23,38 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import "CCViewController.h"
+#ifndef CCCountdownScene_h
+#define CCCountdownScene_h
 
-enum class VROTestSceneType {
-    Scene,
+#include <string>
+#include <ViroKit/ViroKit.h>
+
+class CCCountdownScene : public VRORendererTest {
+public:
+    
+    CCCountdownScene();
+    virtual ~CCCountdownScene();
+    
+    void build(std::shared_ptr<VRORenderer> renderer,
+               std::shared_ptr<VROFrameSynchronizer> frameSynchronizer,
+               std::shared_ptr<VRODriver> driver);
+    std::shared_ptr<VRONode> getPointOfView() {
+        return _pointOfView;
+    }
+    std::shared_ptr<VROSceneController> getSceneController() {
+        return _sceneController;
+    }
+    
+    void setDuration(float seconds);
+    
+private:
+    
+    std::shared_ptr<VRODriver> _driver;
+    std::shared_ptr<VRONode> _pointOfView;
+    std::shared_ptr<VROSceneController> _sceneController;
+    float _duration;
+    std::shared_ptr<VROBox> _box;
+    std::shared_ptr<VRONode> _boxNode;
 };
 
-@interface CCViewController ()
-
-@end
-
-@implementation CCViewController
-
-- (void)loadView {
-    VRORendererConfiguration config;
-    config.enableHDR = YES;
-    config.enablePBR = YES;
-    config.enableBloom = YES;
-    
-    VROViewScene *view = [[VROViewScene alloc] initWithFrame:NSMakeRect(20, 20, 600, 600)
-                                                      config:config
-                                                shareContext:nil];
-    view.renderDelegate = self.renderDelegate;
-    self.renderDelegate.view = view;
-    self.view = view;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-@end
+#endif

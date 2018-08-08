@@ -1,5 +1,5 @@
 //
-//  CCFBXTest.h
+//  CCDanceScene.h
 //  CrowdControls
 //
 //  Created by Raj Advani on 6/30/18.
@@ -22,23 +22,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CCFBXTest_h
-#define CCFBXTest_h
+#ifndef CCDanceScene_h
+#define CCDanceScene_h
 
 #include <string>
 #include <ViroKit/ViroKit.h>
-
-class CCFBXTest;
-
-class CCFBXEventDelegate : public VROEventDelegate {
-public:
-    CCFBXEventDelegate(CCFBXTest *test) : _test(test) {};
-    virtual ~CCFBXEventDelegate() {};
-    void onClick(int source, std::shared_ptr<VRONode> node, ClickState clickState, std::vector<float> position);
-    
-private:
-    CCFBXTest *_test;
-};
 
 class CCFBXModel {
 public:
@@ -53,11 +41,11 @@ public:
     ~CCFBXModel() {}
 };
 
-class CCFBXTest : public VRORendererTest {
+class CCDanceScene : public VRORendererTest {
 public:
     
-    CCFBXTest();
-    virtual ~CCFBXTest();
+    CCDanceScene();
+    virtual ~CCDanceScene();
     
     void build(std::shared_ptr<VRORenderer> renderer,
                std::shared_ptr<VROFrameSynchronizer> frameSynchronizer,
@@ -78,18 +66,9 @@ private:
     std::shared_ptr<VRONode> _pointOfView;
     std::shared_ptr<VROSceneController> _sceneController;
     std::shared_ptr<VRONode> _fbxContainerNode;
-    std::shared_ptr<VROEventDelegate> _eventDelegate;
     int _fbxIndex;
     float _angle;
     std::vector<std::vector<CCFBXModel>> _models;
-    
-    /*
-    White FFFFFF      r-255 g-255 b-255
-    Blue 1E91E1        r-30 g-145 b-225
-    Red DE1B37        r-222 g-27 b-55
-    Green 6AED6D    r-106 g-237, b-109
-    Yellow FFD956     r-255 g-217 b-86
-     */
     
     static std::shared_ptr<VRONode> loadFBXModel(std::string model, VROVector3f position, VROVector3f scale,
                                                  std::string animation, std::shared_ptr<VRODriver> driver);
@@ -99,4 +78,4 @@ private:
     
 };
 
-#endif /* CCFBXTest_h */
+#endif /* CCDanceScene_h */
