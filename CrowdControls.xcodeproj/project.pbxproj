@@ -13,6 +13,30 @@
 		8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2E20FAB08100637A75 /* CCDanceController.m */; };
 		8F201C3120FAB14100637A75 /* CCAnimationScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C3020FAB14000637A75 /* CCAnimationScreen.m */; };
 		8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C3320FACBA800637A75 /* CCCountdownScene.cpp */; };
+		8F201C9E211B849E00637A75 /* Rfoot_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C86211B849B00637A75 /* Rfoot_Y.mp3 */; };
+		8F201C9F211B849E00637A75 /* Body_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C87211B849B00637A75 /* Body_R.mp3 */; };
+		8F201CA0211B849E00637A75 /* Body_G.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C88211B849B00637A75 /* Body_G.mp3 */; };
+		8F201CA1211B849E00637A75 /* Lfoot_G.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C89211B849B00637A75 /* Lfoot_G.mp3 */; };
+		8F201CA2211B849E00637A75 /* Lfoot_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C8A211B849B00637A75 /* Lfoot_Y.mp3 */; };
+		8F201CA3211B849E00637A75 /* Drums_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C8B211B849C00637A75 /* Drums_R.mp3 */; };
+		8F201CA4211B849E00637A75 /* Lhand_G.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C8C211B849C00637A75 /* Lhand_G.mp3 */; };
+		8F201CA5211B849E00637A75 /* Rfoot_W.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C8D211B849C00637A75 /* Rfoot_W.mp3 */; };
+		8F201CA6211B849E00637A75 /* Rhand_G.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C8E211B849C00637A75 /* Rhand_G.mp3 */; };
+		8F201CA7211B849E00637A75 /* Lfoot_W.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C8F211B849C00637A75 /* Lfoot_W.mp3 */; };
+		8F201CA8211B849E00637A75 /* Rhand_W.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C90211B849C00637A75 /* Rhand_W.mp3 */; };
+		8F201CA9211B849E00637A75 /* Rfoot_G.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C91211B849C00637A75 /* Rfoot_G.mp3 */; };
+		8F201CAA211B849E00637A75 /* Lfoot_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C92211B849C00637A75 /* Lfoot_R.mp3 */; };
+		8F201CAB211B849E00637A75 /* Body_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C93211B849C00637A75 /* Body_Y.mp3 */; };
+		8F201CAC211B849E00637A75 /* Drums_G.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C94211B849C00637A75 /* Drums_G.mp3 */; };
+		8F201CAD211B849E00637A75 /* Rhand_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C95211B849C00637A75 /* Rhand_R.mp3 */; };
+		8F201CAE211B849E00637A75 /* Rhand_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C96211B849D00637A75 /* Rhand_Y.mp3 */; };
+		8F201CAF211B849E00637A75 /* Drums_W.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C97211B849D00637A75 /* Drums_W.mp3 */; };
+		8F201CB0211B849E00637A75 /* Lhand_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C98211B849D00637A75 /* Lhand_R.mp3 */; };
+		8F201CB1211B849E00637A75 /* Body_W.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C99211B849D00637A75 /* Body_W.mp3 */; };
+		8F201CB2211B849E00637A75 /* Lhand_W.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9A211B849D00637A75 /* Lhand_W.mp3 */; };
+		8F201CB3211B849E00637A75 /* Lhand_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9B211B849D00637A75 /* Lhand_Y.mp3 */; };
+		8F201CB4211B849E00637A75 /* Rfoot_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9C211B849D00637A75 /* Rfoot_R.mp3 */; };
+		8F201CB5211B849E00637A75 /* Drums_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9D211B849D00637A75 /* Drums_Y.mp3 */; };
 		8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE320A91F5C00635C0D /* AppDelegate.m */; };
 		8F292BE720A91F5C00635C0D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE620A91F5C00635C0D /* ViewController.m */; };
 		8F292BE920A91F5E00635C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F292BE820A91F5E00635C0D /* Assets.xcassets */; };
@@ -79,6 +103,30 @@
 		8F201C3020FAB14000637A75 /* CCAnimationScreen.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CCAnimationScreen.m; sourceTree = "<group>"; };
 		8F201C3220FACBA800637A75 /* CCCountdownScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCCountdownScene.h; sourceTree = "<group>"; };
 		8F201C3320FACBA800637A75 /* CCCountdownScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCCountdownScene.cpp; sourceTree = "<group>"; };
+		8F201C86211B849B00637A75 /* Rfoot_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rfoot_Y.mp3; path = CrowdControls/Sound/Rfoot_Y.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C87211B849B00637A75 /* Body_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Body_R.mp3; path = CrowdControls/Sound/Body_R.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C88211B849B00637A75 /* Body_G.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Body_G.mp3; path = CrowdControls/Sound/Body_G.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C89211B849B00637A75 /* Lfoot_G.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lfoot_G.mp3; path = CrowdControls/Sound/Lfoot_G.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C8A211B849B00637A75 /* Lfoot_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lfoot_Y.mp3; path = CrowdControls/Sound/Lfoot_Y.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C8B211B849C00637A75 /* Drums_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Drums_R.mp3; path = CrowdControls/Sound/Drums_R.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C8C211B849C00637A75 /* Lhand_G.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lhand_G.mp3; path = CrowdControls/Sound/Lhand_G.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C8D211B849C00637A75 /* Rfoot_W.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rfoot_W.mp3; path = CrowdControls/Sound/Rfoot_W.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C8E211B849C00637A75 /* Rhand_G.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rhand_G.mp3; path = CrowdControls/Sound/Rhand_G.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C8F211B849C00637A75 /* Lfoot_W.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lfoot_W.mp3; path = CrowdControls/Sound/Lfoot_W.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C90211B849C00637A75 /* Rhand_W.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rhand_W.mp3; path = CrowdControls/Sound/Rhand_W.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C91211B849C00637A75 /* Rfoot_G.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rfoot_G.mp3; path = CrowdControls/Sound/Rfoot_G.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C92211B849C00637A75 /* Lfoot_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lfoot_R.mp3; path = CrowdControls/Sound/Lfoot_R.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C93211B849C00637A75 /* Body_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Body_Y.mp3; path = CrowdControls/Sound/Body_Y.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C94211B849C00637A75 /* Drums_G.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Drums_G.mp3; path = CrowdControls/Sound/Drums_G.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C95211B849C00637A75 /* Rhand_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rhand_R.mp3; path = CrowdControls/Sound/Rhand_R.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C96211B849D00637A75 /* Rhand_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rhand_Y.mp3; path = CrowdControls/Sound/Rhand_Y.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C97211B849D00637A75 /* Drums_W.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Drums_W.mp3; path = CrowdControls/Sound/Drums_W.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C98211B849D00637A75 /* Lhand_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lhand_R.mp3; path = CrowdControls/Sound/Lhand_R.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C99211B849D00637A75 /* Body_W.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Body_W.mp3; path = CrowdControls/Sound/Body_W.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C9A211B849D00637A75 /* Lhand_W.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lhand_W.mp3; path = CrowdControls/Sound/Lhand_W.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C9B211B849D00637A75 /* Lhand_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lhand_Y.mp3; path = CrowdControls/Sound/Lhand_Y.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C9C211B849D00637A75 /* Rfoot_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rfoot_R.mp3; path = CrowdControls/Sound/Rfoot_R.mp3; sourceTree = SOURCE_ROOT; };
+		8F201C9D211B849D00637A75 /* Drums_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Drums_Y.mp3; path = CrowdControls/Sound/Drums_Y.mp3; sourceTree = SOURCE_ROOT; };
 		8F292BDF20A91F5C00635C0D /* CrowdControls.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrowdControls.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F292BE220A91F5C00635C0D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8F292BE320A91F5C00635C0D /* AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -143,6 +191,30 @@
 		8F201C85211B83BA00637A75 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				8F201C88211B849B00637A75 /* Body_G.mp3 */,
+				8F201C87211B849B00637A75 /* Body_R.mp3 */,
+				8F201C99211B849D00637A75 /* Body_W.mp3 */,
+				8F201C93211B849C00637A75 /* Body_Y.mp3 */,
+				8F201C94211B849C00637A75 /* Drums_G.mp3 */,
+				8F201C8B211B849C00637A75 /* Drums_R.mp3 */,
+				8F201C97211B849D00637A75 /* Drums_W.mp3 */,
+				8F201C9D211B849D00637A75 /* Drums_Y.mp3 */,
+				8F201C89211B849B00637A75 /* Lfoot_G.mp3 */,
+				8F201C92211B849C00637A75 /* Lfoot_R.mp3 */,
+				8F201C8F211B849C00637A75 /* Lfoot_W.mp3 */,
+				8F201C8A211B849B00637A75 /* Lfoot_Y.mp3 */,
+				8F201C8C211B849C00637A75 /* Lhand_G.mp3 */,
+				8F201C98211B849D00637A75 /* Lhand_R.mp3 */,
+				8F201C9A211B849D00637A75 /* Lhand_W.mp3 */,
+				8F201C9B211B849D00637A75 /* Lhand_Y.mp3 */,
+				8F201C91211B849C00637A75 /* Rfoot_G.mp3 */,
+				8F201C9C211B849D00637A75 /* Rfoot_R.mp3 */,
+				8F201C8D211B849C00637A75 /* Rfoot_W.mp3 */,
+				8F201C86211B849B00637A75 /* Rfoot_Y.mp3 */,
+				8F201C8E211B849C00637A75 /* Rhand_G.mp3 */,
+				8F201C95211B849C00637A75 /* Rhand_R.mp3 */,
+				8F201C90211B849C00637A75 /* Rhand_W.mp3 */,
+				8F201C96211B849D00637A75 /* Rhand_Y.mp3 */,
 			);
 			name = Sound;
 			path = "New Group";
@@ -311,25 +383,49 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F2F344820F7A59A001962D0 /* Jams_Rleg_white.png in Resources */,
+				8F201CA3211B849E00637A75 /* Drums_R.mp3 in Resources */,
+				8F201CA2211B849E00637A75 /* Lfoot_Y.mp3 in Resources */,
 				8F2F344A20F7A59A001962D0 /* Trees_White_All.png in Resources */,
+				8F201CA6211B849E00637A75 /* Rhand_G.mp3 in Resources */,
 				8F292BE920A91F5E00635C0D /* Assets.xcassets in Resources */,
 				8F2F344720F7A59A001962D0 /* Jams_Lleg_white.png in Resources */,
 				8F2F344620F7A59A001962D0 /* trap.vrx in Resources */,
 				8F292C1C20A9276200635C0D /* blinn2_Mixed_AO.png in Resources */,
 				8F2F344E20F7A59A001962D0 /* Jams_Rarm_white.png in Resources */,
+				8F201CA8211B849E00637A75 /* Rhand_W.mp3 in Resources */,
+				8F201CA5211B849E00637A75 /* Rfoot_W.mp3 in Resources */,
+				8F201CAA211B849E00637A75 /* Lfoot_R.mp3 in Resources */,
+				8F201CA1211B849E00637A75 /* Lfoot_G.mp3 in Resources */,
 				8F2F344D20F7A59A001962D0 /* Trees_White_Rarm.png in Resources */,
+				8F201CAD211B849E00637A75 /* Rhand_R.mp3 in Resources */,
+				8F201CAF211B849E00637A75 /* Drums_W.mp3 in Resources */,
+				8F201CA4211B849E00637A75 /* Lhand_G.mp3 in Resources */,
 				8F2F342220E7DE4F001962D0 /* Dance_all.vrx in Resources */,
 				8F292C1A20A9276200635C0D /* cylinder_pbr.vrx in Resources */,
+				8F201CB3211B849E00637A75 /* Lhand_Y.mp3 in Resources */,
+				8F201CA9211B849E00637A75 /* Rfoot_G.mp3 in Resources */,
 				8F2F344C20F7A59A001962D0 /* Jams_Larm_white.png in Resources */,
 				8F292C1820A9276200635C0D /* blinn2_Normal_DirectX.png in Resources */,
+				8F201CB0211B849E00637A75 /* Lhand_R.mp3 in Resources */,
 				8F2F345020F7A59A001962D0 /* Jams_All_white.png in Resources */,
+				8F201CB2211B849E00637A75 /* Lhand_W.mp3 in Resources */,
+				8F201CAB211B849E00637A75 /* Body_Y.mp3 in Resources */,
+				8F201CB5211B849E00637A75 /* Drums_Y.mp3 in Resources */,
 				8F2F344B20F7A59A001962D0 /* Trees_White_Larm.png in Resources */,
 				8F292C1720A9276200635C0D /* blinn2_Metallic.png in Resources */,
 				8FDA1D1A20DEC4AE005AFC70 /* animtest.vrx in Resources */,
 				8F292BEC20A91F5E00635C0D /* Main.storyboard in Resources */,
+				8F201CA7211B849E00637A75 /* Lfoot_W.mp3 in Resources */,
+				8F201CAC211B849E00637A75 /* Drums_G.mp3 in Resources */,
 				8F292C1B20A9276200635C0D /* blinn2_Base_Color.png in Resources */,
+				8F201C9E211B849E00637A75 /* Rfoot_Y.mp3 in Resources */,
+				8F201C9F211B849E00637A75 /* Body_R.mp3 in Resources */,
+				8F201CAE211B849E00637A75 /* Rhand_Y.mp3 in Resources */,
+				8F201CB1211B849E00637A75 /* Body_W.mp3 in Resources */,
 				8F2F344920F7A59A001962D0 /* Trees_White_Rleg.png in Resources */,
 				8F2F344F20F7A59A001962D0 /* Trees_White_BodyHead.png in Resources */,
+				8F201CB4211B849E00637A75 /* Rfoot_R.mp3 in Resources */,
+				8F201CA0211B849E00637A75 /* Body_G.mp3 in Resources */,
 				8F292C1020A9275A00635C0D /* ibl_mans_outside.hdr in Resources */,
 				8F2F345220F7A59A001962D0 /* Trees_White_Lleg.png in Resources */,
 				8F292C1920A9276200635C0D /* blinn2_Roughness.png in Resources */,
