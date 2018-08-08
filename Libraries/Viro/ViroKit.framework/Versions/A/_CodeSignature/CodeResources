@@ -10,7 +10,7 @@
 		</data>
 		<key>Resources/VROPolygon.h</key>
 		<data>
-		Sa5cKdbshGVwwlrbZVLXBCF3TH0=
+		pi9is39bH37DguNnbvIPO7cNVuQ=
 		</data>
 		<key>Resources/blank.png</key>
 		<data>
@@ -276,7 +276,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			x9IVLWFUNiF3ge8M1q9fIeXjtgkqR5kGnTWSTTdivgg=
+			7tWr3SmpllH+mO8U2anY2NKlqXvEHWc+cbSZN3zonJo=
 			</data>
 		</dict>
 		<key>Headers/VROAnimationFloat.h</key>
@@ -290,7 +290,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1ilPtEpQDo+wOf2JeRnf8ZRYKLzyDi2BvB/lXfcBRpA=
+			E3xRr1K0YTr5LP/78lxmPHpM6NgTQbUKNbvVh5dFpgk=
 			</data>
 		</dict>
 		<key>Headers/VROAnimationQuaternion.h</key>
@@ -423,7 +423,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			gM3tM9EjuIvVa34ePX9dU6YVn/vfGKX0CLz2+k/ebe8=
+			LXtPQLwl7cLFtFEFdSJzyy+galFGSBJXU7QybXWbq9s=
 			</data>
 		</dict>
 		<key>Headers/VROFBXLoader.h</key>
@@ -633,7 +633,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IPVLs2RZ/Qj9xTm7haTjqzU0VyS58dxbMmCoeojIjVI=
+			F+124TiJ/GlcWsC1dlSZCXZLVxmtd5LLaJsakiH2s+M=
 			</data>
 		</dict>
 		<key>Headers/VROMaterialAnimation.h</key>
@@ -654,7 +654,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			G/Uj18EOo1O001ua3Qx6hsvKsF2uix2PcN+1YP8Coxs=
+			IFdKS3ntRylueKIqHzkbqznGxILkWK4QuA7dmIoNgoM=
 			</data>
 		</dict>
 		<key>Headers/VROMath.h</key>
@@ -682,7 +682,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ofic3t5AbeYu3O7fwDU6hGajDZJRM2KkVol9pL0vhlM=
+			Eb4dWEkrrnXQVxvFG3nGeeA9hW0Wf3zcDzg71+dOBns=
 			</data>
 		</dict>
 		<key>Headers/VRONodeCamera.h</key>
@@ -808,7 +808,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bLrun5+tPbgW4IAq+QM+2wKm9vWM/uIcpkUlOjzshsA=
+			tdT9DPTQa3dHEzNKRHQHBtNO6XJtem4IAo/wJ3yfPI0=
 			</data>
 		</dict>
 		<key>Headers/VROPolyline.h</key>
@@ -913,7 +913,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			kQy25ZtM8Miilo3SvLamgtng1ROdASRZOUs5GbQdc4s=
+			Q5nCQQj73lvl2booIoUkybvhwpIoY7HTPBAqJatiQ5U=
 			</data>
 		</dict>
 		<key>Headers/VRORenderToTextureDelegate.h</key>
@@ -941,7 +941,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JE73Zo7FgJkXv96Sh8jMZIp8PEsSW2epUhHsJCcJ0LE=
+			p3B7OB+O6xe5AdRkj4F7K3mnIk901Ga0kjNn5bIkbMc=
 			</data>
 		</dict>
 		<key>Headers/VROReticle.h</key>
@@ -1011,7 +1011,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZC+waeL/SUWe30vlIPx5D6ENhQ5kTvLJx2Ny0XFtqvI=
+			JgFPDbczVedH2cxX9NWDUi0yPdsBRyWBgfSNSN9M2qE=
 			</data>
 		</dict>
 		<key>Headers/VROSound.h</key>
@@ -1109,7 +1109,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zftNZvVRJyljfKtcvgs1XVDcHB2JF2mBnZzba/c1H70=
+			ehiuXtpRxDE8JShiYXPpZLkY9mzdyOCPmJvCTee9v0g=
 			</data>
 		</dict>
 		<key>Headers/VROTexture.h</key>
@@ -1207,7 +1207,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			28PAvMQAMYioYXDgLyy5nHplERRXjBwrmWnuy6FUraY=
+			QG2bY9CrhBr05rm/I06L4g8dOr8riJmiRNF0SAMPKqo=
 			</data>
 		</dict>
 		<key>Headers/VROTransformConstraint.h</key>
@@ -1242,14 +1242,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			EjUhIhFOnZWfBGxWhF7S8XV6RIhuDj+MhnngkGkx3Hg=
+			DsBdg8nL4rx9FscPvSeGE8TthS3xXnT68NxKjNkSNmM=
 			</data>
 		</dict>
 		<key>Headers/VROTypeface.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Pnb7fgMEJU6jBtrwgup4oQupz9B8mGhdxVZRSG2K7B4=
+			5/fQSy7El3L8S3fQ/ueHrSg73KAGs/XRfMO8s5s2Ui4=
 			</data>
 		</dict>
 		<key>Headers/VROTypefaceCollection.h</key>
@@ -1270,7 +1270,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hvInhgDkA8c5wmNXsdoLjH9kUmzcGHB0wPnVgyjm0Do=
+			FMZZ+tndDGBTnQgYRSOdS2tR1piDND31HPJE9zgTpYU=
 			</data>
 		</dict>
 		<key>Headers/VROVector4f.h</key>
@@ -3195,7 +3195,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bLrun5+tPbgW4IAq+QM+2wKm9vWM/uIcpkUlOjzshsA=
+			tdT9DPTQa3dHEzNKRHQHBtNO6XJtem4IAo/wJ3yfPI0=
 			</data>
 		</dict>
 		<key>Resources/blank.png</key>
