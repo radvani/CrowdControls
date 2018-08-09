@@ -32,14 +32,13 @@
 @property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
 @property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
 @property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
-@property (readwrite, nonatomic) std::shared_ptr<VRORendererTest> scene;
 @property (readwrite, nonatomic) SyphonServer *syphon;
 
 @end
 
 @implementation CCAnimationScreen
 
-- (id)initWithName:(NSString *)name scene:(std::shared_ptr<VRORendererTest>)scene {
+- (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene {
     self = [super init];
     if (self) {
         self.name = name;
@@ -52,7 +51,7 @@
 
 - (void)setupRendererWithDriver:(std::shared_ptr<VRODriver>)driver {
     self.driver = driver;
-    self.scene->build(self.view.renderer, self.view.frameSynchronizer, driver);
+    self.scene->build(self.view, self.view.renderer, self.view.frameSynchronizer, driver);
     
     self.view.sceneController = self.scene->getSceneController();
     if (self.scene->getPointOfView()) {
@@ -76,6 +75,18 @@
     };
     std::shared_ptr<VROShaderProgram> blitShader = VROImageShaderProgram::create(blitSamplers, blitCode, driver);
     _blitPostProcess = driver->newImagePostProcess(blitShader);
+    
+    
+    /// TODO Delete below after proper animation is set up
+    std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
+    if (danceScene) {
+        danceScene->addModel("trap");
+        danceScene->queueAnimation("trap", "Trap");
+    }
+}
+
+- (void)setDuration:(float)duration {
+    
 }
 
 - (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color {

@@ -25,8 +25,13 @@
 
 #import "CCDanceController.h"
 #import "CCAnimationScreen.h"
+#import "CCDanceScene.h"
+#import "CCCountdownScene.h"
 #import <ViroKit/ViroKit.h>
 #import <functional>
+#import <atomic>
+
+static const int kNumDanceScreens = 4;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
 static const VROVector4f kBlueColor = VROVector4f(30.0 / 255.0, 145.0 / 255.0, 225.0 / 255.0, 1);
@@ -40,7 +45,9 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 
 @end
 
-@implementation CCDanceController
+@implementation CCDanceController {
+
+}
 
 - (id)initWithAnimationScreens:(NSArray *)animationScreens {
     self = [super init];
@@ -134,12 +141,30 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     }
 }
 
+- (void)startAnimationSequence {
+    for (CCAnimationScreen *screen in self.screens) {
+        VROViewScene *view = (VROViewScene *) screen.view;
+        std::function<void()> task = [screen, self] {
+            screen.scene->startSequence(9.583f, [self] (CCScene *finishedScene) {
+                CCCountdownScene *finishedCountdownScene = dynamic_cast<CCCountdownScene *>(finishedScene);
+                if (finishedCountdownScene) {
+                    dispatch_async(dispatch_get_main_queue(), [self] {
+                        [self startAnimationSequence];
+                    });
+                }
+            });
+        };
+        [view queueRendererTask:task];
+    }
+}
+
 - (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal {
     if (signal == kSignalOff) {
         return;
     }
     
     NSLog(@"Pin %d did change signal to %d", (int) pin, signal);
+    
     for (CCAnimationScreen *screen in self.screens) {
         VROViewScene *view = (VROViewScene *) screen.view;
         std::function<void()> task = [pin, screen] {

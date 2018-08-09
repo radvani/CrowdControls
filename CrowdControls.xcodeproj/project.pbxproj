@@ -37,6 +37,7 @@
 		8F201CB3211B849E00637A75 /* Lhand_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9B211B849D00637A75 /* Lhand_Y.mp3 */; };
 		8F201CB4211B849E00637A75 /* Rfoot_R.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9C211B849D00637A75 /* Rfoot_R.mp3 */; };
 		8F201CB5211B849E00637A75 /* Drums_Y.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8F201C9D211B849D00637A75 /* Drums_Y.mp3 */; };
+		8F201CBB211B903200637A75 /* CCModelUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F201CB9211B903200637A75 /* CCModelUtil.cpp */; };
 		8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE320A91F5C00635C0D /* AppDelegate.m */; };
 		8F292BE720A91F5C00635C0D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F292BE620A91F5C00635C0D /* ViewController.m */; };
 		8F292BE920A91F5E00635C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F292BE820A91F5E00635C0D /* Assets.xcassets */; };
@@ -127,6 +128,9 @@
 		8F201C9B211B849D00637A75 /* Lhand_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Lhand_Y.mp3; path = CrowdControls/Sound/Lhand_Y.mp3; sourceTree = SOURCE_ROOT; };
 		8F201C9C211B849D00637A75 /* Rfoot_R.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Rfoot_R.mp3; path = CrowdControls/Sound/Rfoot_R.mp3; sourceTree = SOURCE_ROOT; };
 		8F201C9D211B849D00637A75 /* Drums_Y.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Drums_Y.mp3; path = CrowdControls/Sound/Drums_Y.mp3; sourceTree = SOURCE_ROOT; };
+		8F201CB7211B892600637A75 /* CCScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCScene.h; sourceTree = "<group>"; };
+		8F201CB9211B903200637A75 /* CCModelUtil.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCModelUtil.cpp; sourceTree = "<group>"; };
+		8F201CBA211B903200637A75 /* CCModelUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCModelUtil.h; sourceTree = "<group>"; };
 		8F292BDF20A91F5C00635C0D /* CrowdControls.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrowdControls.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F292BE220A91F5C00635C0D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8F292BE320A91F5C00635C0D /* AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -247,6 +251,7 @@
 				8F201C3020FAB14000637A75 /* CCAnimationScreen.m */,
 				8F292BFC20A91FF000635C0D /* CCViewController.h */,
 				8F292BFB20A91FF000635C0D /* CCViewController.m */,
+				8F201CB7211B892600637A75 /* CCScene.h */,
 				8F2F341F20E7D96D001962D0 /* CCDanceScene.h */,
 				8F2F341E20E7D96C001962D0 /* CCDanceScene.cpp */,
 				8F201C3220FACBA800637A75 /* CCCountdownScene.h */,
@@ -259,6 +264,8 @@
 				8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */,
 				8F201C2D20FAB08100637A75 /* CCDanceController.h */,
 				8F201C2E20FAB08100637A75 /* CCDanceController.m */,
+				8F201CBA211B903200637A75 /* CCModelUtil.h */,
+				8F201CB9211B903200637A75 /* CCModelUtil.cpp */,
 				8F292BE220A91F5C00635C0D /* AppDelegate.h */,
 				8F292BE320A91F5C00635C0D /* AppDelegate.m */,
 				8F292BE820A91F5E00635C0D /* Assets.xcassets */,
@@ -447,6 +454,7 @@
 				8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */,
 				8F292BFE20A91FF000635C0D /* CCViewController.m in Sources */,
 				8F292BEF20A91F5E00635C0D /* main.m in Sources */,
+				8F201CBB211B903200637A75 /* CCModelUtil.cpp in Sources */,
 				8F2F342020E7D96D001962D0 /* CCDanceScene.cpp in Sources */,
 				8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */,
 				8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */,

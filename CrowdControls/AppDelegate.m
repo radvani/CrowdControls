@@ -152,10 +152,11 @@
     [reader connect:"/dev/cu.usbmodem14411"];
     
     NSArray *animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.p1Screen,
-                                 self.p2Screen, self.p3Screen, nil];
+                                 self.p2Screen, self.p3Screen, self.countdownScreen, nil];
     
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;
+    [self.danceController startAnimationSequence];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

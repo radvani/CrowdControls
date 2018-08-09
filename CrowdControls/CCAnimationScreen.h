@@ -24,6 +24,7 @@
 
 #import <ViroKit/ViroKit.h>
 #import "CCDanceController.h"
+#import "CCScene.h"
 
 @class CCAnimationScreen;
 
@@ -41,9 +42,12 @@ private:
 @interface CCAnimationScreen : NSObject <VRORenderDelegate>
 
 @property (readwrite, nonatomic) IBOutlet id <VROView> view;
+@property (readwrite, nonatomic) std::shared_ptr<CCScene> scene;
 
-- (id)initWithName:(NSString *)name scene:(std::shared_ptr<VRORendererTest>)scene;
+- (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene;
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
+
+- (void)setDuration:(float)duration;
 - (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color;
 
 @end

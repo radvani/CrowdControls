@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, CCBodyPart) {
 
 - (id)initWithAnimationScreens:(NSArray *)animationScreens;
 - (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal;
+- (void)startAnimationSequence;
 
 @end
 

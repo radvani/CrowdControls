@@ -27,15 +27,18 @@
 #define CCCountdownScene_h
 
 #include <string>
+#include <memory>
 #include <ViroKit/ViroKit.h>
+#include "CCScene.h"
 
-class CCCountdownScene : public VRORendererTest {
+class CCCountdownScene : public CCScene, public VROFrameListener, public std::enable_shared_from_this<CCCountdownScene> {
 public:
     
     CCCountdownScene();
     virtual ~CCCountdownScene();
     
-    void build(std::shared_ptr<VRORenderer> renderer,
+    void build(id <VROView> view,
+               std::shared_ptr<VRORenderer> renderer,
                std::shared_ptr<VROFrameSynchronizer> frameSynchronizer,
                std::shared_ptr<VRODriver> driver);
     std::shared_ptr<VRONode> getPointOfView() {
@@ -45,16 +48,25 @@ public:
         return _sceneController;
     }
     
-    void setDuration(float seconds);
+    void startSequence(float durationSeconds, std::function<void(CCScene *)> onFinished);
+    
+    void onFrameWillRender(const VRORenderContext &context);
+    void onFrameDidRender(const VRORenderContext &context);
     
 private:
     
+    VROViewScene *_view;
     std::shared_ptr<VRODriver> _driver;
     std::shared_ptr<VRONode> _pointOfView;
     std::shared_ptr<VROSceneController> _sceneController;
     float _duration;
-    std::shared_ptr<VROBox> _box;
-    std::shared_ptr<VRONode> _boxNode;
+    std::shared_ptr<VROSurface> _quad;
+    std::shared_ptr<VRONode> _quadNode;
+    
+    double _barIncrementTime;
+    int _currentBarIndex;
+    double _nextBarTime;
+    std::function<void(CCScene *)> _onFinished;
 };
 
 #endif

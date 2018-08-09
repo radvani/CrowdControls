@@ -25,9 +25,14 @@
 
 #import "CCCountdownScene.h"
 
+static const float kYStart = 1.095f;
+static const float kWidth = 0.315;
+static const float kYDecrement = kWidth;
 static const float kZDepth = -2;
+static const int kCountdownPositions = 8;
 
-CCCountdownScene::CCCountdownScene() : VRORendererTest(VRORendererTestType::FBX) {
+CCCountdownScene::CCCountdownScene() :
+    _currentBarIndex(-1) {
     
 }
 
@@ -35,28 +40,61 @@ CCCountdownScene::~CCCountdownScene() {
     
 }
 
-void CCCountdownScene::build(std::shared_ptr<VRORenderer> renderer,
+void CCCountdownScene::build(id <VROView> view,
+                             std::shared_ptr<VRORenderer> renderer,
                              std::shared_ptr<VROFrameSynchronizer> frameSynchronizer,
                              std::shared_ptr<VRODriver> driver) {
     
+    _view = (VROViewScene *) view;
     _driver = driver;
     
     _sceneController = std::make_shared<VROSceneController>();
     std::shared_ptr<VROScene> scene = _sceneController->getScene();
     
-    
-    _box = VROBox::createBox(10, 0.25, 0.01);
-    _box->getMaterials().front()->getDiffuse().setColor({1, 1, 1, 1});
-    _boxNode = std::make_shared<VRONode>();
-    _boxNode->setPosition({ 0, 0, kZDepth });
-    _boxNode->setGeometry(_box);
+    _quad = VROSurface::createSurface(10, kWidth);
+    _quad->getMaterials().front()->getDiffuse().setColor({1, 1, 1, 1});
+    _quadNode = std::make_shared<VRONode>();
+    _quadNode->setPosition({ 0, kYStart, kZDepth });
+    _quadNode->setGeometry(_quad);
 
     std::shared_ptr<VROPortal> rootNode = scene->getRootNode();
-    rootNode->addChildNode(_boxNode);
+    rootNode->addChildNode(_quadNode);
+    frameSynchronizer->addFrameListener(shared_from_this());
+}
+
+void CCCountdownScene::startSequence(float seconds, std::function<void(CCScene *)> onFinished) {
+    float start = VROTimeCurrentSeconds();
+    _duration = seconds;
     
+    _currentBarIndex = 0;
+    _barIncrementTime = seconds / (float) kCountdownPositions;
+    _nextBarTime = start + _barIncrementTime;
+    _onFinished = onFinished;
+    
+    [_view queueRendererTask:[this] {
+        _quadNode->setPosition({ 0, kYStart, kZDepth });
+     }];
+}
+
+void CCCountdownScene::onFrameWillRender(const VRORenderContext &context) {
+    if (_currentBarIndex == -1) {
+        return;
+    }
+    
+    double time = VROTimeCurrentSeconds();
+    if (time > _nextBarTime) {
+        _quadNode->setPosition({ 0, _quadNode->getPosition().y - kYDecrement, kZDepth });
+        _nextBarTime += _barIncrementTime;
+        _currentBarIndex++;
+        
+        if (_currentBarIndex == kCountdownPositions) {
+            _currentBarIndex = -1;
+            _onFinished(this);            
+        }
+    }
+}
+
+void CCCountdownScene::onFrameDidRender(const VRORenderContext &context) {
     
 }
 
-void CCCountdownScene::setDuration(float seconds) {
-    _duration = seconds;
-}

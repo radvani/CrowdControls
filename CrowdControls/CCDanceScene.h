@@ -26,28 +26,32 @@
 #define CCDanceScene_h
 
 #include <string>
+#include <memory>
+#include <functional>
 #include <ViroKit/ViroKit.h>
+#include "CCScene.h"
 
 class CCFBXModel {
 public:
-    std::string name;
+    std::string file;
     VROVector3f position;
     VROVector3f scale;
-    int lightMask;
-    std::string animation;
+    std::string queuedAnimation;
+    std::shared_ptr<VRONode> node;
     
-    CCFBXModel(std::string name, VROVector3f position, VROVector3f scale, std::string animation) :
-        name(name), position(position), scale(scale), animation(animation) {}
+    CCFBXModel(std::string file, VROVector3f position, VROVector3f scale) :
+        file(file), position(position), scale(scale) {}
     ~CCFBXModel() {}
 };
 
-class CCDanceScene : public VRORendererTest {
+class CCDanceScene : public CCScene {
 public:
     
     CCDanceScene();
     virtual ~CCDanceScene();
     
-    void build(std::shared_ptr<VRORenderer> renderer,
+    void build(id <VROView> view,
+               std::shared_ptr<VRORenderer> renderer,
                std::shared_ptr<VROFrameSynchronizer> frameSynchronizer,
                std::shared_ptr<VRODriver> driver);
     std::shared_ptr<VRONode> getPointOfView() {
@@ -57,24 +61,46 @@ public:
         return _sceneController;
     }
     
+    void startSequence(float durationSeconds, std::function<void(CCScene *)> onFinished);
+    
+    /*
+     Add the model with the given name to the dance scene.
+     */
+    void addModel(std::string name);
+    
+    /*
+     Clear all models from the dance scene.
+     */
+    void clearModels();
+    
+    /*
+     Queue the animation with the given name for the given model, to be run at
+     the next startSequence call.
+     */
+    void queueAnimation(std::string modelName, std::string animation);
+    
+    /*
+     Set the color of the given model and body part.
+     
+     // TODO set model and body part
+     */
     void setColor(VROVector4f color);
-    void rotateFBX();
     
 private:
 
+    VROViewScene *_view;
     std::shared_ptr<VRODriver> _driver;
     std::shared_ptr<VRONode> _pointOfView;
     std::shared_ptr<VROSceneController> _sceneController;
     std::shared_ptr<VRONode> _fbxContainerNode;
-    int _fbxIndex;
-    float _angle;
-    std::vector<std::vector<CCFBXModel>> _models;
     
-    static std::shared_ptr<VRONode> loadFBXModel(std::string model, VROVector3f position, VROVector3f scale,
-                                                 std::string animation, std::shared_ptr<VRODriver> driver);
-    static void animateTake(std::weak_ptr<VRONode> node_w, std::string name);
+    std::map<std::string, std::shared_ptr<CCFBXModel>> _models;
+    std::map<std::string, std::shared_ptr<CCFBXModel>> _activeModels;
+    float _animationDurationSeconds;
+    
+    void animateTake(std::shared_ptr<VRONode> node, std::string name, float duration,
+                     std::function<void(CCScene *)> onFinished);
     static void setColor(std::shared_ptr<VRONode> node, VROVector4f color);
-    static std::shared_ptr<VROTexture> loadRadianceHDRTexture(std::string texture);
     
 };
 
