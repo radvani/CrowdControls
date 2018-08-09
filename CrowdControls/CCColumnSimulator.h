@@ -29,35 +29,35 @@
 
 @interface CCColumnSimulator : NSViewController
 
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *headWhite;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmWhite;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmWhite;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegWhite;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegWhite;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *headWhite, *headWhiteBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmWhite, *leftArmWhiteBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmWhite, *rightArmWhiteBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegWhite, *leftLegWhiteBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegWhite, *rightLegWhiteBottom;
 
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *headBlue;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmBlue;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmBlue;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegBlue;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegBlue;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *headBlue, *headBlueBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmBlue, *leftArmBlueBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmBlue, *rightArmBlueBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegBlue, *leftLegBlueBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegBlue, *rightLegBlueBottom;
 
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *headRed;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmRed;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmRed;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegRed;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegRed;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *headRed, *headRedBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmRed, *leftArmRedBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmRed, *rightArmRedBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegRed, *leftLegRedBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegRed, *rightLegRedBottom;
 
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *headGreen;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmGreen;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmGreen;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegGreen;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegGreen;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *headGreen, *headGreenBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmGreen, *leftArmGreenBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmGreen, *rightArmGreenBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegGreen, *leftLegGreenBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegGreen, *rightLegGreenBottom;
 
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *headYellow;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmYellow;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmYellow;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegYellow;
-@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegYellow;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *headYellow, *headYellowBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftArmYellow, *leftArmYellowBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightArmYellow, *rightArmYellowBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *leftLegYellow, *leftLegYellowBottom;
+@property (readwrite, nonatomic, strong) IBOutlet NSButton *rightLegYellow, *rightLegYellowBottom;
 
 @property (readwrite, nonatomic) NSObject<CCSignalDelegate> *signalDelegate;
 

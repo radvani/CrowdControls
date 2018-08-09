@@ -53,6 +53,7 @@ void CCCountdownScene::build(id <VROView> view,
     
     _quad = VROSurface::createSurface(10, kWidth);
     _quad->getMaterials().front()->getDiffuse().setColor({1, 1, 1, 1});
+    _quad->getMaterials().front()->setNeedsToneMapping(false);
     _quadNode = std::make_shared<VRONode>();
     _quadNode->setPosition({ 0, kYStart, kZDepth });
     _quadNode->setGeometry(_quad);

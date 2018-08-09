@@ -57,31 +57,56 @@
                                                    [[CCButtonPin alloc] initWithButton:self.headBlue pin:CCSignalPinHeadBlue],
                                                    [[CCButtonPin alloc] initWithButton:self.headYellow pin:CCSignalPinHeadYellow],
                                                    [[CCButtonPin alloc] initWithButton:self.headGreen pin:CCSignalPinHeadGreen],
-                                                   [[CCButtonPin alloc] initWithButton:self.headRed pin:CCSignalPinHeadRed], nil];
+                                                   [[CCButtonPin alloc] initWithButton:self.headRed pin:CCSignalPinHeadRed],
+                                                   [[CCButtonPin alloc] initWithButton:self.headWhiteBottom pin:CCSignalPinHeadWhite],
+                                                   [[CCButtonPin alloc] initWithButton:self.headBlueBottom pin:CCSignalPinHeadBlue],
+                                                   [[CCButtonPin alloc] initWithButton:self.headYellowBottom pin:CCSignalPinHeadYellow],
+                                                   [[CCButtonPin alloc] initWithButton:self.headGreenBottom pin:CCSignalPinHeadGreen],
+                                                   [[CCButtonPin alloc] initWithButton:self.headRedBottom pin:CCSignalPinHeadRed], nil];
     
     self.leftArmGroup  = [NSArray arrayWithObjects:[[CCButtonPin alloc] initWithButton:self.leftArmWhite pin:CCSignalPinLeftArmWhite],
                                                    [[CCButtonPin alloc] initWithButton:self.leftArmBlue pin:CCSignalPinLeftArmBlue],
                                                    [[CCButtonPin alloc] initWithButton:self.leftArmYellow pin:CCSignalPinLeftArmYellow],
                                                    [[CCButtonPin alloc] initWithButton:self.leftArmGreen pin:CCSignalPinLeftArmGreen],
-                                                   [[CCButtonPin alloc] initWithButton:self.leftArmRed pin:CCSignalPinLeftArmRed], nil];
+                                                   [[CCButtonPin alloc] initWithButton:self.leftArmRed pin:CCSignalPinLeftArmRed],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftArmWhiteBottom pin:CCSignalPinLeftArmWhite],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftArmBlueBottom pin:CCSignalPinLeftArmBlue],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftArmYellowBottom pin:CCSignalPinLeftArmYellow],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftArmGreenBottom pin:CCSignalPinLeftArmGreen],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftArmRedBottom pin:CCSignalPinLeftArmRed], nil];
     
     self.rightArmGroup = [NSArray arrayWithObjects:[[CCButtonPin alloc] initWithButton:self.rightArmWhite pin:CCSignalPinRightArmWhite],
                                                    [[CCButtonPin alloc] initWithButton:self.rightArmBlue pin:CCSignalPinRightArmBlue],
                                                    [[CCButtonPin alloc] initWithButton:self.rightArmYellow pin:CCSignalPinRightArmYellow],
                                                    [[CCButtonPin alloc] initWithButton:self.rightArmGreen pin:CCSignalPinRightArmGreen],
-                                                   [[CCButtonPin alloc] initWithButton:self.rightArmRed pin:CCSignalPinRightArmRed], nil];
+                                                   [[CCButtonPin alloc] initWithButton:self.rightArmRed pin:CCSignalPinRightArmRed],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightArmWhiteBottom pin:CCSignalPinRightArmWhite],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightArmBlueBottom pin:CCSignalPinRightArmBlue],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightArmYellowBottom pin:CCSignalPinRightArmYellow],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightArmGreenBottom pin:CCSignalPinRightArmGreen],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightArmRedBottom pin:CCSignalPinRightArmRed], nil];
     
     self.leftLegGroup  = [NSArray arrayWithObjects:[[CCButtonPin alloc] initWithButton:self.leftLegWhite pin:CCSignalPinLeftLegWhite],
                                                    [[CCButtonPin alloc] initWithButton:self.leftLegBlue pin:CCSignalPinLeftLegBlue],
                                                    [[CCButtonPin alloc] initWithButton:self.leftLegYellow pin:CCSignalPinLeftLegYellow],
                                                    [[CCButtonPin alloc] initWithButton:self.leftLegGreen pin:CCSignalPinLeftLegGreen],
-                                                   [[CCButtonPin alloc] initWithButton:self.leftLegRed pin:CCSignalPinLeftLegRed], nil];
+                                                   [[CCButtonPin alloc] initWithButton:self.leftLegRed pin:CCSignalPinLeftLegRed],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftLegWhiteBottom pin:CCSignalPinLeftLegWhite],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftLegBlueBottom pin:CCSignalPinLeftLegBlue],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftLegYellowBottom pin:CCSignalPinLeftLegYellow],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftLegGreenBottom pin:CCSignalPinLeftLegGreen],
+                                                   [[CCButtonPin alloc] initWithButton:self.leftLegRedBottom pin:CCSignalPinLeftLegRed], nil];
     
     self.rightLegGroup = [NSArray arrayWithObjects:[[CCButtonPin alloc] initWithButton:self.rightLegWhite pin:CCSignalPinRightLegWhite],
                                                    [[CCButtonPin alloc] initWithButton:self.rightLegBlue pin:CCSignalPinRightLegBlue],
                                                    [[CCButtonPin alloc] initWithButton:self.rightLegYellow pin:CCSignalPinRightLegYellow],
                                                    [[CCButtonPin alloc] initWithButton:self.rightLegGreen pin:CCSignalPinRightLegGreen],
-                                                   [[CCButtonPin alloc] initWithButton:self.rightLegRed pin:CCSignalPinRightLegRed], nil];
+                                                   [[CCButtonPin alloc] initWithButton:self.rightLegRed pin:CCSignalPinRightLegRed],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightLegWhiteBottom pin:CCSignalPinRightLegWhite],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightLegBlueBottom pin:CCSignalPinRightLegBlue],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightLegYellowBottom pin:CCSignalPinRightLegYellow],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightLegGreenBottom pin:CCSignalPinRightLegGreen],
+                                                   [[CCButtonPin alloc] initWithButton:self.rightLegRedBottom pin:CCSignalPinRightLegRed], nil];
 }
 
 - (void)onButtonChange:(id)sender group:(NSArray *)group {
