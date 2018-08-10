@@ -42,6 +42,7 @@ public:
     void setLoop(bool loop);
     void play();
     void pause();
+    bool isPlaying();
     void setVolume(float volume);
     void setMuted(bool muted);
     void seekToTime(float seconds);
