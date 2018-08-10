@@ -33,6 +33,7 @@
 #import <atomic>
 
 static const int kNumDanceScreens = 4;
+static bool kMuteAudio = false;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
 static const VROVector4f kBlueColor = VROVector4f(30.0 / 255.0, 145.0 / 255.0, 225.0 / 255.0, 1);
@@ -45,10 +46,11 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 @property (readonly, nonatomic) AVAudioEngine *audioEngine;
 @property (readonly, nonatomic) AVAudioMixerNode *audioMixer;
 @property (readonly, nonatomic) NSArray *screens;
-@property (readonly, nonatomic) std::map<CCSignalPin, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> audioStems;
+@property (readonly, nonatomic) std::map<CCBodyPart, std::map<CCColor, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>>> audioStems;
 @property (readonly, nonatomic) std::map<CCColor, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> drumStems;
-@property (readonly, nonatomic) std::map<CCBodyPart, CCSignalPin> activePins;
+@property (readonly, nonatomic) std::map<CCBodyPart, CCColor> activeColors;
 @property (readonly, nonatomic) std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *> activeDrums;
+@property (readonly, nonatomic) std::map<CCBodyPart, std::vector<CCColor>> activatedPins;
 
 @end
 
@@ -77,11 +79,11 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         
         [self loadAudioStems];
         
-        _activePins[CCBodyPartHead] = CCSignalPinHeadBlue;
-        _activePins[CCBodyPartLeftArm] = CCSignalPinLeftArmBlue;
-        _activePins[CCBodyPartRightArm] = CCSignalPinRightArmBlue;
-        _activePins[CCBodyPartLeftLeg] = CCSignalPinLeftLegBlue;
-        _activePins[CCBodyPartRightLeg] = CCSignalPinRightLegBlue;
+        _activeColors[CCBodyPartHead] = CCColorBlue;
+        _activeColors[CCBodyPartLeftArm] = CCColorBlue;
+        _activeColors[CCBodyPartRightArm] = CCColorBlue;
+        _activeColors[CCBodyPartLeftLeg] = CCColorBlue;
+        _activeColors[CCBodyPartRightLeg] = CCColorBlue;
     }
     return self;
 }
@@ -114,6 +116,9 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 
     [audioPlayer scheduleBuffer:buffer atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
     [audioPlayer prepareWithFrameCount:buffer.frameLength];
+    if (kMuteAudio) {
+        [audioPlayer setVolume:0];
+    }
     
     *outBuffer = buffer;
     return audioPlayer;
@@ -123,7 +128,12 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
     AVAudioPCMBuffer *buffer;
     AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
-    _audioStems.insert({ pin, { audioPlayer, buffer } });
+    
+    CCColor color = [CCDanceController colorForPin:pin];
+    CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
+    
+    std::map<CCColor, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> &bodyPartColorToStem = _audioStems[bodyPart];
+    bodyPartColorToStem.insert({ color, { audioPlayer, buffer } });
 }
 
 - (void)loadDrumStem:(CCColor)color resource:(NSString *)name {
@@ -245,6 +255,23 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     }
 }
 
++ (VROVector4f)rgbForColor:(CCColor)color {
+    switch (color) {
+        case CCColorWhite:
+            return kWhiteColor;
+        case CCColorBlue:
+            return kBlueColor;
+        case CCColorRed:
+            return kRedColor;
+        case CCColorGreen:
+            return kGreenColor;
+        case CCColorYellow:
+            return kYellowColor;
+        default:
+            return kWhiteColor;
+    }
+}
+
 + (VROVector4f)rgbForPin:(CCSignalPin)pin {
     switch (pin) {
         case CCSignalPinHeadWhite:
@@ -292,8 +319,8 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     *outSynchronized = YES;
     CCColor lastColor = CCColorBlue;
     
-    for (auto kv : _activePins) {
-        CCColor colorForBodyPart = [CCDanceController colorForPin:kv.second];
+    for (auto kv : _activeColors) {
+        CCColor colorForBodyPart = kv.second;
         if (i == 0) {
             lastColor = colorForBodyPart;
             ++i;
@@ -312,34 +339,49 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     bool isFirst = true;
     AVAudioFramePosition masterStartTime = 0;
     
+    // Update the color of each body part
+    for (auto kv : _activeColors) {
+        CCBodyPart bodyPart = kv.first;
+        CCColor color = kv.second;
+        
+        for (CCAnimationScreen *screen in self.screens) {
+            VROViewScene *view = (VROViewScene *) screen.view;
+            std::function<void()> task = [color, bodyPart, screen] {
+                [screen setBodyPart:bodyPart toColor:[CCDanceController rgbForColor:color]];
+            };
+            [view queueRendererTask:task];
+        }
+    }
+    
     // Iterate through all sounds: turn off those that are no longer selected, and
     // turn on those that are selected for the first time
     for (auto kv : _audioStems) {
-        CCSignalPin pin = kv.first;
-        CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
+        CCBodyPart bodyPart = kv.first;
         
-        // Use the render time of the first player as the master start time for all
-        // players. This is how we ensure sync: by using playAtTime: with a common
-        // time for all players (and by scheduling and preparing beforehand during
-        // initialization).
-        AVAudioPlayerNode *player = kv.second.first;
-        AVAudioPCMBuffer *buffer = kv.second.second;
-        
-        // Note that the 'time' used in playAtTime: is a system-wide time, not the
-        // time inside the audio track at which to start. In other words, playAtTime
-        // means "play the audio, starting from the beginning, at the given time."
-        if (isFirst) {
-            masterStartTime = player.lastRenderTime.sampleTime;
-            isFirst = false;
-        }
-        
-        if (_activePins[bodyPart] != pin) {
-            [player stop];
-            [player scheduleBuffer:buffer atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
-        } else if (![player isPlaying]) {
-            AVAudioFormat *outputFormat = [player outputFormatForBus:0];
-            AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
-            [player playAtTime:startTime];
+        for (auto colorToAudio : kv.second) {
+            // Use the render time of the first player as the master start time for all
+            // players. This is how we ensure sync: by using playAtTime: with a common
+            // time for all players (and by scheduling and preparing beforehand during
+            // initialization).
+            AVAudioPlayerNode *player = colorToAudio.second.first;
+            AVAudioPCMBuffer *buffer = colorToAudio.second.second;
+            
+            // Note that the 'time' used in playAtTime: is a system-wide time, not the
+            // time inside the audio track at which to start. In other words, playAtTime
+            // means "play the audio, starting from the beginning, at the given time."
+            if (isFirst) {
+                masterStartTime = player.lastRenderTime.sampleTime;
+                isFirst = false;
+            }
+            
+            if (_activeColors[bodyPart] != colorToAudio.first) {
+                [player stop];
+                [player scheduleBuffer:buffer atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
+            } else if (![player isPlaying]) {
+                AVAudioFormat *outputFormat = [player outputFormatForBus:0];
+                AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
+                [player playAtTime:startTime];
+            }
         }
     }
     
@@ -397,7 +439,6 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     }
 }
 
-
 - (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal {
     if (signal == kSignalOff) {
         return;
@@ -406,15 +447,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     NSLog(@"Pin %d did change signal to %d", (int) pin, signal);
     
     CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
-    _activePins[bodyPart] = pin;
-    
-    for (CCAnimationScreen *screen in self.screens) {
-        VROViewScene *view = (VROViewScene *) screen.view;
-        std::function<void()> task = [pin, bodyPart, screen] {
-            [screen setBodyPart:bodyPart toColor:[CCDanceController rgbForPin:pin]];
-        };
-        [view queueRendererTask:task];
-    }
+    _activeColors[bodyPart] = [CCDanceController colorForPin:pin];
 }
 
 @end
