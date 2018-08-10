@@ -33,7 +33,6 @@
 #import <atomic>
 
 static const int kNumDanceScreens = 4;
-static bool kVolumeMethod = false;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
 static const VROVector4f kBlueColor = VROVector4f(30.0 / 255.0, 145.0 / 255.0, 225.0 / 255.0, 1);
@@ -46,10 +45,10 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 @property (readonly, nonatomic) AVAudioEngine *audioEngine;
 @property (readonly, nonatomic) AVAudioMixerNode *audioMixer;
 @property (readonly, nonatomic) NSArray *screens;
-@property (readonly, nonatomic) std::map<CCSignalPin, AVAudioPlayerNode *> audioStems;
-@property (readonly, nonatomic) std::map<CCColor, AVAudioPlayerNode *> drumStems;
+@property (readonly, nonatomic) std::map<CCSignalPin, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> audioStems;
+@property (readonly, nonatomic) std::map<CCColor, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> drumStems;
 @property (readonly, nonatomic) std::map<CCBodyPart, CCSignalPin> activePins;
-@property (readonly, nonatomic) AVAudioPlayerNode *activeDrums;
+@property (readonly, nonatomic) std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *> activeDrums;
 
 @end
 
@@ -61,7 +60,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     self = [super init];
     if (self) {
         _screens = animationScreens;
-        _activeDrums = nil;
+        _activeDrums.first = nil;
         _audioEngine = [[AVAudioEngine alloc] init];
         _audioMixer = [[AVAudioMixerNode alloc] init];
         
@@ -124,14 +123,14 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
     AVAudioPCMBuffer *buffer;
     AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
-    _audioStems.insert({ pin, audioPlayer });
+    _audioStems.insert({ pin, { audioPlayer, buffer } });
 }
 
 - (void)loadDrumStem:(CCColor)color resource:(NSString *)name {
     NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
     AVAudioPCMBuffer *buffer;
     AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
-    _drumStems.insert({ color, audioPlayer });
+    _drumStems.insert({ color, { audioPlayer, buffer } });
 }
 
 - (void)loadAudioStems {
@@ -310,17 +309,6 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 }
 
 - (void)startAnimationSequence {
-    if (kVolumeMethod) {
-        [self startAnimationSequenceVolumeMethod];
-    } else {
-        [self startAnimationSequenceDefaultMethod];
-    }
-}
-
-// This method achieves sync by starting all players simultaneously, and then muting
-// those tracks that aren't being used. This takes more processing power and may result
-// in sync falloff over long periods of time.
-- (void)startAnimationSequenceVolumeMethod {
     bool isFirst = true;
     AVAudioFramePosition masterStartTime = 0;
     
@@ -329,105 +317,13 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     for (auto kv : _audioStems) {
         CCSignalPin pin = kv.first;
         CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
-        
-        AVAudioPlayerNode *player = kv.second;
-    
-        if (_activePins[bodyPart] != pin) {
-            [player setVolume:0];
-        } else {
-            [player setVolume:1];
-        }
-        
-        if (isFirst) {
-            masterStartTime = player.lastRenderTime.sampleTime;
-            isFirst = false;
-        }
-        
-        AVAudioFormat *outputFormat = [player outputFormatForBus:0];
-        AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
-        
-        if (![player isPlaying]) {
-            [player playAtTime:startTime];
-        }
-    }
-    for (auto kv : _drumStems) {
-        AVAudioPlayerNode *player = kv.second;
-        if (![player isPlaying]) {
-            [player setVolume:0];
-            
-            AVAudioFormat *outputFormat = [player outputFormatForBus:0];
-            AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
-            
-            if (![player isPlaying]) {
-                [player playAtTime:startTime];
-            }
-        }
-    }
-    
-    /*
-     Check if all the body parts are of the same color. If so, drums will kick in and
-     a synchronized animation will start.
-     */
-    BOOL synchronized = YES;
-    CCColor synchronizedColor = [self isSynchronized:&synchronized];
-    
-    if (synchronized && synchronizedColor != CCColorBlue) {
-        auto kv = _drumStems.find(synchronizedColor);
-        AVAudioPlayerNode *drumPlayer = kv->second;
-        
-        if (_activeDrums && _activeDrums != drumPlayer) {
-            [_activeDrums setVolume:0];
-        }
-        
-        [drumPlayer setVolume:1];
-        _activeDrums = drumPlayer;
-    } else if (_activeDrums) {
-        [_activeDrums setVolume:0];
-        _activeDrums = nil;
-    }
-    
-    // Begin the next queued animation for each screen
-    for (CCAnimationScreen *screen in self.screens) {
-        VROViewScene *view = (VROViewScene *) screen.view;
-        std::function<void()> task = [screen, self] {
-            
-            // The callback is only invoked by the countdown screen, which serves as the
-            // master timer
-            screen.scene->startSequence(9.583, [self] (CCScene *finishedScene) {
-                // The callback executes on the rendering thread of the countdown scene, which is
-                // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
-                // to the main thread; instead we start the next animation sequence directly from this
-                // rendering thread, otherwise the dispatch call will throw any new sounds off-sync
-                CCCountdownScene *finishedCountdownScene = dynamic_cast<CCCountdownScene *>(finishedScene);
-                if (finishedCountdownScene) {
-                    [self startAnimationSequenceVolumeMethod];
-                }
-            });
-        };
-        
-        [view queueRendererTask:task];
-    }
-}
-
-// This method achieves sync by trusting that the PCM buffers are fully loaded and ready to
-// play. By picking a constant time across all players to start, we ensure the system
-// starts in perfect sync. Rescheduling buffers for each player is not necessary.
-- (void)startAnimationSequenceDefaultMethod {
-    bool isFirst = true;
-    AVAudioFramePosition masterStartTime = 0;
-    
-    // Iterate through all sounds: turn off those that are no longer selected, and
-    // turn on those that are selected for the first time
-    for (auto kv : _audioStems) {
-        CCSignalPin pin = kv.first;
-        CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
-        
-        AVAudioPlayerNode *player = kv.second;
         
         // Use the render time of the first player as the master start time for all
         // players. This is how we ensure sync: by using playAtTime: with a common
         // time for all players (and by scheduling and preparing beforehand during
         // initialization).
+        AVAudioPlayerNode *player = kv.second.first;
+        AVAudioPCMBuffer *buffer = kv.second.second;
         
         // Note that the 'time' used in playAtTime: is a system-wide time, not the
         // time inside the audio track at which to start. In other words, playAtTime
@@ -438,7 +334,8 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         }
         
         if (_activePins[bodyPart] != pin) {
-            [player pause];
+            [player stop];
+            [player scheduleBuffer:buffer atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
         } else if (![player isPlaying]) {
             AVAudioFormat *outputFormat = [player outputFormatForBus:0];
             AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
@@ -455,21 +352,26 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     
     if (synchronized && synchronizedColor != CCColorBlue) {
         auto kv = _drumStems.find(synchronizedColor);
+        AVAudioPlayerNode *drumPlayer = kv->second.first;
+        AVAudioPCMBuffer *drumBuffer = kv->second.second;
         
-        AVAudioPlayerNode *drumPlayer = kv->second;
-        if (_activeDrums && _activeDrums != drumPlayer) {
-            [_activeDrums pause];
+        if (_activeDrums.first && _activeDrums.first != drumPlayer) {
+            [_activeDrums.first stop];
+            [_activeDrums.first scheduleBuffer:_activeDrums.second atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
         }
         
         if (![drumPlayer isPlaying]) {
             AVAudioFormat *outputFormat = [drumPlayer outputFormatForBus:0];
             AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
             [drumPlayer playAtTime:startTime];
-            _activeDrums = drumPlayer;
+            _activeDrums.first = drumPlayer;
+            _activeDrums.second = drumBuffer;
         }
-    } else if (_activeDrums) {
-        [_activeDrums pause];
-        _activeDrums = nil;
+    } else if (_activeDrums.first) {
+        [_activeDrums.first stop];
+        [_activeDrums.first scheduleBuffer:_activeDrums.second atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
+
+        _activeDrums.first = nil;
     }
     
     // Begin the next queued animation for each screen
@@ -477,11 +379,13 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         VROViewScene *view = (VROViewScene *) screen.view;
         std::function<void()> task = [screen, self] {
             
-            // The callback executes on the rendering thread of the countdown scene, which is
-            // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
-            // to the main thread; instead we start the next animation sequence directly from this
-            // rendering thread, otherwise the dispatch call will throw any new sounds off-sync
+            // The callback is only invoked by the countdown screen, which serves as the
+            // master timer
             screen.scene->startSequence(9.583, [self] (CCScene *finishedScene) {
+                // The callback executes on the rendering thread of the countdown scene, which is
+                // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
+                // to the main thread; instead we start the next animation sequence directly from this
+                // rendering thread, otherwise the dispatch call will throw any new sounds off-sync
                 CCCountdownScene *finishedCountdownScene = dynamic_cast<CCCountdownScene *>(finishedScene);
                 if (finishedCountdownScene) {
                     [self startAnimationSequence];
