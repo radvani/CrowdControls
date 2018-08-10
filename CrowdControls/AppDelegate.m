@@ -127,7 +127,7 @@
     self.p3ViewController.renderDelegate = self.p3Screen;
     
     self.p3Window.contentView = self.p3ViewController.view;
-    [self.p3Window orderBack:self];
+    [self.p3Window orderFront:self];
     self.p3Window.title = @"Projector 3";
     self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
     
@@ -143,7 +143,7 @@
     self.countdownViewController.renderDelegate = self.countdownScreen;
     
     self.countdownWindow.contentView = self.countdownViewController.view;
-    [self.countdownWindow orderBack:self];
+    [self.countdownWindow orderFront:self];
     self.countdownWindow.title = @"Countdown";
     self.countdownWindowController = [[NSWindowController alloc] initWithWindow:self.countdownWindow];
     
@@ -156,7 +156,14 @@
     
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;
-    [self.danceController startAnimationSequence];
+    
+    // Give the sound engine some time to buffer. Note that start animation sequence
+    // (which drives the loop) is operated on the countdown scene's rendering thread
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [(VROViewScene *) self.countdownScreen.view queueRendererTask:[self] {
+            [self.danceController startAnimationSequence];
+        }];
+    });
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

@@ -26,6 +26,14 @@
 #import <Foundation/Foundation.h>
 #import "CCSignalReader.h"
 
+typedef NS_ENUM(NSInteger, CCColor) {
+    CCColorBlue,
+    CCColorWhite,
+    CCColorGreen,
+    CCColorYellow,
+    CCColorRed
+};
+
 typedef NS_ENUM(NSInteger, CCBodyPart) {
     CCBodyPartHead,
     CCBodyPartLeftArm,

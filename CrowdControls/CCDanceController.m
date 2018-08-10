@@ -28,10 +28,12 @@
 #import "CCDanceScene.h"
 #import "CCCountdownScene.h"
 #import <ViroKit/ViroKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import <functional>
 #import <atomic>
 
 static const int kNumDanceScreens = 4;
+static bool kVolumeMethod = false;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
 static const VROVector4f kBlueColor = VROVector4f(30.0 / 255.0, 145.0 / 255.0, 225.0 / 255.0, 1);
@@ -41,7 +43,13 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 
 @interface CCDanceController ()
 
+@property (readonly, nonatomic) AVAudioEngine *audioEngine;
+@property (readonly, nonatomic) AVAudioMixerNode *audioMixer;
 @property (readonly, nonatomic) NSArray *screens;
+@property (readonly, nonatomic) std::map<CCSignalPin, AVAudioPlayerNode *> audioStems;
+@property (readonly, nonatomic) std::map<CCColor, AVAudioPlayerNode *> drumStems;
+@property (readonly, nonatomic) std::map<CCBodyPart, CCSignalPin> activePins;
+@property (readonly, nonatomic) AVAudioPlayerNode *activeDrums;
 
 @end
 
@@ -53,8 +61,147 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     self = [super init];
     if (self) {
         _screens = animationScreens;
+        _activeDrums = nil;
+        _audioEngine = [[AVAudioEngine alloc] init];
+        _audioMixer = [[AVAudioMixerNode alloc] init];
+        
+        [self.audioEngine attachNode:self.audioMixer];
+        [self.audioEngine connect:self.audioMixer to:self.audioEngine.outputNode format:nil];
+        
+        NSError *error;
+        [self.audioEngine prepare];
+        [self.audioEngine startAndReturnError:&error];
+        if (error) {
+            NSLog(@"Error starting audio engine: %@", error.localizedDescription);
+            error = nil;
+        }
+        
+        [self loadAudioStems];
+        
+        _activePins[CCBodyPartHead] = CCSignalPinHeadBlue;
+        _activePins[CCBodyPartLeftArm] = CCSignalPinLeftArmBlue;
+        _activePins[CCBodyPartRightArm] = CCSignalPinRightArmBlue;
+        _activePins[CCBodyPartLeftLeg] = CCSignalPinLeftLegBlue;
+        _activePins[CCBodyPartRightLeg] = CCSignalPinRightLegBlue;
     }
     return self;
+}
+
+- (std::string)urlForResource:(std::string)resource type:(std::string)type {
+    NSString *objPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:resource.c_str()]
+                                                        ofType:[NSString stringWithUTF8String:type.c_str()]];
+    NSURL *objURL = [NSURL fileURLWithPath:objPath];
+    return std::string([[objURL description] UTF8String]);
+}
+
+- (AVAudioPlayerNode *)loadAudioPlayerFromURL:(NSURL *)url outBuffer:(AVAudioPCMBuffer **)outBuffer {
+    NSError *error;
+    AVAudioFile *file = [[AVAudioFile alloc] initForReading:url error:&error];
+    if (error) {
+        NSLog(@"Error loading audio file %@", error.localizedDescription);
+        error = nil;
+    }
+    
+    AVAudioPCMBuffer *buffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:file.processingFormat frameCapacity:(int) file.length];
+    [file readIntoBuffer:buffer error:&error];
+    if (error) {
+        NSLog(@"Error reading audio file into buffer %@", error.localizedDescription);
+        error = nil;
+    }
+    
+    AVAudioPlayerNode *audioPlayer = [[AVAudioPlayerNode alloc] init];
+    [self.audioEngine attachNode:audioPlayer];
+    [self.audioEngine connect:audioPlayer to:self.audioMixer format:nil];
+
+    [audioPlayer scheduleBuffer:buffer atTime:0 options:AVAudioPlayerNodeBufferLoops completionHandler:nil];
+    [audioPlayer prepareWithFrameCount:buffer.frameLength];
+    
+    *outBuffer = buffer;
+    return audioPlayer;
+}
+
+- (void)loadAudioStem:(CCSignalPin)pin resource:(NSString *)name {
+    NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
+    AVAudioPCMBuffer *buffer;
+    AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
+    _audioStems.insert({ pin, audioPlayer });
+}
+
+- (void)loadDrumStem:(CCColor)color resource:(NSString *)name {
+    NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
+    AVAudioPCMBuffer *buffer;
+    AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
+    _drumStems.insert({ color, audioPlayer });
+}
+
+- (void)loadAudioStems {
+    [self loadAudioStem:CCSignalPinHeadWhite resource:@"Body_W"];
+    [self loadAudioStem:CCSignalPinLeftArmWhite resource:@"Lhand_W"];
+    [self loadAudioStem:CCSignalPinRightArmWhite resource:@"Rhand_W"];
+    [self loadAudioStem:CCSignalPinLeftLegWhite resource:@"Lfoot_W"];
+    [self loadAudioStem:CCSignalPinRightLegWhite resource:@"Rfoot_W"];
+    [self loadAudioStem:CCSignalPinHeadRed resource:@"Body_R"];
+    [self loadAudioStem:CCSignalPinLeftArmRed resource:@"Lhand_R"];
+    [self loadAudioStem:CCSignalPinRightArmRed resource:@"Rhand_R"];
+    [self loadAudioStem:CCSignalPinLeftLegRed resource:@"Lfoot_R"];
+    [self loadAudioStem:CCSignalPinRightLegRed resource:@"Rfoot_R"];
+    [self loadAudioStem:CCSignalPinHeadGreen resource:@"Body_G"];
+    [self loadAudioStem:CCSignalPinLeftArmGreen resource:@"Lhand_G"];
+    [self loadAudioStem:CCSignalPinRightArmGreen resource:@"Rhand_G"];
+    [self loadAudioStem:CCSignalPinLeftLegGreen resource:@"Lfoot_G"];
+    [self loadAudioStem:CCSignalPinRightLegGreen resource:@"Rfoot_G"];
+    [self loadAudioStem:CCSignalPinHeadYellow resource:@"Body_Y"];
+    [self loadAudioStem:CCSignalPinLeftArmYellow resource:@"Lhand_Y"];
+    [self loadAudioStem:CCSignalPinRightArmYellow resource:@"Rhand_Y"];
+    [self loadAudioStem:CCSignalPinLeftLegYellow resource:@"Lfoot_Y"];
+    [self loadAudioStem:CCSignalPinRightLegYellow resource:@"Rfoot_Y"];
+    
+    [self loadDrumStem:CCColorWhite resource:@"Drums_W"];
+    [self loadDrumStem:CCColorYellow resource:@"Drums_Y"];
+    [self loadDrumStem:CCColorGreen resource:@"Drums_G"];
+    [self loadDrumStem:CCColorRed resource:@"Drums_R"];
+}
+
++ (CCColor)colorForPin:(CCSignalPin)pin {
+    switch (pin) {
+        case CCSignalPinHeadWhite:
+        case CCSignalPinLeftArmWhite:
+        case CCSignalPinRightArmWhite:
+        case CCSignalPinLeftLegWhite:
+        case CCSignalPinRightLegWhite:
+            return CCColorWhite;
+            
+        case CCSignalPinHeadRed:
+        case CCSignalPinLeftArmRed:
+        case CCSignalPinRightArmRed:
+        case CCSignalPinLeftLegRed:
+        case CCSignalPinRightLegRed:
+            return CCColorRed;
+
+        case CCSignalPinHeadGreen:
+        case CCSignalPinLeftArmGreen:
+        case CCSignalPinRightArmGreen:
+        case CCSignalPinLeftLegGreen:
+        case CCSignalPinRightLegGreen:
+            return CCColorGreen;
+
+        case CCSignalPinHeadYellow:
+        case CCSignalPinLeftArmYellow:
+        case CCSignalPinRightArmYellow:
+        case CCSignalPinLeftLegYellow:
+        case CCSignalPinRightLegYellow:
+            return CCColorYellow;
+            
+        case CCSignalPinHeadBlue:
+        case CCSignalPinLeftArmBlue:
+        case CCSignalPinRightArmBlue:
+        case CCSignalPinLeftLegBlue:
+        case CCSignalPinRightLegBlue:
+            return CCColorBlue;
+            
+        default:
+            return CCColorBlue;
+    }
 }
 
 + (CCBodyPart)bodyPartForPin:(CCSignalPin)pin {
@@ -99,7 +246,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     }
 }
 
-+ (VROVector4f)colorForPin:(CCSignalPin)pin {
++ (VROVector4f)rgbForPin:(CCSignalPin)pin {
     switch (pin) {
         case CCSignalPinHeadWhite:
         case CCSignalPinLeftArmWhite:
@@ -141,22 +288,211 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     }
 }
 
+- (CCColor)isSynchronized:(BOOL *)outSynchronized {
+    int i = 0;
+    *outSynchronized = YES;
+    CCColor lastColor = CCColorBlue;
+    
+    for (auto kv : _activePins) {
+        CCColor colorForBodyPart = [CCDanceController colorForPin:kv.second];
+        if (i == 0) {
+            lastColor = colorForBodyPart;
+            ++i;
+            continue;
+        }
+        if (colorForBodyPart != lastColor) {
+            *outSynchronized = NO;
+            break;
+        }
+        ++i;
+    }
+    return lastColor;
+}
+
 - (void)startAnimationSequence {
+    if (kVolumeMethod) {
+        [self startAnimationSequenceVolumeMethod];
+    } else {
+        [self startAnimationSequenceDefaultMethod];
+    }
+}
+
+// This method achieves sync by starting all players simultaneously, and then muting
+// those tracks that aren't being used. This takes more processing power and may result
+// in sync falloff over long periods of time.
+- (void)startAnimationSequenceVolumeMethod {
+    bool isFirst = true;
+    AVAudioFramePosition masterStartTime = 0;
+    
+    // Iterate through all sounds: turn off those that are no longer selected, and
+    // turn on those that are selected for the first time
+    for (auto kv : _audioStems) {
+        CCSignalPin pin = kv.first;
+        CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
+        
+        AVAudioPlayerNode *player = kv.second;
+    
+        if (_activePins[bodyPart] != pin) {
+            [player setVolume:0];
+        } else {
+            [player setVolume:1];
+        }
+        
+        if (isFirst) {
+            masterStartTime = player.lastRenderTime.sampleTime;
+            isFirst = false;
+        }
+        
+        AVAudioFormat *outputFormat = [player outputFormatForBus:0];
+        AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
+        
+        if (![player isPlaying]) {
+            [player playAtTime:startTime];
+        }
+    }
+    for (auto kv : _drumStems) {
+        AVAudioPlayerNode *player = kv.second;
+        if (![player isPlaying]) {
+            [player setVolume:0];
+            
+            AVAudioFormat *outputFormat = [player outputFormatForBus:0];
+            AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
+            
+            if (![player isPlaying]) {
+                [player playAtTime:startTime];
+            }
+        }
+    }
+    
+    /*
+     Check if all the body parts are of the same color. If so, drums will kick in and
+     a synchronized animation will start.
+     */
+    BOOL synchronized = YES;
+    CCColor synchronizedColor = [self isSynchronized:&synchronized];
+    
+    if (synchronized && synchronizedColor != CCColorBlue) {
+        auto kv = _drumStems.find(synchronizedColor);
+        AVAudioPlayerNode *drumPlayer = kv->second;
+        
+        if (_activeDrums && _activeDrums != drumPlayer) {
+            [_activeDrums setVolume:0];
+        }
+        
+        [drumPlayer setVolume:1];
+        _activeDrums = drumPlayer;
+    } else if (_activeDrums) {
+        [_activeDrums setVolume:0];
+        _activeDrums = nil;
+    }
+    
+    // Begin the next queued animation for each screen
     for (CCAnimationScreen *screen in self.screens) {
         VROViewScene *view = (VROViewScene *) screen.view;
         std::function<void()> task = [screen, self] {
-            screen.scene->startSequence(9.583f, [self] (CCScene *finishedScene) {
+            
+            // The callback is only invoked by the countdown screen, which serves as the
+            // master timer
+            screen.scene->startSequence(9.583, [self] (CCScene *finishedScene) {
+                // The callback executes on the rendering thread of the countdown scene, which is
+                // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
+                // to the main thread; instead we start the next animation sequence directly from this
+                // rendering thread, otherwise the dispatch call will throw any new sounds off-sync
                 CCCountdownScene *finishedCountdownScene = dynamic_cast<CCCountdownScene *>(finishedScene);
                 if (finishedCountdownScene) {
-                    dispatch_async(dispatch_get_main_queue(), [self] {
-                        [self startAnimationSequence];
-                    });
+                    [self startAnimationSequenceVolumeMethod];
                 }
             });
         };
+        
         [view queueRendererTask:task];
     }
 }
+
+// This method achieves sync by trusting that the PCM buffers are fully loaded and ready to
+// play. By picking a constant time across all players to start, we ensure the system
+// starts in perfect sync. Rescheduling buffers for each player is not necessary.
+- (void)startAnimationSequenceDefaultMethod {
+    bool isFirst = true;
+    AVAudioFramePosition masterStartTime = 0;
+    
+    // Iterate through all sounds: turn off those that are no longer selected, and
+    // turn on those that are selected for the first time
+    for (auto kv : _audioStems) {
+        CCSignalPin pin = kv.first;
+        CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
+        
+        AVAudioPlayerNode *player = kv.second;
+        
+        // Use the render time of the first player as the master start time for all
+        // players. This is how we ensure sync: by using playAtTime: with a common
+        // time for all players (and by scheduling and preparing beforehand during
+        // initialization).
+        
+        // Note that the 'time' used in playAtTime: is a system-wide time, not the
+        // time inside the audio track at which to start. In other words, playAtTime
+        // means "play the audio, starting from the beginning, at the given time."
+        if (isFirst) {
+            masterStartTime = player.lastRenderTime.sampleTime;
+            isFirst = false;
+        }
+        
+        if (_activePins[bodyPart] != pin) {
+            [player pause];
+        } else if (![player isPlaying]) {
+            AVAudioFormat *outputFormat = [player outputFormatForBus:0];
+            AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
+            [player playAtTime:startTime];
+        }
+    }
+    
+    /*
+     Check if all the body parts are of the same color. If so, drums will kick in and
+     a synchronized animation will start.
+     */
+    BOOL synchronized = YES;
+    CCColor synchronizedColor = [self isSynchronized:&synchronized];
+    
+    if (synchronized && synchronizedColor != CCColorBlue) {
+        auto kv = _drumStems.find(synchronizedColor);
+        
+        AVAudioPlayerNode *drumPlayer = kv->second;
+        if (_activeDrums && _activeDrums != drumPlayer) {
+            [_activeDrums pause];
+        }
+        
+        if (![drumPlayer isPlaying]) {
+            AVAudioFormat *outputFormat = [drumPlayer outputFormatForBus:0];
+            AVAudioTime *startTime = [AVAudioTime timeWithSampleTime:masterStartTime atRate:outputFormat.sampleRate];
+            [drumPlayer playAtTime:startTime];
+            _activeDrums = drumPlayer;
+        }
+    } else if (_activeDrums) {
+        [_activeDrums pause];
+        _activeDrums = nil;
+    }
+    
+    // Begin the next queued animation for each screen
+    for (CCAnimationScreen *screen in self.screens) {
+        VROViewScene *view = (VROViewScene *) screen.view;
+        std::function<void()> task = [screen, self] {
+            
+            // The callback executes on the rendering thread of the countdown scene, which is
+            // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
+            // to the main thread; instead we start the next animation sequence directly from this
+            // rendering thread, otherwise the dispatch call will throw any new sounds off-sync
+            screen.scene->startSequence(9.583, [self] (CCScene *finishedScene) {
+                CCCountdownScene *finishedCountdownScene = dynamic_cast<CCCountdownScene *>(finishedScene);
+                if (finishedCountdownScene) {
+                    [self startAnimationSequence];
+                }
+            });
+        };
+        
+        [view queueRendererTask:task];
+    }
+}
+
 
 - (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal {
     if (signal == kSignalOff) {
@@ -165,10 +501,13 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     
     NSLog(@"Pin %d did change signal to %d", (int) pin, signal);
     
+    CCBodyPart bodyPart = [CCDanceController bodyPartForPin:pin];
+    _activePins[bodyPart] = pin;
+    
     for (CCAnimationScreen *screen in self.screens) {
         VROViewScene *view = (VROViewScene *) screen.view;
-        std::function<void()> task = [pin, screen] {
-            [screen setBodyPart:[CCDanceController bodyPartForPin:pin] toColor:[CCDanceController colorForPin:pin]];
+        std::function<void()> task = [pin, bodyPart, screen] {
+            [screen setBodyPart:bodyPart toColor:[CCDanceController rgbForPin:pin]];
         };
         [view queueRendererTask:task];
     }

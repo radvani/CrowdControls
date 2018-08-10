@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F1DE3B8211D00B100C8749D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F1DE3B7211D00B100C8749D /* AVFoundation.framework */; };
 		8F201C2720FA6EEF00637A75 /* CCSignalReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */; };
 		8F201C2920FA70CF00637A75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F201C2820FA70CF00637A75 /* IOKit.framework */; };
 		8F201C2C20FA9B4E00637A75 /* CCColumnSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */; };
@@ -94,6 +95,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8F1DE3B7211D00B100C8749D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCSignalReader.mm; sourceTree = "<group>"; };
 		8F201C2620FA6EEF00637A75 /* CCSignalReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCSignalReader.h; sourceTree = "<group>"; };
 		8F201C2820FA70CF00637A75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -180,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F1DE3B8211D00B100C8749D /* AVFoundation.framework in Frameworks */,
 				8F201C2920FA70CF00637A75 /* IOKit.framework in Frameworks */,
 				8F292C2420AA370F00635C0D /* OpenGL.framework in Frameworks */,
 				8F292C2220AA370300635C0D /* Cocoa.framework in Frameworks */,
@@ -280,6 +283,7 @@
 		8F292BF620A91F7D00635C0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8F1DE3B7211D00B100C8749D /* AVFoundation.framework */,
 				8F201C2820FA70CF00637A75 /* IOKit.framework */,
 				8F292C2320AA370F00635C0D /* OpenGL.framework */,
 				8F292C2120AA370300635C0D /* Cocoa.framework */,
