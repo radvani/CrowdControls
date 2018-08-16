@@ -129,7 +129,7 @@ void CCDanceScene::clearModels() {
     _fbxContainerNode->removeAllChildren();
 }
 
-void CCDanceScene::queueAnimation(std::string name, std::string animation) {
+void CCDanceScene::queueAnimation(std::string name, CCBodyPart bodyPart, std::string animation) {
     auto kv = _models.find(name);
     if (kv == _models.end()) {
         pinfo("Failed to queue animation %s on model %s: model not found", animation.c_str(), name.c_str());
@@ -137,8 +137,9 @@ void CCDanceScene::queueAnimation(std::string name, std::string animation) {
     }
     
     std::shared_ptr<CCFBXModel> &model = kv->second;
+    
     NSLog(@"Queued model %s with animation %s", name.c_str(), animation.c_str());
-    model->queuedAnimation = animation;
+    model->queuedAnimations[bodyPart] = animation;
 }
 
 void CCDanceScene::animateTake(std::shared_ptr<VRONode> node, std::string name, float durationSeconds,

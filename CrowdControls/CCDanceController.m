@@ -51,6 +51,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 @property (readonly, nonatomic) std::map<CCBodyPart, CCColor> activeColors;
 @property (readonly, nonatomic) std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *> activeDrums;
 @property (readonly, nonatomic) std::map<CCBodyPart, std::vector<CCColor>> activatedPins;
+@property (readonly, nonatomic) std::map<CCBodyPart, std::map<CCColor, std::string>> idleAnimations;
 
 @end
 
@@ -77,7 +78,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
             error = nil;
         }
         
-        [self loadAudioStems];
+        [self loadAnimationAndAudioStemss];
         
         _activeColors[CCBodyPartHead] = CCColorBlue;
         _activeColors[CCBodyPartLeftArm] = CCColorBlue;
@@ -124,7 +125,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     return audioPlayer;
 }
 
-- (void)loadAudioStem:(CCSignalPin)pin resource:(NSString *)name {
+- (void)loadAnimationAndAudioStems:(CCSignalPin)pin resource:(NSString *)name {
     NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
     AVAudioPCMBuffer *buffer;
     AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
@@ -134,6 +135,9 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     
     std::map<CCColor, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> &bodyPartColorToStem = _audioStems[bodyPart];
     bodyPartColorToStem.insert({ color, { audioPlayer, buffer } });
+    
+    std::map<CCColor, std::string> &bodyPartColorToAnimation = _idleAnimations[bodyPart];
+    bodyPartColorToAnimation.insert({ color, std::string([name UTF8String]) });
 }
 
 - (void)loadDrumStem:(CCColor)color resource:(NSString *)name {
@@ -143,27 +147,27 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     _drumStems.insert({ color, { audioPlayer, buffer } });
 }
 
-- (void)loadAudioStems {
-    [self loadAudioStem:CCSignalPinHeadWhite resource:@"Body_W"];
-    [self loadAudioStem:CCSignalPinLeftArmWhite resource:@"Lhand_W"];
-    [self loadAudioStem:CCSignalPinRightArmWhite resource:@"Rhand_W"];
-    [self loadAudioStem:CCSignalPinLeftLegWhite resource:@"Lfoot_W"];
-    [self loadAudioStem:CCSignalPinRightLegWhite resource:@"Rfoot_W"];
-    [self loadAudioStem:CCSignalPinHeadRed resource:@"Body_R"];
-    [self loadAudioStem:CCSignalPinLeftArmRed resource:@"Lhand_R"];
-    [self loadAudioStem:CCSignalPinRightArmRed resource:@"Rhand_R"];
-    [self loadAudioStem:CCSignalPinLeftLegRed resource:@"Lfoot_R"];
-    [self loadAudioStem:CCSignalPinRightLegRed resource:@"Rfoot_R"];
-    [self loadAudioStem:CCSignalPinHeadGreen resource:@"Body_G"];
-    [self loadAudioStem:CCSignalPinLeftArmGreen resource:@"Lhand_G"];
-    [self loadAudioStem:CCSignalPinRightArmGreen resource:@"Rhand_G"];
-    [self loadAudioStem:CCSignalPinLeftLegGreen resource:@"Lfoot_G"];
-    [self loadAudioStem:CCSignalPinRightLegGreen resource:@"Rfoot_G"];
-    [self loadAudioStem:CCSignalPinHeadYellow resource:@"Body_Y"];
-    [self loadAudioStem:CCSignalPinLeftArmYellow resource:@"Lhand_Y"];
-    [self loadAudioStem:CCSignalPinRightArmYellow resource:@"Rhand_Y"];
-    [self loadAudioStem:CCSignalPinLeftLegYellow resource:@"Lfoot_Y"];
-    [self loadAudioStem:CCSignalPinRightLegYellow resource:@"Rfoot_Y"];
+- (void)loadAnimationAndAudioStemss {
+    [self loadAnimationAndAudioStems:CCSignalPinHeadWhite resource:@"Body_W"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftArmWhite resource:@"Lhand_W"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightArmWhite resource:@"Rhand_W"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftLegWhite resource:@"Lfoot_W"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightLegWhite resource:@"Rfoot_W"];
+    [self loadAnimationAndAudioStems:CCSignalPinHeadRed resource:@"Body_R"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftArmRed resource:@"Lhand_R"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightArmRed resource:@"Rhand_R"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftLegRed resource:@"Lfoot_R"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightLegRed resource:@"Rfoot_R"];
+    [self loadAnimationAndAudioStems:CCSignalPinHeadGreen resource:@"Body_G"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftArmGreen resource:@"Lhand_G"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightArmGreen resource:@"Rhand_G"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftLegGreen resource:@"Lfoot_G"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightLegGreen resource:@"Rfoot_G"];
+    [self loadAnimationAndAudioStems:CCSignalPinHeadYellow resource:@"Body_Y"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftArmYellow resource:@"Lhand_Y"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightArmYellow resource:@"Rhand_Y"];
+    [self loadAnimationAndAudioStems:CCSignalPinLeftLegYellow resource:@"Lfoot_Y"];
+    [self loadAnimationAndAudioStems:CCSignalPinRightLegYellow resource:@"Rfoot_Y"];
     
     [self loadDrumStem:CCColorWhite resource:@"Drums_W"];
     [self loadDrumStem:CCColorYellow resource:@"Drums_Y"];
@@ -346,7 +350,11 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         
         for (CCAnimationScreen *screen in self.screens) {
             VROViewScene *view = (VROViewScene *) screen.view;
-            std::function<void()> task = [color, bodyPart, screen] {
+            std::function<void()> task = [self, color, bodyPart, screen] {
+                std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(screen.scene);
+                if (danceScene) {
+                    danceScene->queueAnimation("Jams", bodyPart, _idleAnimations[bodyPart][color]);
+                }
                 [screen setBodyPart:bodyPart toColor:[CCDanceController rgbForColor:color]];
             };
             [view queueRendererTask:task];

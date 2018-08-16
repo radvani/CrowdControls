@@ -25,6 +25,7 @@
 #import "CCAnimationScreen.h"
 #import <Syphon/Syphon.h>
 #import "CCDanceScene.h"
+#import "CCDanceController.h"
 
 @interface CCAnimationScreen ()
 
@@ -76,12 +77,10 @@
     std::shared_ptr<VROShaderProgram> blitShader = VROImageShaderProgram::create(blitSamplers, blitCode, driver);
     _blitPostProcess = driver->newImagePostProcess(blitShader);
     
-    
-    /// TODO Delete below after proper animation is set up
+    // TODO Will add two models to each screen
     std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
     if (danceScene) {
-        danceScene->addModel("trap");
-        danceScene->queueAnimation("trap", "Trap");
+        danceScene->addModel("Jams");
     }
 }
 
@@ -93,7 +92,7 @@
     std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
     if (danceScene) {
         // TODO Find the nodes corresponding to the body part
-        danceScene->setColor(color);
+         danceScene->setColor(color);
     }
 }
 

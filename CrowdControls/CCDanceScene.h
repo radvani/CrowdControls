@@ -30,13 +30,14 @@
 #include <functional>
 #include <ViroKit/ViroKit.h>
 #include "CCScene.h"
+#include "CCDanceController.h"
 
 class CCFBXModel {
 public:
     std::string file;
     VROVector3f position;
     VROVector3f scale;
-    std::string queuedAnimation;
+    std::string queuedAnimations[5];
     std::shared_ptr<VRONode> node;
     
     CCFBXModel(std::string file, VROVector3f position, VROVector3f scale) :
@@ -77,7 +78,7 @@ public:
      Queue the animation with the given name for the given model, to be run at
      the next startSequence call.
      */
-    void queueAnimation(std::string modelName, std::string animation);
+    void queueAnimation(std::string modelName, CCBodyPart bodyPart, std::string animation);
     
     /*
      Set the color of the given model and body part.

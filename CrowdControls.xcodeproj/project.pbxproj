@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8F1DE3B8211D00B100C8749D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F1DE3B7211D00B100C8749D /* AVFoundation.framework */; };
+		8F1DE3BA211E57A700C8749D /* Jams.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8F1DE3B9211E57A700C8749D /* Jams.vrx */; };
 		8F201C2720FA6EEF00637A75 /* CCSignalReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */; };
 		8F201C2920FA70CF00637A75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F201C2820FA70CF00637A75 /* IOKit.framework */; };
 		8F201C2C20FA9B4E00637A75 /* CCColumnSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F201C2B20FA9B4E00637A75 /* CCColumnSimulator.m */; };
@@ -72,9 +73,9 @@
 		8F2F344D20F7A59A001962D0 /* Trees_White_Rarm.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F344020F7A59A001962D0 /* Trees_White_Rarm.png */; };
 		8F2F344E20F7A59A001962D0 /* Jams_Rarm_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F344120F7A59A001962D0 /* Jams_Rarm_white.png */; };
 		8F2F344F20F7A59A001962D0 /* Trees_White_BodyHead.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F344220F7A59A001962D0 /* Trees_White_BodyHead.png */; };
-		8F2F345020F7A59A001962D0 /* Jams_All_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F344320F7A59A001962D0 /* Jams_All_white.png */; };
 		8F2F345120F7A59A001962D0 /* Jams_bodyhead_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F344420F7A59A001962D0 /* Jams_bodyhead_white.png */; };
 		8F2F345220F7A59A001962D0 /* Trees_White_Lleg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2F344520F7A59A001962D0 /* Trees_White_Lleg.png */; };
+		8F98F71221261A8A00917430 /* Trees.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8F98F71121261A8A00917430 /* Trees.vrx */; };
 		8FDA1D1A20DEC4AE005AFC70 /* animtest.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8FDA1D1820DEC4AE005AFC70 /* animtest.vrx */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 
 /* Begin PBXFileReference section */
 		8F1DE3B7211D00B100C8749D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		8F1DE3B9211E57A700C8749D /* Jams.vrx */ = {isa = PBXFileReference; lastKnownFileType = text; path = Jams.vrx; sourceTree = "<group>"; };
 		8F201C2520FA6EEF00637A75 /* CCSignalReader.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCSignalReader.mm; sourceTree = "<group>"; };
 		8F201C2620FA6EEF00637A75 /* CCSignalReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCSignalReader.h; sourceTree = "<group>"; };
 		8F201C2820FA70CF00637A75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -171,9 +173,9 @@
 		8F2F344020F7A59A001962D0 /* Trees_White_Rarm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trees_White_Rarm.png; sourceTree = "<group>"; };
 		8F2F344120F7A59A001962D0 /* Jams_Rarm_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jams_Rarm_white.png; sourceTree = "<group>"; };
 		8F2F344220F7A59A001962D0 /* Trees_White_BodyHead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trees_White_BodyHead.png; sourceTree = "<group>"; };
-		8F2F344320F7A59A001962D0 /* Jams_All_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jams_All_white.png; sourceTree = "<group>"; };
 		8F2F344420F7A59A001962D0 /* Jams_bodyhead_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jams_bodyhead_white.png; sourceTree = "<group>"; };
 		8F2F344520F7A59A001962D0 /* Trees_White_Lleg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trees_White_Lleg.png; sourceTree = "<group>"; };
+		8F98F71121261A8A00917430 /* Trees.vrx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Trees.vrx; sourceTree = "<group>"; };
 		8FDA1D1820DEC4AE005AFC70 /* animtest.vrx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = animtest.vrx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -305,7 +307,8 @@
 		8F292C0E20A926D600635C0D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8F2F344320F7A59A001962D0 /* Jams_All_white.png */,
+				8F98F71121261A8A00917430 /* Trees.vrx */,
+				8F1DE3B9211E57A700C8749D /* Jams.vrx */,
 				8F2F344420F7A59A001962D0 /* Jams_bodyhead_white.png */,
 				8F2F343F20F7A59A001962D0 /* Jams_Larm_white.png */,
 				8F2F343A20F7A599001962D0 /* Jams_Lleg_white.png */,
@@ -404,6 +407,7 @@
 				8F292C1C20A9276200635C0D /* blinn2_Mixed_AO.png in Resources */,
 				8F2F344E20F7A59A001962D0 /* Jams_Rarm_white.png in Resources */,
 				8F201CA8211B849E00637A75 /* Rhand_W.mp3 in Resources */,
+				8F98F71221261A8A00917430 /* Trees.vrx in Resources */,
 				8F201CA5211B849E00637A75 /* Rfoot_W.mp3 in Resources */,
 				8F201CAA211B849E00637A75 /* Lfoot_R.mp3 in Resources */,
 				8F201CA1211B849E00637A75 /* Lfoot_G.mp3 in Resources */,
@@ -418,7 +422,6 @@
 				8F2F344C20F7A59A001962D0 /* Jams_Larm_white.png in Resources */,
 				8F292C1820A9276200635C0D /* blinn2_Normal_DirectX.png in Resources */,
 				8F201CB0211B849E00637A75 /* Lhand_R.mp3 in Resources */,
-				8F2F345020F7A59A001962D0 /* Jams_All_white.png in Resources */,
 				8F201CB2211B849E00637A75 /* Lhand_W.mp3 in Resources */,
 				8F201CAB211B849E00637A75 /* Body_Y.mp3 in Resources */,
 				8F201CB5211B849E00637A75 /* Drums_Y.mp3 in Resources */,
@@ -437,6 +440,7 @@
 				8F2F344F20F7A59A001962D0 /* Trees_White_BodyHead.png in Resources */,
 				8F201CB4211B849E00637A75 /* Rfoot_R.mp3 in Resources */,
 				8F201CA0211B849E00637A75 /* Body_G.mp3 in Resources */,
+				8F1DE3BA211E57A700C8749D /* Jams.vrx in Resources */,
 				8F292C1020A9275A00635C0D /* ibl_mans_outside.hdr in Resources */,
 				8F2F345220F7A59A001962D0 /* Trees_White_Lleg.png in Resources */,
 				8F292C1920A9276200635C0D /* blinn2_Roughness.png in Resources */,
