@@ -99,8 +99,6 @@ private:
     std::map<std::string, std::shared_ptr<CCFBXModel>> _activeModels;
     float _animationDurationSeconds;
     
-    void animateTake(std::shared_ptr<VRONode> node, std::string name, float duration,
-                     std::function<void(CCScene *)> onFinished);
     static void setColor(std::shared_ptr<VRONode> node, VROVector4f color);
     
 };

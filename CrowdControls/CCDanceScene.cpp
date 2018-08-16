@@ -42,8 +42,9 @@ void CCDanceScene::build(id <VROView> view,
     
     VROVector3f position = { 0, -1, -3 };
     VROVector3f scale = { 0.2, 0.2, 0.2 };
-    std::shared_ptr<CCFBXModel> danceAll = std::make_shared<CCFBXModel>("trap", position, scale);
-    _models.insert({ "trap", danceAll });
+    
+    std::shared_ptr<CCFBXModel> danceAll = std::make_shared<CCFBXModel>("Jams", position, scale);
+    _models.insert({ "Jams", danceAll });
     
     _sceneController = std::make_shared<VROSceneController>();
     std::shared_ptr<VROScene> scene = _sceneController->getScene();
@@ -63,32 +64,13 @@ void CCDanceScene::build(id <VROView> view,
     ambient->setColor({ 1.0, 1.0, 1.0 });
     ambient->setIntensity(500);
     
-    //std::shared_ptr<VROTexture> environment = CCModelUtil::loadRadianceHDRTexture("ibl_mans_outside");
-    
     std::shared_ptr<VROPortal> rootNode = scene->getRootNode();
     rootNode->setPosition({0, 0, 0});
     rootNode->addLight(light);
     rootNode->addLight(ambient);
-    //rootNode->setLightingEnvironment(environment);
-    //rootNode->setBackgroundSphere(environment);
     
     _fbxContainerNode = std::make_shared<VRONode>();
     rootNode->addChildNode(_fbxContainerNode);
-    
-    /*
-     Shadow surface.
-     */
-    std::shared_ptr<VROSurface> surface = VROSurface::createSurface(80, 80);
-    surface->setName("Surface");
-    surface->getMaterials().front()->setLightingModel(VROLightingModel::Lambert);
-    VROARShadow::apply(surface->getMaterials().front());
-    
-    std::shared_ptr<VRONode> surfaceNode = std::make_shared<VRONode>();
-    surfaceNode->setGeometry(surface);
-    surfaceNode->setRotationEuler({ -M_PI_2, 0, 0 });
-    surfaceNode->setPosition({0, -6, -6});
-    surfaceNode->setLightReceivingBitMask(1);
-    rootNode->addChildNode(surfaceNode);
     
     std::shared_ptr<VRONodeCamera> camera = std::make_shared<VRONodeCamera>();
     camera->setRotationType(VROCameraRotationType::Orbit);
@@ -140,17 +122,6 @@ void CCDanceScene::queueAnimation(std::string name, CCBodyPart bodyPart, std::st
     
     NSLog(@"Queued model %s with animation %s", name.c_str(), animation.c_str());
     model->queuedAnimations[bodyPart] = animation;
-}
-
-void CCDanceScene::animateTake(std::shared_ptr<VRONode> node, std::string name, float durationSeconds,
-                               std::function<void(CCScene *)> onFinished) {
-    std::shared_ptr<VROExecutableAnimation> animation = node->getAnimation(name.c_str(), true)->copy();
-    pinfo("Original animation duration %f", animation->getDuration());
-    
-    animation->setDuration(durationSeconds);
-    animation->execute(node, [this, onFinished] {
-        onFinished(this);
-    });
 }
 
 void CCDanceScene::setColor(std::shared_ptr<VRONode> node, VROVector4f color) {
