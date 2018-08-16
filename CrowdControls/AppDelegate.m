@@ -59,6 +59,8 @@
 
 @implementation AppDelegate
 
+static bool kRunSingleScreen = true;
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSUInteger masks = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable |
                        NSWindowStyleMaskUnifiedTitleAndToolbar | NSWindowStyleMaskTexturedBackground;
@@ -86,50 +88,52 @@
     /*
      Projector 1.
      */
-    std::shared_ptr<CCDanceScene> proj1Scene = std::make_shared<CCDanceScene>();
-    self.p1Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, padding, windowLength, windowHeight)
-                                                styleMask:masks backing:NSBackingStoreBuffered
-                                                    defer:NO];
-    self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1" scene:proj1Scene];
-    self.p1ViewController = [[CCViewController alloc] init];
-    self.p1ViewController.renderDelegate = self.p1Screen;
-    
-    self.p1Window.contentView = self.p1ViewController.view;
-    [self.p1Window orderBack:self];
-    self.p1Window.title = @"Projector 1";
-    self.p1WindowController = [[NSWindowController alloc] initWithWindow:self.p1Window];
-    
-    /*
-     Projector 2.
-     */
-    std::shared_ptr<CCDanceScene> proj2Scene = std::make_shared<CCDanceScene>();
-    self.p2Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, windowHeight + 2 * padding, windowLength, windowHeight)
-                                                styleMask:masks backing:NSBackingStoreBuffered
-                                                    defer:NO];
-    self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2" scene:proj2Scene];
-    self.p2ViewController = [[CCViewController alloc] init];
-    self.p2ViewController.renderDelegate = self.p2Screen;
-    
-    self.p2Window.contentView = self.p2ViewController.view;
-    [self.p2Window orderBack:self];
-    self.p2Window.title = @"Projector 2";
-    self.p2WindowController = [[NSWindowController alloc] initWithWindow:self.p2Window];
-    
-    /*
-     Projector 3.
-     */
-    std::shared_ptr<CCDanceScene> proj3Scene = std::make_shared<CCDanceScene>();
-    self.p3Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, windowHeight + 2 * padding, windowLength, windowHeight)
-                                                styleMask:masks backing:NSBackingStoreBuffered
-                                                    defer:NO];
-    self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3" scene:proj3Scene];
-    self.p3ViewController = [[CCViewController alloc] init];
-    self.p3ViewController.renderDelegate = self.p3Screen;
-    
-    self.p3Window.contentView = self.p3ViewController.view;
-    [self.p3Window orderFront:self];
-    self.p3Window.title = @"Projector 3";
-    self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
+    if (!kRunSingleScreen) {
+        std::shared_ptr<CCDanceScene> proj1Scene = std::make_shared<CCDanceScene>();
+        self.p1Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, padding, windowLength, windowHeight)
+                                                    styleMask:masks backing:NSBackingStoreBuffered
+                                                        defer:NO];
+        self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1" scene:proj1Scene];
+        self.p1ViewController = [[CCViewController alloc] init];
+        self.p1ViewController.renderDelegate = self.p1Screen;
+        
+        self.p1Window.contentView = self.p1ViewController.view;
+        [self.p1Window orderBack:self];
+        self.p1Window.title = @"Projector 1";
+        self.p1WindowController = [[NSWindowController alloc] initWithWindow:self.p1Window];
+        
+        /*
+         Projector 2.
+         */
+        std::shared_ptr<CCDanceScene> proj2Scene = std::make_shared<CCDanceScene>();
+        self.p2Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, windowHeight + 2 * padding, windowLength, windowHeight)
+                                                    styleMask:masks backing:NSBackingStoreBuffered
+                                                        defer:NO];
+        self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2" scene:proj2Scene];
+        self.p2ViewController = [[CCViewController alloc] init];
+        self.p2ViewController.renderDelegate = self.p2Screen;
+        
+        self.p2Window.contentView = self.p2ViewController.view;
+        [self.p2Window orderBack:self];
+        self.p2Window.title = @"Projector 2";
+        self.p2WindowController = [[NSWindowController alloc] initWithWindow:self.p2Window];
+        
+        /*
+         Projector 3.
+         */
+        std::shared_ptr<CCDanceScene> proj3Scene = std::make_shared<CCDanceScene>();
+        self.p3Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, windowHeight + 2 * padding, windowLength, windowHeight)
+                                                    styleMask:masks backing:NSBackingStoreBuffered
+                                                        defer:NO];
+        self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3" scene:proj3Scene];
+        self.p3ViewController = [[CCViewController alloc] init];
+        self.p3ViewController.renderDelegate = self.p3Screen;
+        
+        self.p3Window.contentView = self.p3ViewController.view;
+        [self.p3Window orderFront:self];
+        self.p3Window.title = @"Projector 3";
+        self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
+    }
     
     /*
      Countdown.
@@ -151,8 +155,13 @@
     [reader listPorts];
     [reader connect:"/dev/cu.usbmodem14411"];
     
-    NSArray *animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.p1Screen,
-                                 self.p2Screen, self.p3Screen, self.countdownScreen, nil];
+    NSArray *animationScreens;
+    if (kRunSingleScreen) {
+        animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.countdownScreen, nil];
+    } else {
+        animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.p1Screen,
+                            self.p2Screen, self.p3Screen, self.countdownScreen, nil];
+    }
     
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;
