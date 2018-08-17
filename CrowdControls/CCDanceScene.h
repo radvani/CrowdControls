@@ -101,6 +101,8 @@ private:
     std::map<std::string, std::shared_ptr<CCFBXModel>> _models;
     std::map<std::string, std::shared_ptr<CCFBXModel>> _activeModels;
     float _animationDurationSeconds;
+    
+    std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> _cachedAnimations;
 
     static void setColor(std::shared_ptr<VRONode> node, VROVector4f color, NSString *textureName);
     

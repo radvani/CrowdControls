@@ -113,33 +113,44 @@ void CCDanceScene::startSequence(float durationSeconds, std::function<void(CCSce
     for (auto &kv : _activeModels) {
         std::shared_ptr<CCFBXModel> &model = kv.second;
  
-        std::vector<std::shared_ptr<VROSkeletalAnimationLayer>> layers;
-        for (auto body_animations : model->queuedAnimations) {
-            CCSkeletonWeights skeletonWeights = body_animations.first;
-            std::vector<std::string> animations = body_animations.second;
-            
-            for (std::string animationName : animations) {
-                if (animationName.length() > 0) {
-                    std::shared_ptr<VROSkeletalAnimationLayer> layer = std::make_shared<VROSkeletalAnimationLayer>(animationName, 1.0);
-                    
-                    if (skeletonWeights == CCSkeletonLeftArm) {
-                        layer->setBoneWeights(model->weights->getLeftArmWeights());
-                    } else if (skeletonWeights == CCSkeletonRightArm) {
-                        layer->setBoneWeights(model->weights->getRightArmWeights());
-                    } else if (skeletonWeights == CCSkeletonLeftLeg) {
-                        layer->setBoneWeights(model->weights->getLeftLegWeights());
-                    } else if (skeletonWeights == CCSkeletonRightLeg) {
-                        layer->setBoneWeights(model->weights->getRightLegWeights());
-                    } else if (skeletonWeights == CCSkeletonHead) {
-                        layer->setBoneWeights(model->weights->getHeadWeights());
+        std::shared_ptr<VROExecutableAnimation> animation;
+        
+        auto it = _cachedAnimations.find(model->queuedAnimations);
+        if (it != _cachedAnimations.end()) {
+            pinfo("Using cached animation");
+            animation = it->second;
+        }
+        else {
+            std::vector<std::shared_ptr<VROSkeletalAnimationLayer>> layers;
+            for (auto body_animations : model->queuedAnimations) {
+                CCSkeletonWeights skeletonWeights = body_animations.first;
+                std::vector<std::string> animations = body_animations.second;
+                
+                for (std::string animationName : animations) {
+                    if (animationName.length() > 0) {
+                        std::shared_ptr<VROSkeletalAnimationLayer> layer = std::make_shared<VROSkeletalAnimationLayer>(animationName, 1.0);
+                        
+                        if (skeletonWeights == CCSkeletonLeftArm) {
+                            layer->setBoneWeights(model->weights->getLeftArmWeights());
+                        } else if (skeletonWeights == CCSkeletonRightArm) {
+                            layer->setBoneWeights(model->weights->getRightArmWeights());
+                        } else if (skeletonWeights == CCSkeletonLeftLeg) {
+                            layer->setBoneWeights(model->weights->getLeftLegWeights());
+                        } else if (skeletonWeights == CCSkeletonRightLeg) {
+                            layer->setBoneWeights(model->weights->getRightLegWeights());
+                        } else if (skeletonWeights == CCSkeletonHead) {
+                            layer->setBoneWeights(model->weights->getHeadWeights());
+                        }
+                        layers.push_back(layer);
                     }
-                    layers.push_back(layer);
                 }
             }
-        }
         
-        std::shared_ptr<VROExecutableAnimation> animation = model->node->getLayeredAnimation(layers, true);
-        pinfo("Original animation duration %f", animation->getDuration());
+            animation = model->node->getLayeredAnimation(layers, true);
+            pinfo("Created new animation [duration %f]", animation->getDuration());
+            
+            _cachedAnimations[model->queuedAnimations] = animation;
+        }
         
         animation->setDuration(durationSeconds);
         animation->execute(model->node, [this, onFinished] {
