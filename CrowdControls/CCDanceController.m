@@ -353,7 +353,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
             std::function<void()> task = [self, color, bodyPart, screen] {
                 std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(screen.scene);
                 if (danceScene) {
-                    danceScene->queueAnimation("Jams", bodyPart, _idleAnimations[bodyPart][color]);
+                    danceScene->queueAnimation(bodyPart, _idleAnimations[bodyPart][color]);
                 }
                 [screen setBodyPart:bodyPart toColor:[CCDanceController rgbForColor:color]];
             };

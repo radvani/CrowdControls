@@ -33,17 +33,22 @@
 @property (readwrite, nonatomic) std::shared_ptr<VRODriver> driver;
 @property (readwrite, nonatomic) std::shared_ptr<CCRenderToTextureDelegate> renderToTextureDelegate;
 @property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
+@property (readwrite, nonatomic) NSString *modelA;
+@property (readwrite, nonatomic) NSString *modelB;
 @property (readwrite, nonatomic) SyphonServer *syphon;
 
 @end
 
 @implementation CCAnimationScreen
 
-- (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene {
+- (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene
+            modelA:(NSString *)modelA modelB:(NSString *)modelB {
     self = [super init];
     if (self) {
         self.name = name;
         self.scene = scene;
+        self.modelA = modelA;
+        self.modelB = modelB;
     }
     return self;
 }
@@ -77,10 +82,10 @@
     std::shared_ptr<VROShaderProgram> blitShader = VROImageShaderProgram::create(blitSamplers, blitCode, driver);
     _blitPostProcess = driver->newImagePostProcess(blitShader);
     
-    // TODO Will add two models to each screen
     std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
     if (danceScene) {
-        danceScene->addModel("Jams");
+        danceScene->addModel(std::string([self.modelA UTF8String]));
+        danceScene->addModel(std::string([self.modelB UTF8String]));
     }
 }
 
@@ -91,8 +96,7 @@
 - (void)setBodyPart:(CCBodyPart)bodyPart toColor:(VROVector4f)color {
     std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
     if (danceScene) {
-        // TODO Find the nodes corresponding to the body part
-         danceScene->setColor(color);
+         danceScene->setColor(bodyPart, color);
     }
 }
 

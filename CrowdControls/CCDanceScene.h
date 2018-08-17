@@ -78,14 +78,12 @@ public:
      Queue the animation with the given name for the given model, to be run at
      the next startSequence call.
      */
-    void queueAnimation(std::string modelName, CCBodyPart bodyPart, std::string animation);
+    void queueAnimation(CCBodyPart bodyPart, std::string animation);
     
     /*
-     Set the color of the given model and body part.
-     
-     // TODO set model and body part
+     Set the color of the given body part.
      */
-    void setColor(VROVector4f color);
+    void setColor(CCBodyPart bodyPart, VROVector4f color);
     
 private:
 
@@ -99,7 +97,13 @@ private:
     std::map<std::string, std::shared_ptr<CCFBXModel>> _activeModels;
     float _animationDurationSeconds;
     
-    static void setColor(std::shared_ptr<VRONode> node, VROVector4f color);
+    std::map<int, float> getBodyWeights() const;
+    std::map<int, float> getLeftArmWeights() const;
+    std::map<int, float> getRightArmWeights() const;
+    std::map<int, float> getLeftLegWeights() const;
+    std::map<int, float> getRightLegWeights() const;
+
+    static void setColor(std::shared_ptr<VRONode> node, VROVector4f color, NSString *textureName);
     
 };
 

@@ -44,7 +44,8 @@ private:
 @property (readwrite, nonatomic) IBOutlet id <VROView> view;
 @property (readwrite, nonatomic) std::shared_ptr<CCScene> scene;
 
-- (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene;
+- (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene
+            modelA:(NSString *)modelA modelB:(NSString *)modelB;
 - (void)publishSyphonFrame:(std::shared_ptr<VRORenderTarget>)target;
 
 - (void)setDuration:(float)duration;

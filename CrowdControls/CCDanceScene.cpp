@@ -43,8 +43,12 @@ void CCDanceScene::build(id <VROView> view,
     VROVector3f position = { 0, -1, -3 };
     VROVector3f scale = { 0.2, 0.2, 0.2 };
     
-    std::shared_ptr<CCFBXModel> danceAll = std::make_shared<CCFBXModel>("Jams", position, scale);
-    _models.insert({ "Jams", danceAll });
+    _models.insert({ "Jams",    std::make_shared<CCFBXModel>("Jams", position, scale) });
+    _models.insert({ "Trees",   std::make_shared<CCFBXModel>("Trees", position, scale) });
+    _models.insert({ "Punk",    std::make_shared<CCFBXModel>("Punk", position, scale) });
+    _models.insert({ "FlatTop", std::make_shared<CCFBXModel>("FlatTop", position, scale) });
+    _models.insert({ "Poof",    std::make_shared<CCFBXModel>("Poof", position, scale) });
+    _models.insert({ "Ballet",  std::make_shared<CCFBXModel>("Ballet", position, scale) });
     
     _sceneController = std::make_shared<VROSceneController>();
     std::shared_ptr<VROScene> scene = _sceneController->getScene();
@@ -100,10 +104,50 @@ void CCDanceScene::addModel(std::string name) {
 
 void CCDanceScene::startSequence(float durationSeconds, std::function<void(CCScene *)> onFinished) {
     _animationDurationSeconds = durationSeconds;
-    
+   
     for (auto &kv : _activeModels) {
         std::shared_ptr<CCFBXModel> &model = kv.second;
-        animateTake(model->node, model->queuedAnimation, durationSeconds, onFinished);
+        
+        int totalAnimations = 0;
+        for (int i = 0; i < 5; i++) {
+            CCBodyPart bodyPart = (CCBodyPart) i;
+            std::string animationName = model->queuedAnimations[i];
+            if (animationName.length() > 0) {
+                ++totalAnimations;
+            }
+        }
+        
+        float weightPerAnimation = 1.0f/ (float) totalAnimations;
+        std::vector<std::shared_ptr<VROSkeletalAnimationLayer>> layers;
+        
+        for (int i = 0; i < 5; i++) {
+            CCBodyPart bodyPart = (CCBodyPart) i;
+            std::string animationName = model->queuedAnimations[i];
+            if (animationName.length() > 0) {
+                std::shared_ptr<VROSkeletalAnimationLayer> layer = std::make_shared<VROSkeletalAnimationLayer>(animationName, weightPerAnimation);
+                
+                if (bodyPart == CCBodyPartHead) {
+                    layer->setBoneWeights(getBodyWeights());
+                } else if (bodyPart == CCBodyPartLeftArm) {
+                    layer->setBoneWeights(getLeftArmWeights());
+                } else if (bodyPart == CCBodyPartRightArm) {
+                    layer->setBoneWeights(getRightArmWeights());
+                } else if (bodyPart == CCBodyPartLeftLeg) {
+                    layer->setBoneWeights(getLeftLegWeights());
+                } else {
+                    layer->setBoneWeights(getRightLegWeights());
+                }
+                layers.push_back(layer);
+            }
+        }
+        
+        std::shared_ptr<VROExecutableAnimation> animation = model->node->getLayeredAnimation(layers, true);
+        pinfo("Original animation duration %f", animation->getDuration());
+        
+        animation->setDuration(durationSeconds);
+        animation->execute(model->node, [this, onFinished] {
+            onFinished(this);
+        });
     }
 }
 
@@ -111,33 +155,163 @@ void CCDanceScene::clearModels() {
     _fbxContainerNode->removeAllChildren();
 }
 
-void CCDanceScene::queueAnimation(std::string name, CCBodyPart bodyPart, std::string animation) {
-    auto kv = _models.find(name);
-    if (kv == _models.end()) {
-        pinfo("Failed to queue animation %s on model %s: model not found", animation.c_str(), name.c_str());
-        return;
+void CCDanceScene::queueAnimation(CCBodyPart bodyPart, std::string animation) {
+    for (auto kv : _models) {
+        std::shared_ptr<CCFBXModel> &model = kv.second;
+        model->queuedAnimations[bodyPart] = animation;
     }
-    
-    std::shared_ptr<CCFBXModel> &model = kv->second;
-    
-    NSLog(@"Queued model %s with animation %s", name.c_str(), animation.c_str());
-    model->queuedAnimations[bodyPart] = animation;
 }
 
-void CCDanceScene::setColor(std::shared_ptr<VRONode> node, VROVector4f color) {
-    if (node->getGeometry()) {
+void CCDanceScene::setColor(std::shared_ptr<VRONode> node, VROVector4f color, NSString *textureName) {
+    std::shared_ptr<VROGeometry> geometry = node->getGeometry();
+    if (geometry) {
         for (std::shared_ptr<VROMaterial> material : node->getGeometry()->getMaterials()) {
-            material->getDiffuse().setColor(color);
+            NSString *diffuseName = @"";
+            if (material->getDiffuse().getTexture()) {
+                diffuseName = [NSString stringWithUTF8String:material->getDiffuse().getTexture()->getName().c_str()];
+            }
+            if ([diffuseName rangeOfString:textureName options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                material->getDiffuse().setColor(color);
+            }
         }
     }
     for (std::shared_ptr<VRONode> child : node->getChildNodes()) {
-        setColor(child, color);
+        setColor(child, color, textureName);
     }
 }
 
-void CCDanceScene::setColor(VROVector4f color) {
+void CCDanceScene::setColor(CCBodyPart bodyPart, VROVector4f color) {
     if (!_fbxContainerNode) {
         return;
     }
-    setColor(_fbxContainerNode, color);
+    
+    NSString *textureNameFragment = nil;
+    switch (bodyPart) {
+        case CCBodyPartHead:
+            textureNameFragment = @"Body";
+            break;
+        case CCBodyPartLeftArm:
+            textureNameFragment = @"Larm";
+            break;
+        case CCBodyPartRightArm:
+            textureNameFragment = @"Rarm";
+            break;
+        case CCBodyPartLeftLeg:
+            textureNameFragment = @"Lleg";
+            break;
+        case CCBodyPartRightLeg:
+            textureNameFragment = @"Rleg";
+            break;
+        default:
+            break;
+    }
+    setColor(_fbxContainerNode, color, textureNameFragment);
+}
+
+std::map<int, float> CCDanceScene::getBodyWeights() const {
+    std::map<int, float> weights;
+    
+    std::map<int, float> map = getLeftLegWeights();
+    for (auto kv : map) {
+        weights[kv.first] = 1 - kv.second;
+    }
+    map = getRightArmWeights();
+    for (auto kv : map) {
+        weights[kv.first] = 1 - kv.second;
+    }
+    map = getLeftLegWeights();
+    for (auto kv : map) {
+        weights[kv.first] = 1 - kv.second;
+    }
+    map = getRightLegWeights();
+    for (auto kv : map) {
+        weights[kv.first] = 1 - kv.second;
+    }
+    for (int i = 0; i < 70; i++) {
+        if (weights.find(i) == weights.end()) {
+            weights[i] = 0.5;
+        }
+    }
+    
+    return weights;
+}
+
+std::map<int, float> CCDanceScene::getLeftArmWeights() const {
+    float heavy = 0.95;
+    
+    std::map<int, float> weights;
+    weights[34] = heavy;
+    weights[35] = heavy;
+    weights[36] = heavy;
+    weights[37] = heavy;
+    weights[38] = heavy;
+    weights[39] = heavy;
+    
+    return weights;
+}
+
+std::map<int, float> CCDanceScene::getRightArmWeights() const {
+    float heavy = 0.95;
+    
+    std::map<int, float> weights;
+    weights[10] = heavy;
+    weights[11] = heavy;
+    weights[12] = heavy;
+    weights[13] = heavy;
+    weights[14] = heavy;
+    weights[15] = heavy;
+    
+    weights[17] = heavy;
+    weights[18] = heavy;
+    weights[19] = heavy;
+    
+    weights[21] = heavy;
+    weights[22] = heavy;
+    weights[23] = heavy;
+    
+    weights[25] = heavy;
+    weights[26] = heavy;
+    weights[27] = heavy;
+    
+    weights[29] = heavy;
+    weights[30] = heavy;
+    weights[31] = heavy;
+    
+    return weights;
+}
+
+std::map<int, float> CCDanceScene::getLeftLegWeights() const {
+    float heavy = 0.70;
+    
+    std::map<int, float> weights;
+    weights[59] = heavy;
+    weights[60] = heavy;
+    weights[61] = heavy;
+    weights[62] = heavy;
+    
+    for (int i = 0; i < 70; i++) {
+        if (weights.find(i) == weights.end()) {
+            weights[i] = 0.0;
+        }
+    }
+    
+    return weights;
+}
+
+std::map<int, float> CCDanceScene::getRightLegWeights() const {
+    float heavy = 0.70;
+    
+    std::map<int, float> weights;
+    weights[59] = heavy;
+    weights[60] = heavy;
+    weights[61] = heavy;
+    weights[62] = heavy;
+    
+    for (int i = 0; i < 70; i++) {
+        if (weights.find(i) == weights.end()) {
+            weights[i] = 0.0;
+        }
+    }
+    
+    return weights;
 }
