@@ -34,6 +34,7 @@
 
 static const int kNumDanceScreens = 4;
 static bool kMuteAudio = true;
+static bool kDancesEnabled = true;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
 static const VROVector4f kBlueColor = VROVector4f(30.0 / 255.0, 145.0 / 255.0, 225.0 / 255.0, 1);
@@ -171,13 +172,25 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     [self loadDrumStem:CCColorRed resource:@"Drums_R"];
 }
 
-- (BOOL)isAllBlue {
+- (CCColor)isAllSameColor:(BOOL *)outSameColor {
+    CCColor color = CCColorBlue;
+    BOOL setFirst = NO;
+    
     for (auto body_color : _activeColors) {
-        if (body_color.second != CCColorBlue) {
-            return false;
+        if (!setFirst) {
+            color = body_color.second;
+            setFirst = YES;
+            continue;
+        }
+        
+        if (color != body_color.second) {
+            *outSameColor = NO;
+            return color;
         }
     }
-    return true;
+    
+    *outSameColor = YES;
+    return color;
 }
 
 - (NSString *)letterForColor:(CCColor) color {
@@ -197,10 +210,20 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 - (std::map<CCSkeletonWeights, std::vector<std::string>>)animationsForActiveColors {
     std::map<CCSkeletonWeights, std::vector<std::string>> animations;
     
-    // First check for rest state
-    if ([self isAllBlue]) {
-        animations.insert({ CCSkeletonAll, { "Dance_B_rest" } });
-        return animations;
+    // First check for rest or dance state
+    BOOL allSameColor = NO;
+    CCColor unifiedColor = [self isAllSameColor:&allSameColor];
+    if (allSameColor) {
+        if (unifiedColor == CCColorBlue) {
+            animations.insert({ CCSkeletonAll, { "Dance_B_rest" } });
+            return animations;
+        }
+        
+        if (kDancesEnabled) {
+            NSString *dance = [NSString stringWithFormat:@"Dance_%@", [self letterForColor:unifiedColor]];
+            animations.insert({ CCSkeletonAll, { std::string([dance UTF8String]) } });
+            return animations;
+        }
     }
     
     // If we're not in rest state, then the character is "bouncing"

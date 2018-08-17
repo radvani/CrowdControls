@@ -77,7 +77,7 @@ static bool kRunSingleScreen = true;
                                                  styleMask:masks backing:NSBackingStoreBuffered
                                                      defer:NO];
     self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene
-                                                      modelA:@"Jams" modelB:nil];//modelB:@"Trees"];
+                                                      modelA:@"Jams" modelB:@"Trees"];
     self.ledViewController = [[CCViewController alloc] init];
     self.ledViewController.renderDelegate = self.ledScreen;
     
