@@ -33,7 +33,7 @@
 #import <atomic>
 
 static const int kNumDanceScreens = 4;
-static bool kMuteAudio = true;
+static bool kMuteAudio = false;
 static bool kDancesEnabled = true;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
@@ -508,14 +508,25 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         _activeDrums.first = nil;
     }
     
+    float period = 9.583;
+    if (self.beatDetection) {
+        float bpm = [self.beatDetection beatsPerMinute];
+        float minutesPerBeat = 1.0f / bpm;
+        float secondsPerBeat = minutesPerBeat * 60.0f;
+        
+        period = secondsPerBeat * 8.0;
+        
+        NSLog(@"COMPUTED PERIOD %f", period);
+    }
+    
     // Begin the next queued animation for each screen
     for (CCAnimationScreen *screen in self.screens) {
         VROViewScene *view = (VROViewScene *) screen.view;
-        std::function<void()> task = [screen, self] {
+        std::function<void()> task = [screen, period, self] {
             
             // The callback is only invoked by the countdown screen, which serves as the
             // master timer
-            screen.scene->startSequence(4.583, [self] (CCScene *finishedScene) { // 9.583
+            screen.scene->startSequence(period, [self] (CCScene *finishedScene) {
                 // The callback executes on the rendering thread of the countdown scene, which is
                 // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
                 // to the main thread; instead we start the next animation sequence directly from this

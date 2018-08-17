@@ -1,8 +1,8 @@
 //
-//  CCDanceController.h
+//  CCAudioRecorder.h
 //  CrowdControls
 //
-//  Created by Raj Advani on 7/14/18.
+//  Created by Raj Advani on 8/17/18.
 //  Copyright © 2018 Raj Advani. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,41 +24,20 @@
 //  SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "CCSignalReader.h"
-#import "CCBeatDetection.h"
+#import <AVFoundation/AVFoundation.h>
+#import <AudioUnit/AudioUnit.h>
 
-typedef NS_ENUM(NSInteger, CCColor) {
-    CCColorBlue,
-    CCColorWhite,
-    CCColorGreen,
-    CCColorYellow,
-    CCColorRed
-};
+@protocol CCAudioRecorderDelegate
+@required
+- (void)processMicrophoneBuffer:(AudioBufferList *)inputDataList frameCount:(uint32_t)frameCount;
+@end
+    
+@interface CCAudioRecorder : NSObject
 
-typedef NS_ENUM(NSInteger, CCBodyPart) {
-    CCBodyPartHead,
-    CCBodyPartLeftArm,
-    CCBodyPartRightArm,
-    CCBodyPartLeftLeg,
-    CCBodyPartRightLeg
-};
+@property (readwrite, nonatomic) id <CCAudioRecorderDelegate> delegate;
 
-typedef NS_ENUM(NSInteger, CCSkeletonWeights) {
-    CCSkeletonAll,
-    CCSkeletonHead,
-    CCSkeletonLeftArm,
-    CCSkeletonRightArm,
-    CCSkeletonLeftLeg,
-    CCSkeletonRightLeg,
-};
-
-@interface CCDanceController : NSObject <CCSignalDelegate>
-
-@property (readwrite, nonatomic, strong) CCBeatDetection *beatDetection;
-
-- (id)initWithAnimationScreens:(NSArray *)animationScreens;
-- (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal;
-- (void)startAnimationSequence;
+- (id)init;
+- (void)startRecording;
+- (void)stopRecording;
 
 @end
-

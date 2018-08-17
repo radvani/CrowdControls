@@ -27,6 +27,8 @@
 #import "CCDanceController.h"
 #import "CCDanceScene.h"
 #import "CCCountdownScene.h"
+#import "CCAudioRecorder.h"
+#import "CCBeatDetection.h"
 
 @interface AppDelegate ()
 
@@ -54,6 +56,9 @@
 @property (nonatomic, strong) NSWindow *countdownWindow;
 @property (nonatomic, strong) CCViewController *countdownViewController;
 @property (nonatomic, strong) CCAnimationScreen *countdownScreen;
+
+@property (nonatomic, strong) CCAudioRecorder *audioRecorder;
+@property (nonatomic, strong) CCBeatDetection *beatDetection;
 
 @end
 
@@ -175,11 +180,18 @@ static bool kRunSingleScreen = true;
     
     // Give the sound engine some time to buffer. Note that start animation sequence
     // (which drives the loop) is operated on the countdown scene's rendering thread
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(11 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [(VROViewScene *) self.countdownScreen.view queueRendererTask:[self] {
             [self.danceController startAnimationSequence];
         }];
     });
+    
+    _beatDetection = [[CCBeatDetection alloc] init];
+    //self.danceController.beatDetection = self.beatDetection;
+    
+    _audioRecorder = [[CCAudioRecorder alloc] init];
+    [_audioRecorder setDelegate:_beatDetection];
+    [_audioRecorder startRecording];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

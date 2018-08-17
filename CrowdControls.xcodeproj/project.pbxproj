@@ -95,6 +95,11 @@
 		8F98F746212648A700917430 /* CCJamsAnimationWeights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F744212648A700917430 /* CCJamsAnimationWeights.cpp */; };
 		8F98F7492126490C00917430 /* CCTreeAnimationWeights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F7472126490C00917430 /* CCTreeAnimationWeights.cpp */; };
 		8F98F75021267A9400917430 /* CCBeatDetection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F74F21267A9400917430 /* CCBeatDetection.m */; };
+		8F98F75321267D5C00917430 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F98F75121267D5B00917430 /* Accelerate.framework */; };
+		8F98F75421267D5C00917430 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F98F75221267D5B00917430 /* AudioToolbox.framework */; };
+		8F98F757212707B400917430 /* aubio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F98F756212707B300917430 /* aubio.framework */; };
+		8F98F75A21270A0C00917430 /* CCAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F75921270A0C00917430 /* CCAudioRecorder.m */; };
+		8F98F75C21272A0200917430 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F98F75B21272A0200917430 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -215,9 +220,14 @@
 		8F98F745212648A700917430 /* CCJamsAnimationWeights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCJamsAnimationWeights.h; sourceTree = "<group>"; };
 		8F98F7472126490C00917430 /* CCTreeAnimationWeights.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCTreeAnimationWeights.cpp; sourceTree = "<group>"; };
 		8F98F7482126490C00917430 /* CCTreeAnimationWeights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCTreeAnimationWeights.h; sourceTree = "<group>"; };
-		8F98F74A212679B100917430 /* aubio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = aubio.framework; path = Libraries/aubio.framework; sourceTree = "<group>"; };
 		8F98F74E21267A9400917430 /* CCBeatDetection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBeatDetection.h; sourceTree = "<group>"; };
 		8F98F74F21267A9400917430 /* CCBeatDetection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBeatDetection.m; sourceTree = "<group>"; };
+		8F98F75121267D5B00917430 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		8F98F75221267D5B00917430 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		8F98F756212707B300917430 /* aubio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = aubio.framework; path = Libraries/Aubio/aubio.framework; sourceTree = "<group>"; };
+		8F98F75821270A0C00917430 /* CCAudioRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCAudioRecorder.h; sourceTree = "<group>"; };
+		8F98F75921270A0C00917430 /* CCAudioRecorder.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCAudioRecorder.m; sourceTree = "<group>"; };
+		8F98F75B21272A0200917430 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,11 +235,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F98F75C21272A0200917430 /* CoreAudio.framework in Frameworks */,
+				8F98F75321267D5C00917430 /* Accelerate.framework in Frameworks */,
+				8F98F75421267D5C00917430 /* AudioToolbox.framework in Frameworks */,
 				8F1DE3B8211D00B100C8749D /* AVFoundation.framework in Frameworks */,
 				8F201C2920FA70CF00637A75 /* IOKit.framework in Frameworks */,
 				8F292C2420AA370F00635C0D /* OpenGL.framework in Frameworks */,
 				8F292C2220AA370300635C0D /* Cocoa.framework in Frameworks */,
 				8F292C0620A9268400635C0D /* harfbuzz.framework in Frameworks */,
+				8F98F757212707B400917430 /* aubio.framework in Frameworks */,
 				8F292C1E20A9DF3A00635C0D /* Syphon.framework in Frameworks */,
 				8F292C0A20A9269100635C0D /* ViroKit.framework in Frameworks */,
 			);
@@ -319,6 +333,8 @@
 				8F98F7472126490C00917430 /* CCTreeAnimationWeights.cpp */,
 				8F98F74E21267A9400917430 /* CCBeatDetection.h */,
 				8F98F74F21267A9400917430 /* CCBeatDetection.m */,
+				8F98F75821270A0C00917430 /* CCAudioRecorder.h */,
+				8F98F75921270A0C00917430 /* CCAudioRecorder.m */,
 				8F292BE220A91F5C00635C0D /* AppDelegate.h */,
 				8F292BE320A91F5C00635C0D /* AppDelegate.m */,
 				8F292BE820A91F5E00635C0D /* Assets.xcassets */,
@@ -333,6 +349,10 @@
 		8F292BF620A91F7D00635C0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8F98F75B21272A0200917430 /* CoreAudio.framework */,
+				8F98F756212707B300917430 /* aubio.framework */,
+				8F98F75121267D5B00917430 /* Accelerate.framework */,
+				8F98F75221267D5B00917430 /* AudioToolbox.framework */,
 				8F1DE3B7211D00B100C8749D /* AVFoundation.framework */,
 				8F201C2820FA70CF00637A75 /* IOKit.framework */,
 				8F292C2320AA370F00635C0D /* OpenGL.framework */,
@@ -430,7 +450,7 @@
 						CreatedOnToolsVersion = 9.3;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -547,6 +567,7 @@
 				8F2F342020E7D96D001962D0 /* CCDanceScene.cpp in Sources */,
 				8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */,
 				8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */,
+				8F98F75A21270A0C00917430 /* CCAudioRecorder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,6 +698,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CrowdControls/CrowdControls.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = FX7DLGYQ33;
@@ -684,6 +706,8 @@
 					"$(PROJECT_DIR)/Libraries/Harfbuzz/x86_64",
 					"$(PROJECT_DIR)/Libraries/Viro",
 					"$(PROJECT_DIR)/Libraries/Syphon",
+					"$(PROJECT_DIR)/Libraries",
+					"$(PROJECT_DIR)/Libraries/Aubio",
 				);
 				INFOPLIST_FILE = CrowdControls/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -699,6 +723,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CrowdControls/CrowdControls.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = FX7DLGYQ33;
@@ -706,6 +731,8 @@
 					"$(PROJECT_DIR)/Libraries/Harfbuzz/x86_64",
 					"$(PROJECT_DIR)/Libraries/Viro",
 					"$(PROJECT_DIR)/Libraries/Syphon",
+					"$(PROJECT_DIR)/Libraries",
+					"$(PROJECT_DIR)/Libraries/Aubio",
 				);
 				INFOPLIST_FILE = CrowdControls/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

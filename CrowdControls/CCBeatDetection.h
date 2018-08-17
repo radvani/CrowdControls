@@ -1,8 +1,8 @@
 //
-//  CCDanceController.h
+//  CCBeatDetection.h
 //  CrowdControls
 //
-//  Created by Raj Advani on 7/14/18.
+//  Created by Raj Advani on 8/16/18.
 //  Copyright © 2018 Raj Advani. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,41 +24,19 @@
 //  SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "CCSignalReader.h"
-#import "CCBeatDetection.h"
+#import <AVFoundation/AVFoundation.h>
+#import <AudioUnit/AudioUnit.h>
 
-typedef NS_ENUM(NSInteger, CCColor) {
-    CCColorBlue,
-    CCColorWhite,
-    CCColorGreen,
-    CCColorYellow,
-    CCColorRed
-};
+#define AUBIO_UNSTABLE 1
+#include <aubio/aubio.h>
 
-typedef NS_ENUM(NSInteger, CCBodyPart) {
-    CCBodyPartHead,
-    CCBodyPartLeftArm,
-    CCBodyPartRightArm,
-    CCBodyPartLeftLeg,
-    CCBodyPartRightLeg
-};
+#include "CCAudioRecorder.h"
 
-typedef NS_ENUM(NSInteger, CCSkeletonWeights) {
-    CCSkeletonAll,
-    CCSkeletonHead,
-    CCSkeletonLeftArm,
-    CCSkeletonRightArm,
-    CCSkeletonLeftLeg,
-    CCSkeletonRightLeg,
-};
+@interface CCBeatDetection : NSObject <CCAudioRecorderDelegate>
 
-@interface CCDanceController : NSObject <CCSignalDelegate>
+@property (readonly, assign) float beatsPerMinute;
 
-@property (readwrite, nonatomic, strong) CCBeatDetection *beatDetection;
-
-- (id)initWithAnimationScreens:(NSArray *)animationScreens;
-- (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal;
-- (void)startAnimationSequence;
+- (id)init;
+- (void)processMicrophoneBuffer:(AudioBufferList *)inputDataList frameCount:(uint32_t)frameCount;
 
 @end
-
