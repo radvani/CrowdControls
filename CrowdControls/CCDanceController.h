@@ -42,6 +42,15 @@ typedef NS_ENUM(NSInteger, CCBodyPart) {
     CCBodyPartRightLeg
 };
 
+typedef NS_ENUM(NSInteger, CCSkeletonWeights) {
+    CCSkeletonAll,
+    CCSkeletonHead,
+    CCSkeletonLeftArm,
+    CCSkeletonRightArm,
+    CCSkeletonLeftLeg,
+    CCSkeletonRightLeg,
+};
+
 @interface CCDanceController : NSObject <CCSignalDelegate>
 
 - (id)initWithAnimationScreens:(NSArray *)animationScreens;

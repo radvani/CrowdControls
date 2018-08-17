@@ -84,8 +84,12 @@
     
     std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
     if (danceScene) {
-        danceScene->addModel(std::string([self.modelA UTF8String]));
-        danceScene->addModel(std::string([self.modelB UTF8String]));
+        if (self.modelA) {
+            danceScene->addModel(std::string([self.modelA UTF8String]));
+        }
+        if (self.modelB) {
+            danceScene->addModel(std::string([self.modelB UTF8String]));
+        }
     }
 }
 

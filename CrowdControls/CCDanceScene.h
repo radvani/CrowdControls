@@ -28,20 +28,25 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <map>
 #include <ViroKit/ViroKit.h>
 #include "CCScene.h"
 #include "CCDanceController.h"
+
+class CCAnimationWeights;
 
 class CCFBXModel {
 public:
     std::string file;
     VROVector3f position;
     VROVector3f scale;
-    std::string queuedAnimations[5];
+    std::map<CCSkeletonWeights, std::vector<std::string>> queuedAnimations;
     std::shared_ptr<VRONode> node;
+    std::shared_ptr<CCAnimationWeights> weights;
     
-    CCFBXModel(std::string file, VROVector3f position, VROVector3f scale) :
-        file(file), position(position), scale(scale) {}
+    CCFBXModel(std::string file, VROVector3f position, VROVector3f scale,
+               std::shared_ptr<CCAnimationWeights> weights) :
+        file(file), position(position), scale(scale), weights(weights) {}
     ~CCFBXModel() {}
 };
 
@@ -75,10 +80,10 @@ public:
     void clearModels();
     
     /*
-     Queue the animation with the given name for the given model, to be run at
+     Queue the animations with the given names for all models, to be run at
      the next startSequence call.
      */
-    void queueAnimation(CCBodyPart bodyPart, std::string animation);
+    void queueAnimations(std::map<CCSkeletonWeights, std::vector<std::string>> animations);
     
     /*
      Set the color of the given body part.
@@ -96,12 +101,6 @@ private:
     std::map<std::string, std::shared_ptr<CCFBXModel>> _models;
     std::map<std::string, std::shared_ptr<CCFBXModel>> _activeModels;
     float _animationDurationSeconds;
-    
-    std::map<int, float> getBodyWeights() const;
-    std::map<int, float> getLeftArmWeights() const;
-    std::map<int, float> getRightArmWeights() const;
-    std::map<int, float> getLeftLegWeights() const;
-    std::map<int, float> getRightLegWeights() const;
 
     static void setColor(std::shared_ptr<VRONode> node, VROVector4f color, NSString *textureName);
     

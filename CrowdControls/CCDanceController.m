@@ -33,7 +33,7 @@
 #import <atomic>
 
 static const int kNumDanceScreens = 4;
-static bool kMuteAudio = false;
+static bool kMuteAudio = true;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
 static const VROVector4f kBlueColor = VROVector4f(30.0 / 255.0, 145.0 / 255.0, 225.0 / 255.0, 1);
@@ -51,7 +51,6 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
 @property (readonly, nonatomic) std::map<CCBodyPart, CCColor> activeColors;
 @property (readonly, nonatomic) std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *> activeDrums;
 @property (readonly, nonatomic) std::map<CCBodyPart, std::vector<CCColor>> activatedPins;
-@property (readonly, nonatomic) std::map<CCBodyPart, std::map<CCColor, std::string>> idleAnimations;
 
 @end
 
@@ -135,9 +134,6 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     
     std::map<CCColor, std::pair<AVAudioPlayerNode *, AVAudioPCMBuffer *>> &bodyPartColorToStem = _audioStems[bodyPart];
     bodyPartColorToStem.insert({ color, { audioPlayer, buffer } });
-    
-    std::map<CCColor, std::string> &bodyPartColorToAnimation = _idleAnimations[bodyPart];
-    bodyPartColorToAnimation.insert({ color, std::string([name UTF8String]) });
 }
 
 - (void)loadDrumStem:(CCColor)color resource:(NSString *)name {
@@ -173,6 +169,61 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     [self loadDrumStem:CCColorYellow resource:@"Drums_Y"];
     [self loadDrumStem:CCColorGreen resource:@"Drums_G"];
     [self loadDrumStem:CCColorRed resource:@"Drums_R"];
+}
+
+- (BOOL)isAllBlue {
+    for (auto body_color : _activeColors) {
+        if (body_color.second != CCColorBlue) {
+            return false;
+        }
+    }
+    return true;
+}
+
+- (NSString *)letterForColor:(CCColor) color {
+    if (color == CCColorBlue) {
+        return @"B";
+    } else if (color == CCColorWhite) {
+        return @"W";
+    } else if (color == CCColorYellow) {
+        return @"Y";
+    } else if (color == CCColorGreen) {
+        return @"G";
+    } else {
+        return @"R";
+    }
+}
+
+- (std::map<CCSkeletonWeights, std::vector<std::string>>)animationsForActiveColors {
+    std::map<CCSkeletonWeights, std::vector<std::string>> animations;
+    
+    // First check for rest state
+    if ([self isAllBlue]) {
+        animations.insert({ CCSkeletonAll, { "Dance_B_rest" } });
+        return animations;
+    }
+    
+    // If we're not in rest state, then the character is "bouncing"
+    
+    // Activate the correct head
+    NSString *head = [NSString stringWithFormat:@"Head_%@", [self letterForColor:_activeColors[CCBodyPartHead]]];
+    animations[CCSkeletonHead].push_back(std::string([head UTF8String]));
+    
+    // Activate the correct arms
+    NSString *leftArm = [NSString stringWithFormat:@"Lhand_%@", [self letterForColor:_activeColors[CCBodyPartLeftArm]]];
+    animations[CCSkeletonLeftArm].push_back(std::string([leftArm UTF8String]));
+    
+    NSString *rightArm = [NSString stringWithFormat:@"Rhand_%@", [self letterForColor:_activeColors[CCBodyPartRightArm]]];
+    animations[CCSkeletonRightArm].push_back(std::string([rightArm UTF8String]));
+    
+    // Activate the correct legs (the body bouncing legs)
+    NSString *leftLeg = [NSString stringWithFormat:@"Lfoot_%@_withBody", [self letterForColor:_activeColors[CCBodyPartLeftLeg]]];
+    animations[CCSkeletonLeftLeg].push_back(std::string([leftLeg UTF8String]));
+    
+    NSString *rightLeg = [NSString stringWithFormat:@"Rfoot_%@_withBody01", [self letterForColor:_activeColors[CCBodyPartRightLeg]]];
+    animations[CCSkeletonRightLeg].push_back(std::string([rightLeg UTF8String]));
+    
+    return animations;
 }
 
 + (CCColor)colorForPin:(CCSignalPin)pin {
@@ -352,13 +403,23 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
             VROViewScene *view = (VROViewScene *) screen.view;
             std::function<void()> task = [self, color, bodyPart, screen] {
                 std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(screen.scene);
-                if (danceScene) {
-                    danceScene->queueAnimation(bodyPart, _idleAnimations[bodyPart][color]);
-                }
                 [screen setBodyPart:bodyPart toColor:[CCDanceController rgbForColor:color]];
             };
             [view queueRendererTask:task];
         }
+    }
+    
+    // Queue the updated animations
+    std::map<CCSkeletonWeights, std::vector<std::string>> animations = [self animationsForActiveColors];
+    for (CCAnimationScreen *screen in self.screens) {
+        VROViewScene *view = (VROViewScene *) screen.view;
+        std::function<void()> task = [self, screen, animations] {
+            std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(screen.scene);
+            if (danceScene) {
+                danceScene->queueAnimations(animations);
+            }
+        };
+        [view queueRendererTask:task];
     }
     
     // Iterate through all sounds: turn off those that are no longer selected, and
@@ -431,7 +492,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
             
             // The callback is only invoked by the countdown screen, which serves as the
             // master timer
-            screen.scene->startSequence(9.583, [self] (CCScene *finishedScene) {
+            screen.scene->startSequence(4.583, [self] (CCScene *finishedScene) { // 9.583
                 // The callback executes on the rendering thread of the countdown scene, which is
                 // precisely timed by VROFrameListener (backed by a CADisplayLink). We do not dispatch
                 // to the main thread; instead we start the next animation sequence directly from this

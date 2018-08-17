@@ -76,12 +76,13 @@ static bool kRunSingleScreen = true;
     self.ledWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, padding, windowLength, windowHeight)
                                                  styleMask:masks backing:NSBackingStoreBuffered
                                                      defer:NO];
-    self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene];
+    self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene
+                                                      modelA:@"Jams" modelB:nil];//modelB:@"Trees"];
     self.ledViewController = [[CCViewController alloc] init];
     self.ledViewController.renderDelegate = self.ledScreen;
     
     self.ledWindow.contentView = self.ledViewController.view;
-    [self.ledWindow orderBack:self];
+    [self.ledWindow orderFront:self];
     self.ledWindow.title = @"LED Screen";
     self.ledWindowController = [[NSWindowController alloc] initWithWindow:self.ledWindow];
     
@@ -93,7 +94,8 @@ static bool kRunSingleScreen = true;
         self.p1Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, padding, windowLength, windowHeight)
                                                     styleMask:masks backing:NSBackingStoreBuffered
                                                         defer:NO];
-        self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1" scene:proj1Scene];
+        self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1" scene:proj1Scene
+                                                         modelA:@"Punk" modelB:@"Ballet"];
         self.p1ViewController = [[CCViewController alloc] init];
         self.p1ViewController.renderDelegate = self.p1Screen;
         
@@ -109,7 +111,8 @@ static bool kRunSingleScreen = true;
         self.p2Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, windowHeight + 2 * padding, windowLength, windowHeight)
                                                     styleMask:masks backing:NSBackingStoreBuffered
                                                         defer:NO];
-        self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2" scene:proj2Scene];
+        self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2" scene:proj2Scene
+                                                         modelA:@"FlatTop" modelB:@"Poof"];
         self.p2ViewController = [[CCViewController alloc] init];
         self.p2ViewController.renderDelegate = self.p2Screen;
         
@@ -121,11 +124,13 @@ static bool kRunSingleScreen = true;
         /*
          Projector 3.
          */
+        /*
         std::shared_ptr<CCDanceScene> proj3Scene = std::make_shared<CCDanceScene>();
         self.p3Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength + 2 * padding, windowHeight + 2 * padding, windowLength, windowHeight)
                                                     styleMask:masks backing:NSBackingStoreBuffered
                                                         defer:NO];
-        self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3" scene:proj3Scene];
+        self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3" scene:proj3Scene
+                                                         modelA:@"Jams" modelB:@"Trees"];
         self.p3ViewController = [[CCViewController alloc] init];
         self.p3ViewController.renderDelegate = self.p3Screen;
         
@@ -133,6 +138,7 @@ static bool kRunSingleScreen = true;
         [self.p3Window orderFront:self];
         self.p3Window.title = @"Projector 3";
         self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
+         */
     }
     
     /*
@@ -142,7 +148,8 @@ static bool kRunSingleScreen = true;
     self.countdownWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(windowLength / 2.0 + padding, 0, windowLength, windowHeight)
                                                 styleMask:masks backing:NSBackingStoreBuffered
                                                     defer:NO];
-    self.countdownScreen = [[CCAnimationScreen alloc] initWithName:@"Countdown" scene:countdownScene];
+    self.countdownScreen = [[CCAnimationScreen alloc] initWithName:@"Countdown" scene:countdownScene
+                                                            modelA:nil modelB:nil];
     self.countdownViewController = [[CCViewController alloc] init];
     self.countdownViewController.renderDelegate = self.countdownScreen;
     
@@ -160,7 +167,7 @@ static bool kRunSingleScreen = true;
         animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.countdownScreen, nil];
     } else {
         animationScreens = [NSArray arrayWithObjects:self.ledScreen, self.p1Screen,
-                            self.p2Screen, self.p3Screen, self.countdownScreen, nil];
+                            self.p2Screen, self.countdownScreen, nil];
     }
     
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];

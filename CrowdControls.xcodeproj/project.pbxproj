@@ -92,6 +92,9 @@
 		8F98F7402126244E00917430 /* Punk_Rleg_White.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F98F7342126244E00917430 /* Punk_Rleg_White.png */; };
 		8F98F7412126244E00917430 /* Punk.vrx in Resources */ = {isa = PBXBuildFile; fileRef = 8F98F7352126244E00917430 /* Punk.vrx */; };
 		8F98F7422126244E00917430 /* Poof_Rarm_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F98F7362126244E00917430 /* Poof_Rarm_white.png */; };
+		8F98F746212648A700917430 /* CCJamsAnimationWeights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F744212648A700917430 /* CCJamsAnimationWeights.cpp */; };
+		8F98F7492126490C00917430 /* CCTreeAnimationWeights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F7472126490C00917430 /* CCTreeAnimationWeights.cpp */; };
+		8F98F75021267A9400917430 /* CCBeatDetection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F74F21267A9400917430 /* CCBeatDetection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -207,6 +210,14 @@
 		8F98F7342126244E00917430 /* Punk_Rleg_White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Punk_Rleg_White.png; sourceTree = "<group>"; };
 		8F98F7352126244E00917430 /* Punk.vrx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Punk.vrx; sourceTree = "<group>"; };
 		8F98F7362126244E00917430 /* Poof_Rarm_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Poof_Rarm_white.png; sourceTree = "<group>"; };
+		8F98F7432126484700917430 /* CCAnimationWeights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCAnimationWeights.h; sourceTree = "<group>"; };
+		8F98F744212648A700917430 /* CCJamsAnimationWeights.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCJamsAnimationWeights.cpp; sourceTree = "<group>"; };
+		8F98F745212648A700917430 /* CCJamsAnimationWeights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCJamsAnimationWeights.h; sourceTree = "<group>"; };
+		8F98F7472126490C00917430 /* CCTreeAnimationWeights.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCTreeAnimationWeights.cpp; sourceTree = "<group>"; };
+		8F98F7482126490C00917430 /* CCTreeAnimationWeights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCTreeAnimationWeights.h; sourceTree = "<group>"; };
+		8F98F74A212679B100917430 /* aubio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = aubio.framework; path = Libraries/aubio.framework; sourceTree = "<group>"; };
+		8F98F74E21267A9400917430 /* CCBeatDetection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBeatDetection.h; sourceTree = "<group>"; };
+		8F98F74F21267A9400917430 /* CCBeatDetection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBeatDetection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,6 +312,13 @@
 				8F201C2E20FAB08100637A75 /* CCDanceController.m */,
 				8F201CBA211B903200637A75 /* CCModelUtil.h */,
 				8F201CB9211B903200637A75 /* CCModelUtil.cpp */,
+				8F98F7432126484700917430 /* CCAnimationWeights.h */,
+				8F98F745212648A700917430 /* CCJamsAnimationWeights.h */,
+				8F98F744212648A700917430 /* CCJamsAnimationWeights.cpp */,
+				8F98F7482126490C00917430 /* CCTreeAnimationWeights.h */,
+				8F98F7472126490C00917430 /* CCTreeAnimationWeights.cpp */,
+				8F98F74E21267A9400917430 /* CCBeatDetection.h */,
+				8F98F74F21267A9400917430 /* CCBeatDetection.m */,
 				8F292BE220A91F5C00635C0D /* AppDelegate.h */,
 				8F292BE320A91F5C00635C0D /* AppDelegate.m */,
 				8F292BE820A91F5E00635C0D /* Assets.xcassets */,
@@ -520,8 +538,11 @@
 				8F201C2C20FA9B4E00637A75 /* CCColumnSimulator.m in Sources */,
 				8F292BE720A91F5C00635C0D /* ViewController.m in Sources */,
 				8F201C2F20FAB08100637A75 /* CCDanceController.m in Sources */,
+				8F98F7492126490C00917430 /* CCTreeAnimationWeights.cpp in Sources */,
 				8F292BFE20A91FF000635C0D /* CCViewController.m in Sources */,
+				8F98F75021267A9400917430 /* CCBeatDetection.m in Sources */,
 				8F292BEF20A91F5E00635C0D /* main.m in Sources */,
+				8F98F746212648A700917430 /* CCJamsAnimationWeights.cpp in Sources */,
 				8F201CBB211B903200637A75 /* CCModelUtil.cpp in Sources */,
 				8F2F342020E7D96D001962D0 /* CCDanceScene.cpp in Sources */,
 				8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */,
