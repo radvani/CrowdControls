@@ -33,14 +33,14 @@ CCJamsAnimationWeights::CCJamsAnimationWeights() {
     _rightLegOnly = { 0, 5, 6, 7, 8, 64, 65, 66, 67, 68 };
 
     // The arm weights are used only by the left and right arm, only
-    _leftArmOnly = {  33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56 }; //16, 20, 24, 28
-    _rightArmOnly = { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
+    _leftArmOnly = {  33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56 };
+    _rightArmOnly = {  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
     
     // We don't use 0.0 as a weight because if we did, Viro would discard that layer of the animation
     // entirely. By using 0.01, we ensure when two animations are blended, the one with 0.99
     // will have the full impact, but whe only the 0.01 animation is enabled, it is normalized
     // to the full weight (1.0) instead of being discarded.
-    float fullWeight = 0.99;//0.99;
+    float fullWeight = 0.99;
     float zeroWeight = 0.01;
     
     for (int boneIndex : _headOnly) {
@@ -77,21 +77,6 @@ CCJamsAnimationWeights::CCJamsAnimationWeights() {
         _rightArmWeights[boneIndex] = zeroWeight;
         _leftLegWeights[boneIndex] = zeroWeight;
         _rightLegWeights[boneIndex] = fullWeight;
-    }
-    
-    for (int boneIndex : _mixedLeftArmBody) {
-        _leftArmWeights[boneIndex] = 0.99;
-        _rightArmWeights[boneIndex] = 0.0;
-        _headWeights[boneIndex] = 0.0;
-        _leftLegWeights[boneIndex] = 0.0;
-        _rightLegWeights[boneIndex] = 0.0;
-    }
-    for (int boneIndex : _mixedRightArmBody) {
-        _leftArmWeights[boneIndex] = 0.0;
-        _rightArmWeights[boneIndex] = 0.99;
-        _headWeights[boneIndex] = 0.0;
-        _leftLegWeights[boneIndex] = 0.0;
-        _rightLegWeights[boneIndex] = 0.0;
     }
 }
 

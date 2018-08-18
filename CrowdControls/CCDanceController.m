@@ -32,8 +32,10 @@
 #import <functional>
 #import <atomic>
 
-static const int kNumDanceScreens = 4;
-static bool kMuteAudio = false;
+// When debug animations is true, blue animations are turned off. This allows
+// us to select single animations to play alone.
+static bool kDebugAnimations = false;
+static bool kMuteAudio = true;
 static bool kDancesEnabled = true;
 
 static const VROVector4f kWhiteColor = VROVector4f(1, 1, 1, 1);
@@ -229,22 +231,32 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     // If we're not in rest state, then the character is "bouncing"
     
     // Activate the correct head
-    NSString *head = [NSString stringWithFormat:@"Head_%@", [self letterForColor:_activeColors[CCBodyPartHead]]];
-    animations[CCSkeletonHead].push_back(std::string([head UTF8String]));
+    if (!kDebugAnimations || _activeColors[CCBodyPartHead] != CCColorBlue) {
+        NSString *head = [NSString stringWithFormat:@"Head_%@", [self letterForColor:_activeColors[CCBodyPartHead]]];
+        animations[CCSkeletonHead].push_back(std::string([head UTF8String]));
+    }
     
     // Activate the correct arms
-    NSString *leftArm = [NSString stringWithFormat:@"Lhand_%@", [self letterForColor:_activeColors[CCBodyPartLeftArm]]];
-    animations[CCSkeletonLeftArm].push_back(std::string([leftArm UTF8String]));
+    if (!kDebugAnimations || _activeColors[CCBodyPartLeftArm] != CCColorBlue) {
+        NSString *leftArm = [NSString stringWithFormat:@"Lhand_%@", [self letterForColor:_activeColors[CCBodyPartLeftArm]]];
+        animations[CCSkeletonLeftArm].push_back(std::string([leftArm UTF8String]));
+    }
     
-    NSString *rightArm = [NSString stringWithFormat:@"Rhand_%@", [self letterForColor:_activeColors[CCBodyPartRightArm]]];
-    animations[CCSkeletonRightArm].push_back(std::string([rightArm UTF8String]));
+    if (!kDebugAnimations || _activeColors[CCBodyPartRightArm] != CCColorBlue) {
+        NSString *rightArm = [NSString stringWithFormat:@"Rhand_%@", [self letterForColor:_activeColors[CCBodyPartRightArm]]];
+        animations[CCSkeletonRightArm].push_back(std::string([rightArm UTF8String]));
+    }
     
     // Activate the correct legs (the body bouncing legs)
-    NSString *leftLeg = [NSString stringWithFormat:@"Lfoot_%@_withBody", [self letterForColor:_activeColors[CCBodyPartLeftLeg]]];
-    animations[CCSkeletonLeftLeg].push_back(std::string([leftLeg UTF8String]));
+    if (!kDebugAnimations || _activeColors[CCBodyPartLeftLeg] != CCColorBlue) {
+        NSString *leftLeg = [NSString stringWithFormat:@"Lfoot_%@_withBody", [self letterForColor:_activeColors[CCBodyPartLeftLeg]]];
+        animations[CCSkeletonLeftLeg].push_back(std::string([leftLeg UTF8String]));
+    }
     
-    NSString *rightLeg = [NSString stringWithFormat:@"Rfoot_%@_withBody01", [self letterForColor:_activeColors[CCBodyPartRightLeg]]];
-    animations[CCSkeletonRightLeg].push_back(std::string([rightLeg UTF8String]));
+    if (!kDebugAnimations || _activeColors[CCBodyPartRightLeg] != CCColorBlue) {
+        NSString *rightLeg = [NSString stringWithFormat:@"Rfoot_%@_withBody01", [self letterForColor:_activeColors[CCBodyPartRightLeg]]];
+        animations[CCSkeletonRightLeg].push_back(std::string([rightLeg UTF8String]));
+    }
     
     return animations;
 }

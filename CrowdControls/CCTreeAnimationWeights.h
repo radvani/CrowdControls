@@ -27,6 +27,8 @@
 #define CCTreeAnimationWeights_hpp
 
 #include "CCAnimationWeights.h"
+#include <vector>
+#include <map>
 
 class CCTreeAnimationWeights : public CCAnimationWeights {
 public:
@@ -39,6 +41,21 @@ public:
     virtual std::map<int, float> getRightArmWeights() const;
     virtual std::map<int, float> getLeftLegWeights() const;
     virtual std::map<int, float> getRightLegWeights() const;
+    
+private:
+    
+    std::vector<int> _leftLegOnly;
+    std::vector<int> _rightLegOnly;
+    std::vector<int> _leftArmOnly;
+    std::vector<int> _rightArmOnly;
+    std::vector<int> _headOnly;
+    std::vector<int> _body;
+    
+    std::map<int, float> _headWeights;
+    std::map<int, float> _leftArmWeights;
+    std::map<int, float> _rightArmWeights;
+    std::map<int, float> _leftLegWeights;
+    std::map<int, float> _rightLegWeights;
     
 };
 

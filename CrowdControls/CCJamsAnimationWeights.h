@@ -50,9 +50,6 @@ private:
     std::vector<int> _rightArmOnly;
     std::vector<int> _headOnly;
     
-    std::vector<int> _mixedLeftArmBody;
-    std::vector<int> _mixedRightArmBody;
-    
     std::map<int, float> _headWeights;
     std::map<int, float> _leftArmWeights;
     std::map<int, float> _rightArmWeights;
