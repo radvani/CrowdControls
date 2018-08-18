@@ -526,7 +526,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         float minutesPerBeat = 1.0f / bpm;
         float secondsPerBeat = minutesPerBeat * 60.0f;
         
-        period = secondsPerBeat * 8.0;
+        period = secondsPerBeat * 8.0 * 2.0;
         
         NSLog(@"COMPUTED PERIOD %f", period);
     }

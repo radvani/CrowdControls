@@ -35,8 +35,9 @@
 @interface CCAudioRecorder : NSObject
 
 @property (readwrite, nonatomic) id <CCAudioRecorderDelegate> delegate;
+@property (readonly, nonatomic) int sampleRate;
 
-- (id)init;
+- (id)initWithMicrophone:(NSString *)microphone sampleRate:(double)sampleRate;
 - (void)startRecording;
 - (void)stopRecording;
 

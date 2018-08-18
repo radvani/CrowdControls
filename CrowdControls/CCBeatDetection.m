@@ -40,11 +40,11 @@
     fvec_t *_samples;
 }
 
-- (id)init {
+- (id)initWithSampleRate:(int)sampleRate {
     self = [super init];
     if (self) {
         _windowSize = 1024;
-        _sampleRate = 44100;
+        _sampleRate = sampleRate;
         _hopSize = _windowSize / 4;
         _tempo = new_aubio_tempo("default", _windowSize, _hopSize, _sampleRate);
         

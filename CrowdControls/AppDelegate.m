@@ -190,12 +190,12 @@ static bool kRunSingleScreen = true;
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;
     
-    _beatDetection = [[CCBeatDetection alloc] init];
-    //self.danceController.beatDetection = self.beatDetection;
-    
-    _audioRecorder = [[CCAudioRecorder alloc] init];
+    _audioRecorder = [[CCAudioRecorder alloc] initWithMicrophone:@"Yeti Stereo Microphone" sampleRate:48000];
+    _beatDetection = [[CCBeatDetection alloc] initWithSampleRate:_audioRecorder.sampleRate];
     [_audioRecorder setDelegate:_beatDetection];
     [_audioRecorder startRecording];
+    
+    self.danceController.beatDetection = self.beatDetection;
 }
 
 - (void)screenDidLoad {

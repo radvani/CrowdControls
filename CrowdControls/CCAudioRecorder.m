@@ -36,9 +36,9 @@
 @implementation CCAudioRecorder {
     
     BOOL _isRecording;
+    NSString *_microphoneName;
     
     AudioDeviceID _inputDevice;
-    double _sampleRate;
     int _circBufferSize;
     float *_circBuffer;
     
@@ -54,14 +54,15 @@
     uint32_t _inputBus;
 }
 
-- (id)init {
+- (id)initWithMicrophone:(NSString *)microphone sampleRate:(double)sampleRate {
     self = [super init];
     if (self) {
         _isRecording = NO;
+        _microphoneName = microphone;
         
         // Setup AudioUnit for recording
         _inputDevice = 0;
-        _sampleRate = 44100.0;
+        _sampleRate = sampleRate;
         _circBufferSize = 32768;
         _circBuffer = (float *) malloc(sizeof(float) * _circBufferSize);
         _circInIdx = 0;
@@ -156,19 +157,44 @@
         NSLog(@"Error disabling output on audio unit");
     }
     
-    // Select the default input device
-    uint32_t param = sizeof(AudioDeviceID);
-    AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyDefaultInputDevice,
-                                              kAudioObjectPropertyScopeGlobal,
-                                              kAudioObjectPropertyElementMaster };
-    osErr = AudioObjectGetPropertyData(kAudioObjectSystemObject,
-                                       &theAddress,
-                                       0,
-                                       NULL,
-                                       &param,
-                                       &_inputDevice);
-    if(osErr != noErr) {
-        NSLog(@"Failed to get default input device");
+    // Get a list of all microphones
+    NSLog(@"Searching for installed microphones...");
+    
+    CFArrayRef microphones = [self retrieveInputDeviceArray];
+    for (int i = 0; i < CFArrayGetCount(microphones); i++) {
+        CFDictionaryRef microphoneMap = (CFDictionaryRef) CFArrayGetValueAtIndex(microphones, i);
+        
+
+        NSString *deviceName = (NSString *) CFDictionaryGetValue(microphoneMap, CFSTR("deviceName"));
+        NSLog(@"   Device name %@", deviceName);
+
+        if (_microphoneName && [_microphoneName isEqualToString:deviceName]) {
+            NSString *deviceId = (NSString *) CFDictionaryGetValue(microphoneMap, CFSTR("deviceAudioId"));
+            _inputDevice = [deviceId intValue];
+            
+            NSLog(@"   Found target microphone [%@], device ID %d", deviceName, _inputDevice);
+            break;
+        }
+    }
+    
+    // Select the default input device if we couldn't find the microphone
+    if (_inputDevice == 0) {
+        if (_microphoneName) {
+            NSLog(@"Warning: could not find desired microphone %@, using default", _microphoneName);
+        }
+        uint32_t param = sizeof(AudioDeviceID);
+        AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyDefaultInputDevice,
+            kAudioObjectPropertyScopeGlobal,
+            kAudioObjectPropertyElementMaster };
+        osErr = AudioObjectGetPropertyData(kAudioObjectSystemObject,
+                                           &theAddress,
+                                           0,
+                                           NULL,
+                                           &param,
+                                           &_inputDevice);
+        if(osErr != noErr) {
+            NSLog(@"Failed to get default input device");
+        }
     }
     
     // Set the current device to the default input unit
@@ -306,6 +332,135 @@ OSStatus recordingCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionF
             NSLog(@"Audio level %f", _audioLevel);
         }
     }
+}
+
+- (CFArrayRef)retrieveInputDeviceArray {
+    AudioObjectPropertyAddress propertyAddress = {
+        kAudioHardwarePropertyDevices,
+        kAudioObjectPropertyScopeGlobal,
+        kAudioObjectPropertyElementMaster
+    };
+    
+    UInt32 dataSize = 0;
+    OSStatus status = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &dataSize);
+    if(kAudioHardwareNoError != status) {
+        fprintf(stderr, "AudioObjectGetPropertyDataSize (kAudioHardwarePropertyDevices) failed: %i\n", status);
+        return NULL;
+    }
+    
+    UInt32 deviceCount = static_cast<UInt32>(dataSize / sizeof(AudioDeviceID));
+    
+    AudioDeviceID *audioDevices = static_cast<AudioDeviceID *>(malloc(dataSize));
+    if(NULL == audioDevices) {
+        fputs("Unable to allocate memory", stderr);
+        return NULL;
+    }
+    
+    status = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &dataSize, audioDevices);
+    if(kAudioHardwareNoError != status) {
+        fprintf(stderr, "AudioObjectGetPropertyData (kAudioHardwarePropertyDevices) failed: %i\n", status);
+        free(audioDevices);
+        audioDevices = NULL;
+        return NULL;
+    }
+    
+    CFMutableArrayRef inputDeviceArray = CFArrayCreateMutable(kCFAllocatorDefault, deviceCount, &kCFTypeArrayCallBacks);
+    if(NULL == inputDeviceArray) {
+        fputs("CFArrayCreateMutable failed", stderr);
+        free(audioDevices);
+        audioDevices = NULL;
+        return NULL;
+    }
+    
+    // Iterate through all the devices and determine which are input-capable
+    propertyAddress.mScope = kAudioDevicePropertyScopeInput;
+    for(UInt32 i = 0; i < deviceCount; ++i) {
+        // Query device UID
+        CFStringRef deviceUID = NULL;
+        dataSize = sizeof(deviceUID);
+        propertyAddress.mSelector = kAudioDevicePropertyDeviceUID;
+        status = AudioObjectGetPropertyData(audioDevices[i], &propertyAddress, 0, NULL, &dataSize, &deviceUID);
+        if(kAudioHardwareNoError != status) {
+            fprintf(stderr, "AudioObjectGetPropertyData (kAudioDevicePropertyDeviceUID) failed: %i\n", status);
+            continue;
+        }
+        
+        // Query device name
+        CFStringRef deviceName = NULL;
+        dataSize = sizeof(deviceName);
+        propertyAddress.mSelector = kAudioDevicePropertyDeviceNameCFString;
+        status = AudioObjectGetPropertyData(audioDevices[i], &propertyAddress, 0, NULL, &dataSize, &deviceName);
+        if(kAudioHardwareNoError != status) {
+            fprintf(stderr, "AudioObjectGetPropertyData (kAudioDevicePropertyDeviceNameCFString) failed: %i\n", status);
+            continue;
+        }
+        
+        // Query device manufacturer
+        CFStringRef deviceManufacturer = NULL;
+        dataSize = sizeof(deviceManufacturer);
+        propertyAddress.mSelector = kAudioDevicePropertyDeviceManufacturerCFString;
+        status = AudioObjectGetPropertyData(audioDevices[i], &propertyAddress, 0, NULL, &dataSize, &deviceManufacturer);
+        if(kAudioHardwareNoError != status) {
+            fprintf(stderr, "AudioObjectGetPropertyData (kAudioDevicePropertyDeviceManufacturerCFString) failed: %i\n", status);
+            continue;
+        }
+        
+        // Determine if the device is an input device (it is an input device if it has input channels)
+        dataSize = 0;
+        propertyAddress.mSelector = kAudioDevicePropertyStreamConfiguration;
+        status = AudioObjectGetPropertyDataSize(audioDevices[i], &propertyAddress, 0, NULL, &dataSize);
+        if(kAudioHardwareNoError != status) {
+            fprintf(stderr, "AudioObjectGetPropertyDataSize (kAudioDevicePropertyStreamConfiguration) failed: %i\n", status);
+            continue;
+        }
+        
+        AudioBufferList *bufferList = static_cast<AudioBufferList *>(malloc(dataSize));
+        if(NULL == bufferList) {
+            fputs("Unable to allocate memory", stderr);
+            break;
+        }
+        
+        status = AudioObjectGetPropertyData(audioDevices[i], &propertyAddress, 0, NULL, &dataSize, bufferList);
+        if(kAudioHardwareNoError != status || 0 == bufferList->mNumberBuffers) {
+            if(kAudioHardwareNoError != status)
+                fprintf(stderr, "AudioObjectGetPropertyData (kAudioDevicePropertyStreamConfiguration) failed: %i\n", status);
+            free(bufferList);
+            bufferList = NULL;
+            continue;
+        }
+        
+        free(bufferList);
+        bufferList = NULL;
+        
+        NSString *audioDeviceId = [NSString stringWithFormat:@"%d", audioDevices[i]];
+        
+        // Add a dictionary for this device to the array of input devices
+        CFStringRef keys    []  = { CFSTR("deviceUID"),     CFSTR("deviceName"),    CFSTR("deviceManufacturer"),    CFSTR("deviceAudioId") };
+        CFStringRef values  []  = { deviceUID,              deviceName,             deviceManufacturer,             (__bridge CFStringRef) audioDeviceId };
+        
+        CFDictionaryRef deviceDictionary = CFDictionaryCreate(kCFAllocatorDefault,
+                                                              reinterpret_cast<const void **>(keys),
+                                                              reinterpret_cast<const void **>(values),
+                                                              4,
+                                                              &kCFTypeDictionaryKeyCallBacks,
+                                                              &kCFTypeDictionaryValueCallBacks);
+        
+        
+        CFArrayAppendValue(inputDeviceArray, deviceDictionary);
+        
+        CFRelease(deviceDictionary);
+        deviceDictionary = NULL;
+    }
+    
+    free(audioDevices);
+    audioDevices = NULL;
+    
+    // Return a non-mutable copy of the array
+    CFArrayRef copy = CFArrayCreateCopy(kCFAllocatorDefault, inputDeviceArray);
+    CFRelease(inputDeviceArray);
+    inputDeviceArray = NULL;
+    
+    return copy;
 }
 
 - (void)stopRecording {

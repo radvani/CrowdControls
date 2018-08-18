@@ -36,7 +36,7 @@
 
 @property (readonly, assign) float beatsPerMinute;
 
-- (id)init;
+- (id)initWithSampleRate:(int)sampleRate;
 - (void)processMicrophoneBuffer:(AudioBufferList *)inputDataList frameCount:(uint32_t)frameCount;
 
 @end
