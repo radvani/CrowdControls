@@ -155,6 +155,10 @@ void CCDanceScene::startSequence(float durationSeconds, std::function<void(CCSce
         }
         
         animation->setDuration(durationSeconds);
+        
+        // Preload to ensure all animations in the chain start at the same time
+        // when we execute
+        animation->preload();
         animation->execute(model->node, [this, onFinished] {
             onFinished(this);
         });
