@@ -26,31 +26,7 @@
 #import <Foundation/Foundation.h>
 #import "CCSignalReader.h"
 #import "CCBeatDetection.h"
-
-typedef NS_ENUM(NSInteger, CCColor) {
-    CCColorBlue,
-    CCColorWhite,
-    CCColorGreen,
-    CCColorYellow,
-    CCColorRed
-};
-
-typedef NS_ENUM(NSInteger, CCBodyPart) {
-    CCBodyPartHead,
-    CCBodyPartLeftArm,
-    CCBodyPartRightArm,
-    CCBodyPartLeftLeg,
-    CCBodyPartRightLeg
-};
-
-typedef NS_ENUM(NSInteger, CCSkeletonWeights) {
-    CCSkeletonAll,
-    CCSkeletonHead,
-    CCSkeletonLeftArm,
-    CCSkeletonRightArm,
-    CCSkeletonLeftLeg,
-    CCSkeletonRightLeg,
-};
+#import "CCTypes.h"
 
 @interface CCDanceController : NSObject <CCSignalDelegate>
 
@@ -59,6 +35,8 @@ typedef NS_ENUM(NSInteger, CCSkeletonWeights) {
 - (id)initWithAnimationScreens:(NSArray *)animationScreens;
 - (void)pin:(CCSignalPin)pin didChangeSignal:(int)signal;
 - (void)startAnimationSequence;
+
++ (NSString *)letterForColor:(CCColor)color;
 
 @end
 

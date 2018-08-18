@@ -60,6 +60,9 @@
 @property (nonatomic, strong) CCAudioRecorder *audioRecorder;
 @property (nonatomic, strong) CCBeatDetection *beatDetection;
 
+@property (nonatomic, readwrite, assign) int numScreens;
+@property (nonatomic, readwrite, assign) int numScreensLoaded;
+
 @end
 
 @implementation AppDelegate
@@ -83,6 +86,7 @@ static bool kRunSingleScreen = true;
                                                      defer:NO];
     self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene
                                                       modelA:@"Jams" modelB:@"Trees"];
+    self.ledScreen.delegate = self;
     self.ledViewController = [[CCViewController alloc] init];
     self.ledViewController.renderDelegate = self.ledScreen;
     
@@ -90,6 +94,7 @@ static bool kRunSingleScreen = true;
     [self.ledWindow orderFront:self];
     self.ledWindow.title = @"LED Screen";
     self.ledWindowController = [[NSWindowController alloc] initWithWindow:self.ledWindow];
+    ++_numScreens;
     
     /*
      Projector 1.
@@ -101,6 +106,7 @@ static bool kRunSingleScreen = true;
                                                         defer:NO];
         self.p1Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_1" scene:proj1Scene
                                                          modelA:@"Punk" modelB:@"Ballet"];
+        self.p1Screen.delegate = self;
         self.p1ViewController = [[CCViewController alloc] init];
         self.p1ViewController.renderDelegate = self.p1Screen;
         
@@ -108,6 +114,7 @@ static bool kRunSingleScreen = true;
         [self.p1Window orderBack:self];
         self.p1Window.title = @"Projector 1";
         self.p1WindowController = [[NSWindowController alloc] initWithWindow:self.p1Window];
+        ++_numScreens;
         
         /*
          Projector 2.
@@ -118,6 +125,7 @@ static bool kRunSingleScreen = true;
                                                         defer:NO];
         self.p2Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_2" scene:proj2Scene
                                                          modelA:@"FlatTop" modelB:@"Poof"];
+        self.p2Screen.delegate = self;
         self.p2ViewController = [[CCViewController alloc] init];
         self.p2ViewController.renderDelegate = self.p2Screen;
         
@@ -125,6 +133,8 @@ static bool kRunSingleScreen = true;
         [self.p2Window orderBack:self];
         self.p2Window.title = @"Projector 2";
         self.p2WindowController = [[NSWindowController alloc] initWithWindow:self.p2Window];
+        
+        ++_numScreens;
         
         /*
          Projector 3.
@@ -136,6 +146,7 @@ static bool kRunSingleScreen = true;
                                                         defer:NO];
         self.p3Screen = [[CCAnimationScreen alloc] initWithName:@"Projector_3" scene:proj3Scene
                                                          modelA:@"Jams" modelB:@"Trees"];
+        self.p3Screen.delegate = self;
         self.p3ViewController = [[CCViewController alloc] init];
         self.p3ViewController.renderDelegate = self.p3Screen;
         
@@ -143,6 +154,7 @@ static bool kRunSingleScreen = true;
         [self.p3Window orderFront:self];
         self.p3Window.title = @"Projector 3";
         self.p3WindowController = [[NSWindowController alloc] initWithWindow:self.p3Window];
+         ++_numScreens;
          */
     }
     
@@ -178,20 +190,23 @@ static bool kRunSingleScreen = true;
     self.danceController = [[CCDanceController alloc] initWithAnimationScreens:animationScreens];
     reader.delegate = self.danceController;
     
-    // Give the sound engine some time to buffer. Note that start animation sequence
-    // (which drives the loop) is operated on the countdown scene's rendering thread
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(11 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [(VROViewScene *) self.countdownScreen.view queueRendererTask:[self] {
-            [self.danceController startAnimationSequence];
-        }];
-    });
-    
     _beatDetection = [[CCBeatDetection alloc] init];
     //self.danceController.beatDetection = self.beatDetection;
     
     _audioRecorder = [[CCAudioRecorder alloc] init];
     [_audioRecorder setDelegate:_beatDetection];
     [_audioRecorder startRecording];
+}
+
+- (void)screenDidLoad {
+    dispatch_async(dispatch_get_main_queue(), [self] {
+        self.numScreensLoaded++;
+        if (self.numScreensLoaded == self.numScreens) {
+            [(VROViewScene *) self.countdownScreen.view queueRendererTask:[self] {
+                [self.danceController startAnimationSequence];
+            }];
+        }
+    });
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

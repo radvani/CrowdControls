@@ -35,6 +35,8 @@
 @property (readwrite, nonatomic) std::shared_ptr<VROImagePostProcess> blitPostProcess;
 @property (readwrite, nonatomic) NSString *modelA;
 @property (readwrite, nonatomic) NSString *modelB;
+@property (readwrite, nonatomic) BOOL modelALoaded;
+@property (readwrite, nonatomic) BOOL modelBLoaded;
 @property (readwrite, nonatomic) SyphonServer *syphon;
 
 @end
@@ -85,10 +87,24 @@
     std::shared_ptr<CCDanceScene> danceScene = std::dynamic_pointer_cast<CCDanceScene>(self.scene);
     if (danceScene) {
         if (self.modelA) {
-            danceScene->addModel(std::string([self.modelA UTF8String]));
+            danceScene->addModel(std::string([self.modelA UTF8String]), [self] {
+                self.modelALoaded = YES;
+                if (self.modelALoaded && self.modelBLoaded) {
+                    if (self.delegate) {
+                        [self.delegate screenDidLoad];
+                    }
+                }
+            });
         }
         if (self.modelB) {
-            danceScene->addModel(std::string([self.modelB UTF8String]));
+            danceScene->addModel(std::string([self.modelB UTF8String]), [self] {
+                self.modelBLoaded = YES;
+                if (self.modelALoaded && self.modelBLoaded) {
+                    if (self.delegate) {
+                        [self.delegate screenDidLoad];
+                    }
+                }
+            });
         }
     }
 }

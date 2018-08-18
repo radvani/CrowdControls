@@ -48,12 +48,12 @@ void CCDanceScene::build(id <VROView> view,
     VROVector3f position = { 0, -1, -3 };
     VROVector3f scale = { 0.2, 0.2, 0.2 };
     
-    _models.insert({ "Jams",    std::make_shared<CCFBXModel>("Jams", position, scale, jamsWeights) });
-    _models.insert({ "Trees",   std::make_shared<CCFBXModel>("Trees", position, scale, treeWeights) });
-    _models.insert({ "FlatTop", std::make_shared<CCFBXModel>("FlatTop", position, scale, jamsWeights) });
-    _models.insert({ "Punk",    std::make_shared<CCFBXModel>("Punk", position, scale, treeWeights) });
-    _models.insert({ "Poof",    std::make_shared<CCFBXModel>("Poof", position, scale, jamsWeights) });
-    _models.insert({ "Ballet",  std::make_shared<CCFBXModel>("Ballet", position, scale, treeWeights) });
+    _models.insert({ "Jams",    std::make_shared<CCFBXModel>("Jams",    position, scale, jamsWeights, _jamsCachedAnimations) });
+    _models.insert({ "Trees",   std::make_shared<CCFBXModel>("Trees",   position, scale, treeWeights, _treeCachedAnimations) });
+    _models.insert({ "FlatTop", std::make_shared<CCFBXModel>("FlatTop", position, scale, jamsWeights, _jamsCachedAnimations) });
+    _models.insert({ "Punk",    std::make_shared<CCFBXModel>("Punk",    position, scale, treeWeights, _treeCachedAnimations) });
+    _models.insert({ "Poof",    std::make_shared<CCFBXModel>("Poof",    position, scale, jamsWeights, _jamsCachedAnimations) });
+    _models.insert({ "Ballet",  std::make_shared<CCFBXModel>("Ballet",  position, scale, treeWeights, _treeCachedAnimations) });
     
     _sceneController = std::make_shared<VROSceneController>();
     std::shared_ptr<VROScene> scene = _sceneController->getScene();
@@ -93,7 +93,7 @@ void CCDanceScene::build(id <VROView> view,
     _pointOfView = cameraNode;
 }
 
-void CCDanceScene::addModel(std::string name) {
+void CCDanceScene::addModel(std::string name, std::function<void()> onModelLoaded) {
     auto kv = _models.find(name);
     if (kv == _models.end()) {
         pinfo("Failed to add model %s, not found", name.c_str());
@@ -101,7 +101,8 @@ void CCDanceScene::addModel(std::string name) {
     }
     
     std::shared_ptr<CCFBXModel> &model = kv->second;
-    model->node = CCModelUtil::loadFBXModel(model->file, model->position, model->scale, _driver);
+    model->node = CCModelUtil::loadFBXModel(model->file, model->position, model->scale, model->weights, &model->cachedAnimations,
+                                            _driver, onModelLoaded);
     _fbxContainerNode->addChildNode(model->node);
     
     _activeModels.insert( {name, model });
@@ -114,9 +115,10 @@ void CCDanceScene::startSequence(float durationSeconds, std::function<void(CCSce
         std::shared_ptr<CCFBXModel> &model = kv.second;
  
         std::shared_ptr<VROExecutableAnimation> animation;
+        auto &cachedAnimations = model->cachedAnimations;
         
-        auto it = _cachedAnimations.find(model->queuedAnimations);
-        if (it != _cachedAnimations.end()) {
+        auto it = cachedAnimations.find(model->queuedAnimations);
+        if (it != cachedAnimations.end()) {
             pinfo("Using cached animation");
             animation = it->second;
         }
@@ -149,7 +151,7 @@ void CCDanceScene::startSequence(float durationSeconds, std::function<void(CCSce
             animation = model->node->getLayeredAnimation(layers, true);
             pinfo("Created new animation [duration %f]", animation->getDuration());
             
-            _cachedAnimations[model->queuedAnimations] = animation;
+            cachedAnimations[model->queuedAnimations] = animation;
         }
         
         animation->setDuration(durationSeconds);

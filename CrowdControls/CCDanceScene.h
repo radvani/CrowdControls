@@ -43,10 +43,12 @@ public:
     std::map<CCSkeletonWeights, std::vector<std::string>> queuedAnimations;
     std::shared_ptr<VRONode> node;
     std::shared_ptr<CCAnimationWeights> weights;
+    std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> cachedAnimations;
     
     CCFBXModel(std::string file, VROVector3f position, VROVector3f scale,
-               std::shared_ptr<CCAnimationWeights> weights) :
-        file(file), position(position), scale(scale), weights(weights) {}
+               std::shared_ptr<CCAnimationWeights> weights,
+               std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> cache) :
+        file(file), position(position), scale(scale), weights(weights), cachedAnimations(cache) {}
     ~CCFBXModel() {}
 };
 
@@ -72,7 +74,7 @@ public:
     /*
      Add the model with the given name to the dance scene.
      */
-    void addModel(std::string name);
+    void addModel(std::string name, std::function<void()> onModelLoaded);
     
     /*
      Clear all models from the dance scene.
@@ -102,7 +104,8 @@ private:
     std::map<std::string, std::shared_ptr<CCFBXModel>> _activeModels;
     float _animationDurationSeconds;
     
-    std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> _cachedAnimations;
+    std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> _jamsCachedAnimations;
+    std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> _treeCachedAnimations;
 
     static void setColor(std::shared_ptr<VRONode> node, VROVector4f color, NSString *textureName);
     

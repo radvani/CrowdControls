@@ -28,6 +28,11 @@
 
 @class CCAnimationScreen;
 
+@protocol CCAnimationScreenDelegate
+@required
+- (void)screenDidLoad;
+@end
+
 class CCRenderToTextureDelegate : public VRORenderToTextureDelegate {
 public:
     CCRenderToTextureDelegate(CCAnimationScreen *renderer);
@@ -43,6 +48,7 @@ private:
 
 @property (readwrite, nonatomic) IBOutlet id <VROView> view;
 @property (readwrite, nonatomic) std::shared_ptr<CCScene> scene;
+@property (readwrite, nonatomic) id<CCAnimationScreenDelegate> delegate;
 
 - (id)initWithName:(NSString *)name scene:(std::shared_ptr<CCScene>)scene
             modelA:(NSString *)modelA modelB:(NSString *)modelB;

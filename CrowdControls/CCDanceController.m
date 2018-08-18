@@ -80,7 +80,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
             error = nil;
         }
         
-        [self loadAnimationAndAudioStemss];
+        [self loadAudioStems];
         
         _activeColors[CCBodyPartHead] = CCColorBlue;
         _activeColors[CCBodyPartLeftArm] = CCColorBlue;
@@ -127,7 +127,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     return audioPlayer;
 }
 
-- (void)loadAnimationAndAudioStems:(CCSignalPin)pin resource:(NSString *)name {
+- (void)loadAudioStem:(CCSignalPin)pin resource:(NSString *)name {
     NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"mp3"];
     AVAudioPCMBuffer *buffer;
     AVAudioPlayerNode *audioPlayer = [self loadAudioPlayerFromURL:url outBuffer:&buffer];
@@ -146,27 +146,27 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     _drumStems.insert({ color, { audioPlayer, buffer } });
 }
 
-- (void)loadAnimationAndAudioStemss {
-    [self loadAnimationAndAudioStems:CCSignalPinHeadWhite resource:@"Body_W"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftArmWhite resource:@"Lhand_W"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightArmWhite resource:@"Rhand_W"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftLegWhite resource:@"Lfoot_W"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightLegWhite resource:@"Rfoot_W"];
-    [self loadAnimationAndAudioStems:CCSignalPinHeadRed resource:@"Body_R"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftArmRed resource:@"Lhand_R"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightArmRed resource:@"Rhand_R"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftLegRed resource:@"Lfoot_R"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightLegRed resource:@"Rfoot_R"];
-    [self loadAnimationAndAudioStems:CCSignalPinHeadGreen resource:@"Body_G"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftArmGreen resource:@"Lhand_G"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightArmGreen resource:@"Rhand_G"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftLegGreen resource:@"Lfoot_G"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightLegGreen resource:@"Rfoot_G"];
-    [self loadAnimationAndAudioStems:CCSignalPinHeadYellow resource:@"Body_Y"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftArmYellow resource:@"Lhand_Y"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightArmYellow resource:@"Rhand_Y"];
-    [self loadAnimationAndAudioStems:CCSignalPinLeftLegYellow resource:@"Lfoot_Y"];
-    [self loadAnimationAndAudioStems:CCSignalPinRightLegYellow resource:@"Rfoot_Y"];
+- (void)loadAudioStems {
+    [self loadAudioStem:CCSignalPinHeadWhite resource:@"Body_W"];
+    [self loadAudioStem:CCSignalPinLeftArmWhite resource:@"Lhand_W"];
+    [self loadAudioStem:CCSignalPinRightArmWhite resource:@"Rhand_W"];
+    [self loadAudioStem:CCSignalPinLeftLegWhite resource:@"Lfoot_W"];
+    [self loadAudioStem:CCSignalPinRightLegWhite resource:@"Rfoot_W"];
+    [self loadAudioStem:CCSignalPinHeadRed resource:@"Body_R"];
+    [self loadAudioStem:CCSignalPinLeftArmRed resource:@"Lhand_R"];
+    [self loadAudioStem:CCSignalPinRightArmRed resource:@"Rhand_R"];
+    [self loadAudioStem:CCSignalPinLeftLegRed resource:@"Lfoot_R"];
+    [self loadAudioStem:CCSignalPinRightLegRed resource:@"Rfoot_R"];
+    [self loadAudioStem:CCSignalPinHeadGreen resource:@"Body_G"];
+    [self loadAudioStem:CCSignalPinLeftArmGreen resource:@"Lhand_G"];
+    [self loadAudioStem:CCSignalPinRightArmGreen resource:@"Rhand_G"];
+    [self loadAudioStem:CCSignalPinLeftLegGreen resource:@"Lfoot_G"];
+    [self loadAudioStem:CCSignalPinRightLegGreen resource:@"Rfoot_G"];
+    [self loadAudioStem:CCSignalPinHeadYellow resource:@"Body_Y"];
+    [self loadAudioStem:CCSignalPinLeftArmYellow resource:@"Lhand_Y"];
+    [self loadAudioStem:CCSignalPinRightArmYellow resource:@"Rhand_Y"];
+    [self loadAudioStem:CCSignalPinLeftLegYellow resource:@"Lfoot_Y"];
+    [self loadAudioStem:CCSignalPinRightLegYellow resource:@"Rfoot_Y"];
     
     [self loadDrumStem:CCColorWhite resource:@"Drums_W"];
     [self loadDrumStem:CCColorYellow resource:@"Drums_Y"];
@@ -195,7 +195,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     return color;
 }
 
-- (NSString *)letterForColor:(CCColor) color {
++ (NSString *)letterForColor:(CCColor) color {
     if (color == CCColorBlue) {
         return @"B";
     } else if (color == CCColorWhite) {
@@ -222,7 +222,7 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
         }
         
         if (kDancesEnabled) {
-            NSString *dance = [NSString stringWithFormat:@"Dance_%@", [self letterForColor:unifiedColor]];
+            NSString *dance = [NSString stringWithFormat:@"Dance_%@", [CCDanceController letterForColor:unifiedColor]];
             animations.insert({ CCSkeletonAll, { std::string([dance UTF8String]) } });
             return animations;
         }
@@ -232,29 +232,29 @@ static const VROVector4f kYellowColor = VROVector4f(255.0 / 255.0, 217.0 / 255.0
     
     // Activate the correct head
     if (!kDebugAnimations || _activeColors[CCBodyPartHead] != CCColorBlue) {
-        NSString *head = [NSString stringWithFormat:@"Head_%@", [self letterForColor:_activeColors[CCBodyPartHead]]];
+        NSString *head = [NSString stringWithFormat:@"Head_%@", [CCDanceController letterForColor:_activeColors[CCBodyPartHead]]];
         animations[CCSkeletonHead].push_back(std::string([head UTF8String]));
     }
     
     // Activate the correct arms
     if (!kDebugAnimations || _activeColors[CCBodyPartLeftArm] != CCColorBlue) {
-        NSString *leftArm = [NSString stringWithFormat:@"Lhand_%@", [self letterForColor:_activeColors[CCBodyPartLeftArm]]];
+        NSString *leftArm = [NSString stringWithFormat:@"Lhand_%@", [CCDanceController letterForColor:_activeColors[CCBodyPartLeftArm]]];
         animations[CCSkeletonLeftArm].push_back(std::string([leftArm UTF8String]));
     }
     
     if (!kDebugAnimations || _activeColors[CCBodyPartRightArm] != CCColorBlue) {
-        NSString *rightArm = [NSString stringWithFormat:@"Rhand_%@", [self letterForColor:_activeColors[CCBodyPartRightArm]]];
+        NSString *rightArm = [NSString stringWithFormat:@"Rhand_%@", [CCDanceController letterForColor:_activeColors[CCBodyPartRightArm]]];
         animations[CCSkeletonRightArm].push_back(std::string([rightArm UTF8String]));
     }
     
     // Activate the correct legs (the body bouncing legs)
     if (!kDebugAnimations || _activeColors[CCBodyPartLeftLeg] != CCColorBlue) {
-        NSString *leftLeg = [NSString stringWithFormat:@"Lfoot_%@_withBody", [self letterForColor:_activeColors[CCBodyPartLeftLeg]]];
+        NSString *leftLeg = [NSString stringWithFormat:@"Lfoot_%@_withBody", [CCDanceController letterForColor:_activeColors[CCBodyPartLeftLeg]]];
         animations[CCSkeletonLeftLeg].push_back(std::string([leftLeg UTF8String]));
     }
     
     if (!kDebugAnimations || _activeColors[CCBodyPartRightLeg] != CCColorBlue) {
-        NSString *rightLeg = [NSString stringWithFormat:@"Rfoot_%@_withBody01", [self letterForColor:_activeColors[CCBodyPartRightLeg]]];
+        NSString *rightLeg = [NSString stringWithFormat:@"Rfoot_%@_withBody01", [CCDanceController letterForColor:_activeColors[CCBodyPartRightLeg]]];
         animations[CCSkeletonRightLeg].push_back(std::string([rightLeg UTF8String]));
     }
     

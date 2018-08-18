@@ -1,8 +1,9 @@
 //
-//  AppDelegate.h
+//  CCTypes.h
 //  CrowdControls
 //
-//  Created by Raj Advani on 5/13/18.
+//  Created by Raj Advani on 8/18/18.
+//  Copyright © 2018 Raj Advani. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +23,32 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import <Cocoa/Cocoa.h>
-#import "CCViewController.h"
-#import "CCAnimationScreen.h"
+#ifndef CCTypes_h
+#define CCTypes_h
 
-@class CCDanceController;
+typedef NS_ENUM(NSInteger, CCColor) {
+    CCColorBlue,
+    CCColorWhite,
+    CCColorGreen,
+    CCColorYellow,
+    CCColorRed
+};
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, CCAnimationScreenDelegate>
+typedef NS_ENUM(NSInteger, CCBodyPart) {
+    CCBodyPartHead,
+    CCBodyPartLeftArm,
+    CCBodyPartRightArm,
+    CCBodyPartLeftLeg,
+    CCBodyPartRightLeg
+};
 
-@property (nonatomic, strong) CCDanceController *danceController;
+typedef NS_ENUM(NSInteger, CCSkeletonWeights) {
+    CCSkeletonAll,
+    CCSkeletonHead,
+    CCSkeletonLeftArm,
+    CCSkeletonRightArm,
+    CCSkeletonLeftLeg,
+    CCSkeletonRightLeg,
+};
 
-@end
-
+#endif /* CCTypes_h */
