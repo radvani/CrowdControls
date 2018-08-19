@@ -100,6 +100,7 @@
 		8F98F757212707B400917430 /* aubio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F98F756212707B300917430 /* aubio.framework */; };
 		8F98F75A21270A0C00917430 /* CCAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F75921270A0C00917430 /* CCAudioRecorder.m */; };
 		8F98F75C21272A0200917430 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F98F75B21272A0200917430 /* CoreAudio.framework */; };
+		8F98F767212916A300917430 /* CCTimelineScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F98F765212916A300917430 /* CCTimelineScene.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -229,6 +230,8 @@
 		8F98F75921270A0C00917430 /* CCAudioRecorder.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCAudioRecorder.m; sourceTree = "<group>"; };
 		8F98F75B21272A0200917430 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		8F98F75D2128BD7600917430 /* CCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCTypes.h; sourceTree = "<group>"; };
+		8F98F765212916A300917430 /* CCTimelineScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CCTimelineScene.cpp; sourceTree = "<group>"; };
+		8F98F766212916A300917430 /* CCTimelineScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCTimelineScene.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,6 +312,7 @@
 				8F201C85211B83BA00637A75 /* Sound */,
 				8F292C0E20A926D600635C0D /* Models */,
 				8F292C0D20A926B600635C0D /* Images */,
+				8F98F75D2128BD7600917430 /* CCTypes.h */,
 				8F292BF920A91FF000635C0D /* CCAnimationScreen.h */,
 				8F201C3020FAB14000637A75 /* CCAnimationScreen.m */,
 				8F292BFC20A91FF000635C0D /* CCViewController.h */,
@@ -337,7 +341,8 @@
 				8F98F74F21267A9400917430 /* CCBeatDetection.m */,
 				8F98F75821270A0C00917430 /* CCAudioRecorder.h */,
 				8F98F75921270A0C00917430 /* CCAudioRecorder.m */,
-				8F98F75D2128BD7600917430 /* CCTypes.h */,
+				8F98F766212916A300917430 /* CCTimelineScene.h */,
+				8F98F765212916A300917430 /* CCTimelineScene.cpp */,
 				8F292BE220A91F5C00635C0D /* AppDelegate.h */,
 				8F292BE320A91F5C00635C0D /* AppDelegate.m */,
 				8F292BE820A91F5E00635C0D /* Assets.xcassets */,
@@ -579,6 +584,7 @@
 				8F201C3420FACBA800637A75 /* CCCountdownScene.cpp in Sources */,
 				8F292BE420A91F5C00635C0D /* AppDelegate.m in Sources */,
 				8F98F75A21270A0C00917430 /* CCAudioRecorder.m in Sources */,
+				8F98F767212916A300917430 /* CCTimelineScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

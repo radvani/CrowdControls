@@ -29,6 +29,7 @@
 #import "CCCountdownScene.h"
 #import "CCAudioRecorder.h"
 #import "CCBeatDetection.h"
+#import "CCTimelineScene.h"
 
 @interface AppDelegate ()
 
@@ -68,6 +69,8 @@
 @implementation AppDelegate
 
 static bool kRunSingleScreen = true;
+static bool kTimelineMode = true;
+static bool kBeatDetectionMode = false;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSUInteger masks = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable |
@@ -77,15 +80,23 @@ static bool kRunSingleScreen = true;
     int windowHeight = 500;
     int padding = 15;
     
+    
     /*
      LED Screen.
      */
-    std::shared_ptr<CCDanceScene> ledScene = std::make_shared<CCDanceScene>();
     self.ledWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(padding, padding, windowLength, windowHeight)
                                                  styleMask:masks backing:NSBackingStoreBuffered
                                                      defer:NO];
-    self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene
-                                                      modelA:@"Jams" modelB:@"Trees"];
+    if (!kTimelineMode) {
+        std::shared_ptr<CCDanceScene> ledScene = std::make_shared<CCDanceScene>();
+        self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:ledScene
+                                                          modelA:@"Jams" modelB:@"Trees"];
+    } else {
+        std::shared_ptr<CCTimelineScene> timelineScene = std::make_shared<CCTimelineScene>();
+        self.ledScreen = [[CCAnimationScreen alloc] initWithName:@"LEDScreen" scene:timelineScene
+                                                          modelA:nil modelB:nil];
+    }
+    
     self.ledScreen.delegate = self;
     self.ledViewController = [[CCViewController alloc] init];
     self.ledViewController.renderDelegate = self.ledScreen;
@@ -195,7 +206,12 @@ static bool kRunSingleScreen = true;
     [_audioRecorder setDelegate:_beatDetection];
     [_audioRecorder startRecording];
     
-    self.danceController.beatDetection = self.beatDetection;
+    if (kBeatDetectionMode) {
+        self.danceController.beatDetection = self.beatDetection;
+    }
+    if (kTimelineMode) {
+        [self screenDidLoad];
+    }
 }
 
 - (void)screenDidLoad {
