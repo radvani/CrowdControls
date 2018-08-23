@@ -43,6 +43,7 @@ public:
     std::map<CCSkeletonWeights, std::vector<std::string>> queuedAnimations;
     std::shared_ptr<VRONode> node;
     std::shared_ptr<CCAnimationWeights> weights;
+    std::map<std::pair<CCSkeletonWeights, std::string>, std::shared_ptr<VROSkeletalAnimationLayer>> cachedSkeletalAnimationLayers;
     std::map<std::map<CCSkeletonWeights, std::vector<std::string>>, std::shared_ptr<VROExecutableAnimation>> cachedAnimations;
     
     CCFBXModel(std::string file, VROVector3f position, VROVector3f scale,

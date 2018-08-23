@@ -96,6 +96,9 @@
                 }
             });
         }
+        else {
+            self.modelALoaded = YES;
+        }
         if (self.modelB) {
             danceScene->addModel(std::string([self.modelB UTF8String]), [self] {
                 self.modelBLoaded = YES;
@@ -105,6 +108,8 @@
                     }
                 }
             });
+        } else {
+            self.modelBLoaded = YES;
         }
     }
 }

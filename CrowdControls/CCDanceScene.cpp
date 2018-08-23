@@ -130,18 +130,25 @@ void CCDanceScene::startSequence(float durationSeconds, std::function<void(CCSce
                 
                 for (std::string animationName : animations) {
                     if (animationName.length() > 0) {
-                        std::shared_ptr<VROSkeletalAnimationLayer> layer = std::make_shared<VROSkeletalAnimationLayer>(animationName, 1.0);
+                        std::shared_ptr<VROSkeletalAnimationLayer> layer;
                         
-                        if (skeletonWeights == CCSkeletonLeftArm) {
-                            layer->setBoneWeights(model->weights->getLeftArmWeights());
-                        } else if (skeletonWeights == CCSkeletonRightArm) {
-                            layer->setBoneWeights(model->weights->getRightArmWeights());
-                        } else if (skeletonWeights == CCSkeletonLeftLeg) {
-                            layer->setBoneWeights(model->weights->getLeftLegWeights());
-                        } else if (skeletonWeights == CCSkeletonRightLeg) {
-                            layer->setBoneWeights(model->weights->getRightLegWeights());
-                        } else if (skeletonWeights == CCSkeletonHead) {
-                            layer->setBoneWeights(model->weights->getHeadWeights());
+                        auto cachedLayerIt = model->cachedSkeletalAnimationLayers.find({ skeletonWeights, animationName });
+                        if (cachedLayerIt != model->cachedSkeletalAnimationLayers.end()) {
+                            layer = cachedLayerIt->second;
+                        } else {
+                            layer = std::make_shared<VROSkeletalAnimationLayer>(animationName, 1.0);
+                            if (skeletonWeights == CCSkeletonLeftArm) {
+                                layer->setBoneWeights(model->weights->getLeftArmWeights());
+                            } else if (skeletonWeights == CCSkeletonRightArm) {
+                                layer->setBoneWeights(model->weights->getRightArmWeights());
+                            } else if (skeletonWeights == CCSkeletonLeftLeg) {
+                                layer->setBoneWeights(model->weights->getLeftLegWeights());
+                            } else if (skeletonWeights == CCSkeletonRightLeg) {
+                                layer->setBoneWeights(model->weights->getRightLegWeights());
+                            } else if (skeletonWeights == CCSkeletonHead) {
+                                layer->setBoneWeights(model->weights->getHeadWeights());
+                            }
+                            model->cachedSkeletalAnimationLayers[{ skeletonWeights, animationName }] = layer;
                         }
                         layers.push_back(layer);
                     }
